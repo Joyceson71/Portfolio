@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact · Joyceson Danielraj</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Write in the Death Note — Contact Joyceson Danielraj." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Special+Elite&family=Tangerine:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="contact">
+
+  <canvas id="threeCanvas"></canvas>
+  <div id="cursor-outer"></div>
+  <div id="cursor-inner"></div>
+  <div id="page-transition"></div>
+
+  <div id="loader">
+    <div class="loader-book">
+      <div class="loader-title">DEATH NOTE</div>
+      <div class="loader-subtitle">The human whose name is written in this note shall die.</div>
+      <div class="loader-rule"></div>
+      <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
+      <span class="loader-text" id="loaderText">Preparing the note...</span>
+    </div>
+  </div>
+
+  <div id="scroll-progress"><div id="scroll-bar"></div></div>
+
+  <header id="header">
+    <a href="index.html" class="logo">DEATH<span class="logo-note">note</span></a>
+    <nav id="mainNav">
+      <a href="index.html"    class="nav-link">Home</a>
+      <a href="about.html"    class="nav-link">About</a>
+      <a href="skills.html"   class="nav-link">Skills</a>
+      <a href="projects.html" class="nav-link">Projects</a>
+      <a href="contact.html"  class="nav-link active">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <a href="Joyceson-CV.pdf" target="_blank" class="resume-btn">
+        <i class="fas fa-arrow-up-right-from-square"></i> Resume
+      </a>
+      <button class="burger" id="burger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div id="smooth-wrapper">
+    <div id="smooth-content">
+
+      <section class="section">
+        <div class="section-container">
+          <div class="section-head reveal">
+            <span class="sec-tag">05 / Contact</span>
+            <h2 class="sec-title">Write In The <em>Note</em></h2>
+            <div class="sec-rule"></div>
+          </div>
+
+          <div class="contact-grid">
+            <!-- Left: Contact Info -->
+            <div class="reveal-left">
+              <p class="contact-intro">
+                "Those who use the Death Note are neither in Heaven nor Hell."<br/><br/>
+                Collaborate, discuss a project, or just say hi — I'm always open to exciting opportunities in this world.
+              </p>
+
+              <div class="contact-links">
+                <a href="https://github.com/Joyceson71" target="_blank" class="clink">
+                  <div class="clink-icon"><i class="fab fa-github"></i></div>
+                  <div class="clink-text">
+                    <span class="clink-label">GitHub</span>
+                    <span class="clink-val">github.com/Joyceson71</span>
+                  </div>
+                  <i class="fas fa-arrow-up-right-from-square clink-arrow"></i>
+                </a>
+                <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" class="clink">
+                  <div class="clink-icon"><i class="fab fa-linkedin"></i></div>
+                  <div class="clink-text">
+                    <span class="clink-label">LinkedIn</span>
+                    <span class="clink-val">joyceson-danielraj</span>
+                  </div>
+                  <i class="fas fa-arrow-up-right-from-square clink-arrow"></i>
+                </a>
+                <a href="https://www.instagram.com/still_jodaniel/" target="_blank" class="clink">
+                  <div class="clink-icon"><i class="fab fa-instagram"></i></div>
+                  <div class="clink-text">
+                    <span class="clink-label">Instagram</span>
+                    <span class="clink-val">still_jodaniel</span>
+                  </div>
+                  <i class="fas fa-arrow-up-right-from-square clink-arrow"></i>
+                </a>
+                <a href="mailto:joycesondanielraj@gmail.com" class="clink">
+                  <div class="clink-icon"><i class="fas fa-envelope"></i></div>
+                  <div class="clink-text">
+                    <span class="clink-label">Email</span>
+                    <span class="clink-val">joycesondanielraj@gmail.com</span>
+                  </div>
+                  <i class="fas fa-arrow-up-right-from-square clink-arrow"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- Right: Death Note Form (parchment) -->
+            <div class="reveal-right">
+              <form class="death-note-form" id="contactForm">
+                <div class="form-header">
+                  <span class="form-header-title">DEATH NOTE — Correspondence Entry</span>
+                  <span class="form-header-sub">Write your name... and your purpose.</span>
+                </div>
+
+                <div class="fg">
+                  <label class="flabel">Your Name</label>
+                  <input type="text" class="finput" id="nameInput" placeholder="Write your name here..." />
+                  <span class="ferror" id="nameError">Name must be at least 2 characters.</span>
+                </div>
+
+                <div class="fg">
+                  <label class="flabel">Email Address</label>
+                  <input type="email" class="finput" id="emailInput" placeholder="your@email.com" />
+                  <span class="ferror" id="emailError">Please enter a valid email.</span>
+                </div>
+
+                <div class="fg">
+                  <label class="flabel">Your Message</label>
+                  <textarea class="finput" id="msgInput" rows="6" placeholder="Write your cause of death... I mean, your message."></textarea>
+                  <span class="ferror" id="msgError">Message must be at least 10 characters.</span>
+                </div>
+
+                <button type="submit" class="form-submit" id="submitBtn">
+                  <span class="btn-text">🪶 Write in the Note</span>
+                  <span class="btn-icon"><i class="fas fa-feather-alt"></i></span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div class="footer-inner">
+          <span class="footer-logo">DEATH NOTE · JD</span>
+          <span class="footer-quote">"I'll be waiting... in the Shinigami Realm."</span>
+          <div class="footer-socials">
+            <a href="https://github.com/Joyceson71" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
