@@ -1,10 +1,3 @@
-/**
- * ╔══════════════════════════════════════════════════════╗
- * ║   JOYCESON PORTFOLIO — script.js                    ║
- * ║   DEATH NOTE THEME                                  ║
- * ║   Stack: Three.js · GSAP · ScrollTrigger            ║
- * ╚══════════════════════════════════════════════════════╝
- */
 (function () {
   "use strict";
 
