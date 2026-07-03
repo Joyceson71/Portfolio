@@ -4,6 +4,8 @@
    ╚═══════════════════════════════════════════════════╝ */
 
 @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Special+Elite&family=Tangerine:wght@400;700&display=swap');
+/* Ensure native scroll is always active */
+html { scroll-behavior: smooth; }
 
 /* ───────────────────────────────────────────
    DESIGN TOKENS
@@ -64,6 +66,7 @@ body {
   color: var(--t1);
   font-family: var(--fb);
   overflow-x: hidden;
+  overflow-y: auto; /* Always allow vertical scroll */
   cursor: none;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
@@ -278,9 +281,9 @@ nav { display: flex; gap: 4px; }
 .burger.open span:nth-child(3) { transform:translateY(-6px) rotate(-45deg); }
 
 /* ───────────────────────────────────────────
-   SMOOTH SCROLL WRAPPER
+   SCROLL WRAPPER (native, no overflow trap)
 ─────────────────────────────────────────── */
-#smooth-wrapper { position:relative; overflow:hidden; height:100vh; }
+#smooth-wrapper { position:relative; }
 #smooth-content { position:relative; z-index:10; }
 
 /* ───────────────────────────────────────────
@@ -621,23 +624,37 @@ nav { display: flex; gap: 4px; }
 .skill-tags span:hover { background: var(--gold-dim); box-shadow: 0 0 10px var(--gold-glow); }
 
 /* ───────────────────────────────────────────
-   EXPERIENCE TIMELINE
+   EXPERIENCE TIMELINE — Death Note theme
 ─────────────────────────────────────────── */
-.timeline { position:relative; max-width:800px; margin:0 auto; padding:2rem 0; }
+.timeline {
+  position:relative; max-width:800px;
+  margin:0 auto; padding:2rem 0;
+  overflow:hidden; /* clearfix */
+}
+.timeline::after { content:''; display:table; clear:both; }
 .timeline::before {
   content:''; position:absolute;
   top:0; left:50%; transform:translateX(-50%);
   width:1px; height:100%;
   background: linear-gradient(to bottom, transparent, var(--bdr-gold), transparent);
 }
-.timeline-item { position:relative; margin-bottom:3.5rem; width:50%; padding-right:3.5rem; }
-.timeline-item.is-right { float:right; padding-right:0; padding-left:3.5rem; }
+.timeline-item {
+  position:relative; margin-bottom:3.5rem;
+  width:50%; padding-right:3.5rem;
+  float:left; clear:left;
+}
+.timeline-item.is-right {
+  float:right; clear:right;
+  padding-right:0; padding-left:3.5rem;
+}
 .timeline-item.is-right .timeline-dot { left:-10px; right:auto; }
 .timeline-dot {
   position:absolute; top:16px; right:-10px;
   width:18px; height:18px; border-radius:50%;
-  background: var(--bg); border:2px solid var(--gold);
-  box-shadow:0 0 12px var(--gold-glow); z-index:2;
+  background: var(--bg);
+  border:2px solid var(--gold);
+  box-shadow:0 0 14px var(--gold-glow);
+  z-index:2;
 }
 .timeline-content {
   background: rgba(201,168,76,0.03);
@@ -648,13 +665,21 @@ nav { display: flex; gap: 4px; }
 }
 .timeline-content::before {
   content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 1px;
+  position: absolute; top:0; left:0; right:0; height:1px;
   background: linear-gradient(90deg, var(--gold), transparent);
 }
-.timeline-item:hover .timeline-content { transform:translateY(-4px); box-shadow:0 12px 30px rgba(0,0,0,0.4), 0 0 20px var(--gold-glow); }
-.timeline-date { font-family:var(--fm); font-size:0.62rem; letter-spacing:0.15em; color:var(--gold); margin-bottom:8px; }
-.timeline-title { font-family:var(--fh2); font-size:1.05rem; font-weight:600; color:var(--t1); margin-bottom:4px; }
+.timeline-item:hover .timeline-content {
+  transform:translateY(-4px);
+  box-shadow:0 12px 30px rgba(0,0,0,0.5), 0 0 20px var(--gold-glow);
+}
+.timeline-date {
+  font-family:var(--fm); font-size:0.62rem;
+  letter-spacing:0.15em; color:var(--gold); margin-bottom:8px;
+}
+.timeline-title {
+  font-family:var(--fh2); font-size:1.05rem; font-weight:600;
+  color:var(--t1); margin-bottom:4px;
+}
 .timeline-org { font-size:0.9rem; color:var(--t2); margin-bottom:10px; font-style:italic; }
 .timeline-desc { font-size:0.88rem; line-height:1.7; color:var(--t3); }
 @media (max-width:768px) {
