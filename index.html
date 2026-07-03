@@ -149,7 +149,16 @@
         <div class="about-grid">
           <div class="about-visual reveal-left">
             <div class="about-3d-container">
-              <div class="cube">
+              <div class="cube-assembly">
+                <!-- Outer Rings -->
+                <div class="ring ring-x"></div>
+                <div class="ring ring-y"></div>
+                <div class="ring ring-z"></div>
+                
+                <!-- Glowing Core -->
+                <div class="core-glow"></div>
+
+                <!-- Outer Cube -->
                 <div class="cube-face front"></div>
                 <div class="cube-face back"></div>
                 <div class="cube-face right"></div>
@@ -157,6 +166,7 @@
                 <div class="cube-face top"></div>
                 <div class="cube-face bottom"></div>
                 
+                <!-- Inner Cube -->
                 <div class="cube-inner">
                   <div class="cube-face front"></div>
                   <div class="cube-face back"></div>
@@ -165,6 +175,11 @@
                   <div class="cube-face top"></div>
                   <div class="cube-face bottom"></div>
                 </div>
+
+                <!-- Floating Labels -->
+                <div class="float-label label-1">UX/UI</div>
+                <div class="float-label label-2">Frontend</div>
+                <div class="float-label label-3">System</div>
               </div>
             </div>
             <div class="about-socials">
@@ -449,18 +464,21 @@
             </div>
           </div>
 
-          <form class="contact-form reveal-right" id="contactForm" onsubmit="return false;">
+          <form class="contact-form reveal-right" id="contactForm" novalidate>
             <div class="form-group">
               <label class="form-label">Your Name</label>
-              <input type="text" class="form-input" placeholder="John Doe" required />
+              <input type="text" class="form-input" id="nameInput" placeholder="John Doe" />
+              <div class="error-msg" id="nameError">Please enter a valid name.</div>
             </div>
             <div class="form-group">
               <label class="form-label">Email Address</label>
-              <input type="email" class="form-input" placeholder="john@example.com" required />
+              <input type="email" class="form-input" id="emailInput" placeholder="john@example.com" />
+              <div class="error-msg" id="emailError">Please enter a valid email address.</div>
             </div>
             <div class="form-group">
               <label class="form-label">Message</label>
-              <textarea class="form-textarea" rows="5" placeholder="Let's build something amazing..." required></textarea>
+              <textarea class="form-textarea" id="messageInput" rows="5" placeholder="Let's build something amazing..."></textarea>
+              <div class="error-msg" id="messageError">Message must be at least 10 characters.</div>
             </div>
             <button type="submit" class="btn-primary" id="submitBtn">
               <span class="btn-text">Send Message</span>

@@ -423,32 +423,104 @@
   });
 
   /* ===================================================
-     9. CONTACT FORM
+     9. CONTACT FORM VALIDATION
      =================================================== */
   const contactForm = $("#contactForm");
   const submitBtn   = $("#submitBtn");
+  const nameInput   = $("#nameInput");
+  const emailInput  = $("#emailInput");
+  const msgInput    = $("#messageInput");
+
+  const nameError   = $("#nameError");
+  const emailError  = $("#emailError");
+  const msgError    = $("#messageError");
+
+  function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  }
 
   if (contactForm) {
     contactForm.addEventListener("submit", (e) => {
       e.preventDefault();
+      
+      let isValid = true;
+
+      // Validate Name
+      if (nameInput.value.trim().length < 2) {
+        nameInput.classList.add("input-error");
+        nameError.style.display = "block";
+        isValid = false;
+      } else {
+        nameInput.classList.remove("input-error");
+        nameError.style.display = "none";
+      }
+
+      // Validate Email
+      if (!validateEmail(emailInput.value.trim())) {
+        emailInput.classList.add("input-error");
+        emailError.style.display = "block";
+        isValid = false;
+      } else {
+        emailInput.classList.remove("input-error");
+        emailError.style.display = "none";
+      }
+
+      // Validate Message
+      if (msgInput.value.trim().length < 10) {
+        msgInput.classList.add("input-error");
+        msgError.style.display = "block";
+        isValid = false;
+      } else {
+        msgInput.classList.remove("input-error");
+        msgError.style.display = "none";
+      }
+
+      if (!isValid) return;
+
       const origText = submitBtn.querySelector(".btn-text").textContent;
       const origIcon = submitBtn.querySelector(".btn-icon").innerHTML;
 
-      // Success state
-      submitBtn.querySelector(".btn-text").textContent = "Message Sent!";
-      submitBtn.querySelector(".btn-icon").innerHTML = '<i class="fas fa-check"></i>';
-      submitBtn.style.background = "linear-gradient(135deg, #059669, #10b981)";
-      submitBtn.style.boxShadow  = "0 4px 24px rgba(16, 185, 129, 0.4)";
+      // 1. Setup the Web App URL here from your Google Apps Script
+      // Replace this string with the URL you get after deploying your Google Apps Script
+      const scriptURL = "YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE";
+
+      // Show sending state
+      submitBtn.querySelector(".btn-text").textContent = "Sending...";
       submitBtn.disabled = true;
 
-      setTimeout(() => {
-        submitBtn.querySelector(".btn-text").textContent = origText;
-        submitBtn.querySelector(".btn-icon").innerHTML   = origIcon;
-        submitBtn.style.background = "";
-        submitBtn.style.boxShadow  = "";
-        submitBtn.disabled = false;
-        contactForm.reset();
-      }, 3000);
+      // Prepare form data
+      const formData = new FormData();
+      formData.append("Name", nameInput.value.trim());
+      formData.append("Email", emailInput.value.trim());
+      formData.append("Message", msgInput.value.trim());
+
+      // Send the data
+      fetch(scriptURL, { method: "POST", body: formData, mode: "no-cors" })
+        .then(() => {
+          // Success state
+          submitBtn.querySelector(".btn-text").textContent = "Message Sent!";
+          submitBtn.querySelector(".btn-icon").innerHTML = '<i class="fas fa-check"></i>';
+          submitBtn.style.background = "linear-gradient(135deg, #059669, #10b981)";
+          submitBtn.style.boxShadow  = "0 4px 24px rgba(16, 185, 129, 0.4)";
+
+          setTimeout(() => {
+            submitBtn.querySelector(".btn-text").textContent = origText;
+            submitBtn.querySelector(".btn-icon").innerHTML   = origIcon;
+            submitBtn.style.background = "";
+            submitBtn.style.boxShadow  = "";
+            submitBtn.disabled = false;
+            contactForm.reset();
+          }, 3000);
+        })
+        .catch(error => {
+          console.error("Error!", error.message);
+          submitBtn.querySelector(".btn-text").textContent = "Error! Try Again.";
+          setTimeout(() => {
+            submitBtn.querySelector(".btn-text").textContent = origText;
+            submitBtn.disabled = false;
+          }, 3000);
+        });
     });
   }
 
