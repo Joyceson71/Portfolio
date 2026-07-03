@@ -467,25 +467,71 @@
   }
 
   /* ===================================================
-     12. SMOOTH ACTIVE NAV
+     12. 3D UNIVERSE NAVIGATION (DOMAIN EXPANSION)
      =================================================== */
-  const sections = $$("section[id]");
-  const navLinks = $$(".nav-link");
+  const prisonRealm = $("#prison-realm");
+  const sectionsList = ['home', 'about', 'skills', 'project', 'contact'];
+  const navLinksList = $$(".nav-link");
+  let currentSectionIdx = 0;
 
-  function updateActiveNav() {
-    const scrollY = window.scrollY + 100;
-    sections.forEach((sec) => {
-      const top    = sec.offsetTop;
-      const bottom = top + sec.offsetHeight;
-      if (scrollY >= top && scrollY < bottom) {
-        navLinks.forEach((l) => l.classList.remove("active-nav"));
-        const activeLink = $(`a[href="#${sec.id}"]`);
-        if (activeLink) activeLink.classList.add("active-nav");
-      }
-    });
+  function goToSection(index) {
+    if (index < 0 || index >= sectionsList.length || !prisonRealm) return;
+    currentSectionIdx = index;
+    const secId = sectionsList[index];
+    
+    // Update Prison Realm Rotation Class
+    prisonRealm.className = `show-${secId}`;
+    
+    // Update Nav active states
+    navLinksList.forEach(l => l.classList.remove("active-nav"));
+    const targetHref = secId === 'project' ? '#projects' : `#${secId}`;
+    const activeLink = Array.from(navLinksList).find(l => l.getAttribute('href') === targetHref || l.getAttribute('href') === `#${secId}`);
+    if (activeLink) activeLink.classList.add("active-nav");
+
+    // Close mobile menu if open
+    if (typeof nav !== 'undefined' && nav.classList.contains("open")) {
+      nav.classList.remove("open");
+      menuToggle.classList.remove("is-open");
+    }
   }
 
-  window.addEventListener("scroll", updateActiveNav, { passive: true });
-  updateActiveNav();
+  // Handle Nav Clicks
+  navLinksList.forEach(link => {
+    link.addEventListener("click", (e) => {
+      const href = link.getAttribute("href");
+      if (href && href.startsWith("#")) {
+        e.preventDefault();
+        let targetId = href.substring(1);
+        if (targetId === 'projects') targetId = 'project'; // id mismatch mapping
+        const idx = sectionsList.indexOf(targetId);
+        if (idx !== -1) goToSection(idx);
+      }
+    });
+  });
+
+  // Handle Wheel Scroll (Debounced to match CSS transition)
+  let isScrolling3D = false;
+  window.addEventListener("wheel", (e) => {
+    // Only intercept if we are at the top/bottom of the current section's internal scroll, or simply just override entirely.
+    // For simplicity, we just use wheel to switch scenes and rely on users dragging the scrollbar if internal content overflows.
+    if (isScrolling3D) return;
+    
+    if (e.deltaY > 50) {
+      if (currentSectionIdx < sectionsList.length - 1) {
+        goToSection(currentSectionIdx + 1);
+        isScrolling3D = true;
+        setTimeout(() => isScrolling3D = false, 1200);
+      }
+    } else if (e.deltaY < -50) {
+      if (currentSectionIdx > 0) {
+        goToSection(currentSectionIdx - 1);
+        isScrolling3D = true;
+        setTimeout(() => isScrolling3D = false, 1200);
+      }
+    }
+  }, { passive: true });
+
+  // Init First Scene
+  goToSection(0);
 
 })();

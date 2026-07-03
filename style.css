@@ -41,6 +41,30 @@
   --tr-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ---- LIGHT MODE OVERRIDES ---- */
+body.light-mode {
+  --bg: #f8fafc;
+  --bg-2: #f1f5f9;
+  --bg-3: #e2e8f0;
+  --surface: rgba(0, 0, 0, 0.03);
+  --surface-hover: rgba(0, 0, 0, 0.06);
+  --border: rgba(0, 0, 0, 0.08);
+  --border-accent: rgba(99, 102, 241, 0.4);
+  --text-primary: #0f172a;
+  --text-secondary: rgba(15, 23, 42, 0.7);
+  --text-muted: rgba(15, 23, 42, 0.5);
+  --indigo-glow: rgba(99, 102, 241, 0.15);
+  --cyan-glow: rgba(6, 182, 212, 0.15);
+}
+body.light-mode .grid-overlay {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+}
+body.light-mode .noise-overlay {
+  opacity: 0.04;
+}
+
 /* ---- RESET ---- */
 *, *::before, *::after {
   margin: 0;
@@ -71,6 +95,41 @@ body {
   inset: 0;
   z-index: 0;
   pointer-events: none;
+}
+
+/* ---- SCROLL PROGRESS ---- */
+.scroll-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--surface);
+  z-index: 10000;
+  pointer-events: none;
+}
+#scrollProgressBar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--cyan), var(--indigo));
+  box-shadow: 0 0 10px var(--cyan-glow);
+}
+
+/* ---- THEME TOGGLE ---- */
+.theme-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-right: 1rem;
+  transition: color var(--tr), transform var(--tr);
+  pointer-events: auto;
+}
+.theme-toggle-btn:hover {
+  color: var(--cyan);
+  transform: scale(1.1);
 }
 
 /* ---- NOISE OVERLAY ---- */
@@ -321,6 +380,53 @@ nav {
   opacity: 1;
   transform: none;
 }
+
+/* =============================================
+   3D UNIVERSE - PRISON REALM
+   ============================================= */
+body {
+  overflow: hidden; /* Prevent native scrolling */
+}
+#universe {
+  perspective: 1500px;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  z-index: 10; /* Above the canvas aura */
+}
+#prison-realm {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: transform 1.2s cubic-bezier(0.64, 0.04, 0.35, 1);
+  transform: translateZ(-50vw); 
+}
+#prison-realm > section {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: rgba(5, 2, 2, 0.90); /* JJK Obsidian Dark, slight transparency to see cursed aura */
+  backface-visibility: hidden;
+  padding: 100px 48px; /* space for header */
+}
+/* Section Faces (Cube faces) */
+#home    { transform: translateZ(50vw); }
+#about   { transform: rotateY(90deg) translateZ(50vw); }
+#skills  { transform: rotateY(180deg) translateZ(50vw); }
+#project { transform: rotateY(-90deg) translateZ(50vw); } /* Note: using #project instead of #projects based on ID */
+#contact { transform: rotateX(-90deg) translateZ(50vw); }
+
+/* Navigation States applied to #prison-realm */
+.show-home    { transform: translateZ(-50vw) rotateY(0deg) !important; }
+.show-about   { transform: translateZ(-50vw) rotateY(-90deg) !important; }
+.show-skills  { transform: translateZ(-50vw) rotateY(-180deg) !important; }
+.show-project { transform: translateZ(-50vw) rotateY(90deg) !important; }
+.show-contact { transform: translateZ(-50vw) rotateX(90deg) !important; }
 
 /* =============================================
    HOME / HERO
