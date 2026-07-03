@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Joyceson · Death Note Portfolio</title>
+  <title>Joyceson · Shadow Monarch Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Joyceson Danielraj — Frontend Developer. I am the god of the new world." />
+  <meta name="description" content="Joyceson Danielraj — Frontend Developer. Arise." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Special+Elite&family=Tangerine:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
+  
   <link rel="stylesheet" href="style.css" />
 </head>
 <body data-page="home">
@@ -24,12 +24,11 @@
 
   <!-- LOADER -->
   <div id="loader">
-    <div class="loader-book">
-      <div class="loader-title">DEATH NOTE</div>
-      <div class="loader-subtitle">The notebook of the human whose name is written in this note shall die.</div>
-      <div class="loader-rule"></div>
+    <div class="loader-panel">
+      <div class="loader-title">SYSTEM</div>
+      <div class="loader-subtitle">Accessing Shadow Archives</div>
       <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
-      <span class="loader-text" id="loaderText">Opening the notebook...</span>
+      <span class="loader-text" id="loaderText">Booting...</span>
     </div>
   </div>
 
@@ -37,7 +36,7 @@
 
   <!-- HEADER -->
   <header id="header">
-    <a href="index.html" class="logo">JD</a>
+    <a href="index.html" class="logo">JD<span class="logo-accent">.</span></a>
     <nav id="mainNav">
       <a href="index.html"    class="nav-link active">Home</a>
       <a href="about.html"    class="nav-link">About</a>
@@ -47,7 +46,7 @@
     </nav>
     <div class="header-actions">
       <a href="Joyceson-CV.pdf" target="_blank" class="resume-btn">
-        <i class="fas fa-arrow-up-right-from-square"></i> Resume
+        <i class="fas fa-terminal"></i> Extract CV
       </a>
       <button class="burger" id="burger" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -58,73 +57,73 @@
   <!-- MAIN -->
   <div id="smooth-wrapper">
     <div id="smooth-content">
-
+      
       <!-- ══ HERO ══ -->
       <section id="home" class="section hero-section">
         <div class="hero-inner">
           <div class="hero-left">
-            <div class="hero-eyebrow">The notebook of a god</div>
+            <div class="hero-eyebrow">[PLAYER_FOUND]</div>
 
-            <h1 class="hero-title">Joyceson<br/>Danielraj</h1>
+            <h1 class="hero-title">Joyceson<br/><span>Danielraj</span></h1>
 
             <div class="hero-role">
-              <span class="role-sep">✦</span>
-              <span id="typedText"></span><span class="caret">▮</span>
+              <span class="role-sep">►</span>
+              <span id="typedText"></span><span class="caret">_</span>
             </div>
 
             <p class="hero-desc">
-              "I will create a perfect world — free of injustice, free of poor design,<br/>
-              built on clean code and cursed ambition."
+              "You have been granted the qualifications of a Player.<br/>
+              Will you accept the quest to build the ultimate web interface?"
             </p>
 
             <div class="hero-rule"></div>
 
             <div class="hero-stats">
               <div class="stat">
-                <span class="stat-num" data-count="10">0</span>
-                <span class="stat-lbl">Projects</span>
+                <span class="stat-num" data-count="99">0</span>
+                <span class="stat-lbl">Level</span>
               </div>
               <div class="stat-sep"></div>
               <div class="stat">
-                <span class="stat-num">React</span>
-                <span class="stat-lbl">Core Stack</span>
+                <span class="stat-num">S-Rank</span>
+                <span class="stat-lbl">Class</span>
               </div>
               <div class="stat-sep"></div>
               <div class="stat">
-                <span class="stat-num">UI/UX</span>
-                <span class="stat-lbl">Focus</span>
+                <span class="stat-num">100%</span>
+                <span class="stat-lbl">Awakened</span>
               </div>
             </div>
 
             <div class="hero-btns">
               <a href="projects.html" class="btn-primary">
-                <i class="fas fa-book"></i>
-                <span>View Case Files</span>
+                <i class="fas fa-bolt"></i>
+                <span>Accept Quest</span>
               </a>
-              <a href="Joyceson-CV.pdf" target="_blank" class="btn-ghost">
-                <i class="fas fa-download"></i>
-                <span>Download CV</span>
+              <a href="about.html" class="btn-ghost">
+                <i class="fas fa-search"></i>
+                <span>View Status</span>
               </a>
             </div>
           </div>
 
           <div class="hero-right">
-            <canvas id="bookCanvas"></canvas>
-            <div class="book-label">The Death Note · Est. 2021</div>
+            <canvas id="hero3DCanvas"></canvas>
+            <div class="sys-label">ITEM: KNIGHT'S KILLER</div>
           </div>
         </div>
 
         <div class="scroll-hint">
-          <div class="sh-feather">🪶</div>
-          <span>Scroll</span>
+          <div class="sh-line"></div>
+          <span>Scroll to level up</span>
         </div>
       </section>
 
       <!-- FOOTER -->
       <footer>
         <div class="footer-inner">
-          <span class="footer-logo">JD</span>
-          <span class="footer-quote">"I'll take a potato chip... and eat it."</span>
+          <span class="footer-logo">JD<span class="logo-accent">.</span></span>
+          <span class="footer-quote">"I shall protect my code... even if it means destroying everything."</span>
           <div class="footer-socials">
             <a href="https://github.com/Joyceson71" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
             <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>

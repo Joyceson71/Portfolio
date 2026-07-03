@@ -2,53 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Skills · Joyceson Danielraj</title>
+  <title>Skills · Joyceson</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Joyceson Danielraj skills — the investigation board." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&family=Special+Elite&family=Tangerine:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
+  
   <link rel="stylesheet" href="style.css" />
-  <style>
-    /* ── Chess Board Skills Layout (additional) ── */
-    .skills-hero {
-      display: grid;
-      grid-template-columns: 1fr 440px;
-      gap: 72px;
-      align-items: start;
-    }
-    #chessCanvas {
-      width: 440px; height: 440px; max-width: 100%;
-      filter: drop-shadow(0 20px 60px rgba(0,0,0,0.8)) drop-shadow(0 0 30px rgba(201,168,76,0.15));
-    }
-    .chess-label {
-      text-align: center;
-      font-family: var(--fw);
-      font-size: 1.4rem;
-      color: var(--gold);
-      opacity: 0.7;
-      margin-top: 8px;
-      letter-spacing: 0.1em;
-    }
-    .skills-caption {
-      font-family: var(--fw);
-      font-size: 1.8rem;
-      color: var(--gold);
-      opacity: 0.7;
-      margin-bottom: 24px;
-      letter-spacing: 0.05em;
-    }
-    @media (max-width: 1100px) {
-      .skills-hero { grid-template-columns: 1fr; }
-      .chess-right { order: -1; display: flex; flex-direction: column; align-items: center; }
-      #chessCanvas { width: 300px; height: 300px; }
-    }
-  </style>
 </head>
 <body data-page="skills">
 
@@ -57,20 +21,20 @@
   <div id="cursor-inner"></div>
   <div id="page-transition"></div>
 
+  <!-- LOADER -->
   <div id="loader">
-    <div class="loader-book">
-      <div class="loader-title">DEATH NOTE</div>
-      <div class="loader-subtitle">The human whose name is written in this note shall die.</div>
-      <div class="loader-rule"></div>
+    <div class="loader-panel">
+      <div class="loader-title">SYSTEM</div>
+      <div class="loader-subtitle">Accessing Shadow Archives</div>
       <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
-      <span class="loader-text" id="loaderText">Analyzing the suspect's arsenal...</span>
+      <span class="loader-text" id="loaderText">Booting...</span>
     </div>
   </div>
 
   <div id="scroll-progress"><div id="scroll-bar"></div></div>
 
   <header id="header">
-    <a href="index.html" class="logo">JD</a>
+    <a href="index.html" class="logo">JD<span class="logo-accent">.</span></a>
     <nav id="mainNav">
       <a href="index.html"    class="nav-link">Home</a>
       <a href="about.html"    class="nav-link">About</a>
@@ -79,9 +43,6 @@
       <a href="contact.html"  class="nav-link">Contact</a>
     </nav>
     <div class="header-actions">
-      <a href="Joyceson-CV.pdf" target="_blank" class="resume-btn">
-        <i class="fas fa-arrow-up-right-from-square"></i> Resume
-      </a>
       <button class="burger" id="burger" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -90,97 +51,78 @@
 
   <div id="smooth-wrapper">
     <div id="smooth-content">
-
+      
       <section class="section">
-        <div class="section-container">
-          <div class="section-head reveal">
-            <span class="sec-tag">03 / Skills</span>
-            <h2 class="sec-title">The <em>Investigation</em></h2>
-            <div class="sec-rule"></div>
-          </div>
+        <div class="section-head reveal">
+          <span class="section-title-sub">[ABILITIES_ACQUIRED]</span>
+          <h2 class="section-title">Skill Tree</h2>
+        </div>
 
-          <div class="skills-hero">
-            <!-- Left: skills list -->
-            <div>
-              <p class="skills-caption">"The one with superior intellect wins."</p>
-              <div class="skills-grid">
-                <div class="skill-card">
-                  <div class="skill-icon"><i class="fab fa-html5"></i></div>
-                  <div class="skill-detail">
-                    <div class="skill-top">
-                      <span class="skill-name">HTML & CSS</span>
-                      <span class="skill-pct">80%</span>
-                    </div>
-                    <div class="skill-track"><div class="skill-fill" data-w="80"></div></div>
-                    <span class="skill-sub">HTML5 · CSS3 · Flexbox · Grid</span>
-                  </div>
-                </div>
-                <div class="skill-card">
-                  <div class="skill-icon"><i class="fab fa-js"></i></div>
-                  <div class="skill-detail">
-                    <div class="skill-top">
-                      <span class="skill-name">JavaScript</span>
-                      <span class="skill-pct">60%</span>
-                    </div>
-                    <div class="skill-track"><div class="skill-fill" data-w="60"></div></div>
-                    <span class="skill-sub">ES6+ · DOM · APIs · Async</span>
-                  </div>
-                </div>
-                <div class="skill-card">
-                  <div class="skill-icon"><i class="fab fa-react"></i></div>
-                  <div class="skill-detail">
-                    <div class="skill-top">
-                      <span class="skill-name">React</span>
-                      <span class="skill-pct">10%</span>
-                    </div>
-                    <div class="skill-track"><div class="skill-fill" data-w="10"></div></div>
-                    <span class="skill-sub">React · Redux · React Router</span>
-                  </div>
-                </div>
-                <div class="skill-card">
-                  <div class="skill-icon"><i class="fab fa-linux"></i></div>
-                  <div class="skill-detail">
-                    <div class="skill-top">
-                      <span class="skill-name">Networking</span>
-                      <span class="skill-pct">60%</span>
-                    </div>
-                    <div class="skill-track"><div class="skill-fill" data-w="60"></div></div>
-                    <span class="skill-sub">TCP/IP · DNS · Routing · Switching</span>
-                  </div>
-                </div>
-                <div class="skill-card">
-                  <div class="skill-icon"><i class="fab fa-github"></i></div>
-                  <div class="skill-detail">
-                    <div class="skill-top">
-                      <span class="skill-name">Version Control</span>
-                      <span class="skill-pct">90%</span>
-                    </div>
-                    <div class="skill-track"><div class="skill-fill" data-w="90"></div></div>
-                    <span class="skill-sub">Git · GitHub · VS Code · Postman</span>
-                  </div>
-                </div>
-              </div>
+        <div style="display:flex; justify-content:center; position:relative; margin-bottom: 2rem;" class="reveal-scale">
+          <canvas id="skills3DCanvas"></canvas>
+          <div class="sys-label" style="bottom: 20px;">ITEM: SHADOW CRYSTAL</div>
+        </div>
+
+        <div class="skills-grid">
+          <!-- SKILL 1 -->
+          <div class="skill-card">
+            <div class="sc-head">
+              <div class="sc-icon"><i class="fab fa-react"></i></div>
+              <h3 class="sc-title">React / Next.js</h3>
             </div>
-
-            <!-- Right: 3D chess board -->
-            <div class="chess-right">
-              <canvas id="chessCanvas"></canvas>
-              <div class="chess-label">Light vs L — A Game of Intellect</div>
+            <div class="skill-bar-bg"><div class="skill-fill" data-w="95"></div></div>
+            <div class="skill-tags">
+              <span>Hooks</span><span>Redux</span><span>Context</span><span>SSR</span>
+            </div>
+          </div>
+          <!-- SKILL 2 -->
+          <div class="skill-card">
+            <div class="sc-head">
+              <div class="sc-icon"><i class="fab fa-js-square"></i></div>
+              <h3 class="sc-title">JavaScript / TS</h3>
+            </div>
+            <div class="skill-bar-bg"><div class="skill-fill" data-w="90"></div></div>
+            <div class="skill-tags">
+              <span>ES6+</span><span>TypeScript</span><span>DOM</span>
+            </div>
+          </div>
+          <!-- SKILL 3 -->
+          <div class="skill-card">
+            <div class="sc-head">
+              <div class="sc-icon"><i class="fab fa-css3-alt"></i></div>
+              <h3 class="sc-title">CSS & Animations</h3>
+            </div>
+            <div class="skill-bar-bg"><div class="skill-fill" data-w="92"></div></div>
+            <div class="skill-tags">
+              <span>GSAP</span><span>Tailwind</span><span>SASS</span><span>Three.js</span>
+            </div>
+          </div>
+          <!-- SKILL 4 -->
+          <div class="skill-card">
+            <div class="sc-head">
+              <div class="sc-icon"><i class="fab fa-node-js"></i></div>
+              <h3 class="sc-title">Backend Mages</h3>
+            </div>
+            <div class="skill-bar-bg"><div class="skill-fill" data-w="75"></div></div>
+            <div class="skill-tags">
+              <span>Node.js</span><span>Express</span><span>MongoDB</span><span>Firebase</span>
             </div>
           </div>
         </div>
+
       </section>
 
       <footer>
         <div class="footer-inner">
-          <span class="footer-logo">JD</span>
-          <span class="footer-quote">"I'll solve the case in my head... while eating cake."</span>
+          <span class="footer-logo">JD<span class="logo-accent">.</span></span>
+          <span class="footer-quote">"A king's domain is absolute."</span>
           <div class="footer-socials">
             <a href="https://github.com/Joyceson71" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
             <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
           </div>
         </div>
       </footer>
+
     </div>
   </div>
 
