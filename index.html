@@ -5,489 +5,447 @@
     <title>Joyceson · Frontend Developer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Joyceson Danielraj — Frontend Developer & UI Enthusiast crafting immersive, responsive web experiences." />
+    <meta name="theme-color" content="#050202" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Rubik+Glitch&display=swap" rel="stylesheet" />
+
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+
+    <!-- Three.js via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+    <!-- GSAP + ScrollTrigger + TextPlugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/SplitText.min.js"></script>
+
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
 
-    <!-- Custom Cursor -->
-    <div class="cursor-dot" id="cursorDot"></div>
-    <div class="cursor-ring" id="cursorRing"></div>
-    <div class="cursor-trail-container" id="cursorTrail"></div>
+    <!-- ═══ THREE.JS CANVAS BACKGROUND ═══ -->
+    <canvas id="threeCanvas"></canvas>
 
-    <!-- 3D Particle Canvas -->
-    <canvas id="bgCanvas"></canvas>
+    <!-- ═══ CUSTOM CURSOR ═══ -->
+    <div id="cursor-outer"></div>
+    <div id="cursor-inner"></div>
 
-    <!-- Noise Overlay -->
-    <div class="noise-overlay"></div>
+    <!-- ═══ LOADING SCREEN ═══ -->
+    <div id="loader">
+      <div class="loader-content">
+        <div class="loader-sigil">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon class="sigil-shape" points="50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5" fill="none" stroke="#e60039" stroke-width="1.5"/>
+            <polygon class="sigil-shape sigil-inner" points="50,20 80,35 80,65 50,80 20,65 20,35" fill="none" stroke="#6a0dad" stroke-width="1"/>
+            <circle cx="50" cy="50" r="5" fill="#e60039" class="sigil-core"/>
+          </svg>
+        </div>
+        <div class="loader-bar-wrap">
+          <div class="loader-bar" id="loaderBar"></div>
+        </div>
+        <span class="loader-text" id="loaderText">Initializing Domain...</span>
+      </div>
+    </div>
 
-    <!-- Grid Lines -->
-    <div class="grid-overlay"></div>
-
-    <!-- ======= HEADER ======= -->
+    <!-- ═══ HEADER ═══ -->
     <header id="header">
-      <a href="#home" class="logo" id="logo">
+      <a href="#home" class="logo" data-nav="home">
         <span class="logo-bracket">[</span>
-        <span class="logo-text">JD</span>
+        <span class="logo-name">JD</span>
         <span class="logo-bracket">]</span>
       </a>
+
       <nav id="mainNav">
-        <a href="#about" class="nav-link" data-text="About">About</a>
-        <a href="#skills" class="nav-link" data-text="Skills">Skills</a>
-        <a href="#project" class="nav-link" data-text="Projects">Projects</a>
-        <a href="#contact" class="nav-link" data-text="Contact">Contact</a>
+        <a href="#about"   class="nav-link" data-nav="about">About</a>
+        <a href="#skills"  class="nav-link" data-nav="skills">Skills</a>
+        <a href="#project" class="nav-link" data-nav="project">Projects</a>
+        <a href="#contact" class="nav-link" data-nav="contact">Contact</a>
       </nav>
-      <div class="header-right">
-        <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+
+      <div class="header-actions">
+        <a href="Joyceson-CV.pdf" target="_blank" class="resume-btn">
+          <i class="fas fa-arrow-up-right-from-square"></i>
+          <span>Resume</span>
+        </a>
+        <button class="burger" id="burger" aria-label="Menu">
           <span></span><span></span><span></span>
         </button>
-        <a href="Joyceson-CV.pdf" target="_blank" class="resume-btn">
-          <i class="fas fa-arrow-up-right-from-square"></i> Resume
-        </a>
       </div>
     </header>
 
-    <!-- ======= 3D UNIVERSE WRAPPER ======= -->
-    <main id="universe">
-      <div id="prison-realm">
+    <!-- ═══ SCROLL PROGRESS ═══ -->
+    <div id="scroll-progress"><div id="scroll-bar"></div></div>
 
-        <!-- ======= HOME ======= -->
-        <section id="home" class="section">
-      <!-- 3D Hero Scene -->
-      <div class="hero-scene" id="heroScene">
-        <div class="floating-cube cube1"></div>
-        <div class="floating-cube cube2"></div>
-        <div class="floating-cube cube3"></div>
-        <div class="floating-ring ring1"></div>
-        <div class="floating-ring ring2"></div>
-      </div>
+    <!-- ═══ MAIN SCROLL CONTAINER ═══ -->
+    <div id="smooth-wrapper">
+      <div id="smooth-content">
 
-      <div class="home-content">
-        <div class="home-left reveal-up">
-          <div class="label-badge">
-            <span class="badge-dot"></span>
-            <span class="badge-text">Available for Work</span>
-          </div>
-          <h1 class="hero-title">
-            <span class="title-line">Hello, I'm</span>
-            <span class="title-name" id="heroName">Joyceson</span>
-            <span class="title-role">
-              <span class="role-prefix">// </span>
-              <span class="typed-text" id="typedText"></span>
-              <span class="cursor-blink">|</span>
-            </span>
-          </h1>
-          <p class="hero-desc">
-            I design and build responsive, performance-focused web interfaces with strong attention to detail — clean layouts, smooth interactions, real-world solutions.
-          </p>
-          <div class="hero-stats">
-            <div class="stat-item">
-              <span class="stat-value">10+</span>
-              <span class="stat-label">Projects</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-              <span class="stat-value">React</span>
-              <span class="stat-label">Core Stack</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-              <span class="stat-value">UI/UX</span>
-              <span class="stat-label">Focus</span>
-            </div>
-          </div>
-          <div class="hero-actions">
-            <a href="#contact" class="btn-primary">
-              <span class="btn-text">Let's Work</span>
-              <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
-            </a>
-            <a href="Joyceson-CV.pdf" target="_blank" class="btn-ghost">
-              <i class="fas fa-download"></i> Download CV
-            </a>
-          </div>
-        </div>
+        <!-- ──────── HERO ──────── -->
+        <section id="home" class="section hero-section">
+          <div class="hero-inner">
 
-        <div class="home-right reveal-scale">
-          <div class="avatar-container" id="avatarContainer">
-            <div class="avatar-glow"></div>
-            <div class="avatar-hex">
-              <div class="hex-inner">
-                <img src="Daniel.jpg" alt="Joyceson Danielraj" />
+            <div class="hero-left">
+              <div class="hero-badge">
+                <span class="pulse-dot"></span>
+                <span>Available for Work</span>
+              </div>
+
+              <h1 class="hero-title">
+                <span class="ht-line ht-hello">Hello, I'm</span>
+                <span class="ht-line ht-name" id="heroName">Joyceson</span>
+                <span class="ht-line ht-role">
+                  <span class="role-prefix">// </span>
+                  <span id="typedText"></span><span class="caret">▮</span>
+                </span>
+              </h1>
+
+              <p class="hero-desc">
+                I design and build responsive, performance-focused web interfaces — clean layouts, smooth interactions, real-world solutions.
+              </p>
+
+              <div class="hero-stats">
+                <div class="stat">
+                  <span class="stat-num" data-count="10">0</span><span class="stat-suf">+</span>
+                  <span class="stat-lbl">Projects</span>
+                </div>
+                <div class="stat-sep"></div>
+                <div class="stat">
+                  <span class="stat-num">React</span>
+                  <span class="stat-lbl">Core Stack</span>
+                </div>
+                <div class="stat-sep"></div>
+                <div class="stat">
+                  <span class="stat-num">UI/UX</span>
+                  <span class="stat-lbl">Focus</span>
+                </div>
+              </div>
+
+              <div class="hero-btns">
+                <a href="#contact" class="btn-primary jjk-btn" data-nav="contact">
+                  <span>Let's Work</span>
+                  <i class="fas fa-arrow-right"></i>
+                  <div class="jjk-slash"></div>
+                </a>
+                <a href="Joyceson-CV.pdf" target="_blank" class="btn-ghost">
+                  <i class="fas fa-download"></i>
+                  <span>Download CV</span>
+                </a>
               </div>
             </div>
-            <div class="avatar-orbit orbit1">
-              <div class="orbit-dot"></div>
+
+            <div class="hero-right">
+              <div class="domain-orb" id="domainOrb">
+                <div class="orb-ring orb-ring-1"></div>
+                <div class="orb-ring orb-ring-2"></div>
+                <div class="orb-ring orb-ring-3"></div>
+                <div class="orb-core">
+                  <div class="orb-eye"></div>
+                </div>
+                <div class="orb-label ol-1">CURSED ENERGY</div>
+                <div class="orb-label ol-2">DOMAIN</div>
+                <div class="orb-label ol-3">EXPANSION</div>
+              </div>
             </div>
-            <div class="avatar-orbit orbit2">
-              <div class="orbit-dot"></div>
-            </div>
-            <div class="avatar-badge">
-              <i class="fab fa-react"></i>
-            </div>
-            <div class="avatar-badge">
-              <i class="fab fa-js"></i>
-            </div>
-            <div class="avatar-badge">
-              <i class="fab fa-css3-alt"></i>
-            </div>
+
           </div>
-        </div>
-      </div>
 
-      <div class="scroll-indicator">
-        <div class="scroll-line"></div>
-        <span class="scroll-text">Scroll</span>
-      </div>
-    </section>
+          <div class="scroll-hint">
+            <div class="sh-line"></div>
+            <span>Scroll</span>
+          </div>
+        </section>
 
-    <!-- ======= ABOUT ======= -->
-    <section id="about" class="section">
-      <div class="section-container">
-        <div class="section-header reveal-up">
-          <span class="section-tag">01 / About</span>
-          <h2 class="section-title">Who <em>I Am</em></h2>
-          <div class="title-line-dec"></div>
-        </div>
+        <!-- ──────── ABOUT ──────── -->
+        <section id="about" class="section">
+          <div class="section-container">
+            <div class="section-head">
+              <span class="sec-tag">01 / About</span>
+              <h2 class="sec-title split-title">Who <em>I Am</em></h2>
+              <div class="sec-rule"></div>
+            </div>
 
-        <div class="about-grid">
-          <div class="about-visual reveal-left">
-            <div class="about-3d-container">
-              <div class="cube">
-                <div class="cube-face front"></div>
-                <div class="cube-face back"></div>
-                <div class="cube-face right"></div>
-                <div class="cube-face left"></div>
-                <div class="cube-face top"></div>
-                <div class="cube-face bottom"></div>
-                
-                <div class="cube-inner">
-                  <div class="cube-face front"></div>
-                  <div class="cube-face back"></div>
-                  <div class="cube-face right"></div>
-                  <div class="cube-face left"></div>
-                  <div class="cube-face top"></div>
-                  <div class="cube-face bottom"></div>
+            <div class="about-grid">
+              <div class="about-vis">
+                <!-- Three.js will inject a canvas overlay here for the 3D sigil -->
+                <div class="about-3d" id="about3d"></div>
+                <div class="about-socials">
+                  <a href="https://github.com/Joyceson71" target="_blank" class="social-pill" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                  <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" class="social-pill" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                  <a href="https://instagram.com/j_d_2_8_" target="_blank" class="social-pill" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+              </div>
+
+              <div class="about-content">
+                <div class="code-card">
+                  <div class="code-card-head">
+                    <div class="code-dots"><span></span><span></span><span></span></div>
+                    <span class="code-file">about.js</span>
+                  </div>
+                  <pre class="code-body"><code><span class="ck">const</span> <span class="cv">joyceson</span> = {
+  <span class="cp">role</span>: <span class="cs">"Frontend Developer"</span>,
+  <span class="cp">passion</span>: <span class="cs">"Building Immersive UIs"</span>,
+  <span class="cp">status</span>: <span class="cs">"Open to Opportunities"</span>,
+  <span class="cp">stack</span>: [<span class="cs">"React"</span>, <span class="cs">"JS"</span>, <span class="cs">"CSS"</span>],
+};</code></pre>
+                </div>
+
+                <p class="about-p">
+                  I'm an aspiring frontend developer with a strong interest in modern web technologies. I enjoy turning ideas into interfaces that feel intuitive and fast, with a focus on responsive layouts and reusable components.
+                </p>
+                <p class="about-p">
+                  I regularly work with HTML, CSS, JavaScript, and React, and I'm actively exploring backend tools like Node.js and Django to become more full-stack.
+                </p>
+
+                <div class="skill-tags">
+                  <span>Pixel-perfect</span>
+                  <span>Responsive</span>
+                  <span>Performance</span>
+                  <span>Clean Code</span>
+                  <span>Accessibility</span>
                 </div>
               </div>
             </div>
-            <div class="about-socials">
-              <a href="https://github.com/Joyceson71" target="_blank" class="social-link" aria-label="GitHub">
-                <i class="fab fa-github"></i>
-              </a>
-              <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" class="social-link" aria-label="LinkedIn">
-                <i class="fab fa-linkedin"></i>
-              </a>
-              <a href="https://instagram.com/j_d_2_8_" target="_blank" class="social-link" aria-label="Instagram">
-                <i class="fab fa-instagram"></i>
-              </a>
-            </div>
           </div>
+        </section>
 
-          <div class="about-text reveal-right">
-            <div class="code-block">
-              <div class="code-header">
-                <span class="code-dot red"></span>
-                <span class="code-dot yellow"></span>
-                <span class="code-dot green"></span>
-                <span class="code-filename">about.js</span>
-              </div>
-              <div class="code-body">
-                <p><span class="code-kw">const</span> <span class="code-var">joyceson</span> = {</p>
-                <p>&nbsp;&nbsp;<span class="code-key">role</span>: <span class="code-str">"Frontend Developer"</span>,</p>
-                <p>&nbsp;&nbsp;<span class="code-key">passion</span>: <span class="code-str">"Building immersive UIs"</span>,</p>
-                <p>&nbsp;&nbsp;<span class="code-key">status</span>: <span class="code-str">"Open to Opportunities"</span>,</p>
-                <p>};</p>
-              </div>
+        <!-- ──────── SKILLS ──────── -->
+        <section id="skills" class="section section-alt">
+          <div class="section-container">
+            <div class="section-head">
+              <span class="sec-tag">02 / Skills</span>
+              <h2 class="sec-title split-title">My <em>Stack</em></h2>
+              <div class="sec-rule"></div>
             </div>
 
-            <p class="about-para">
-              I'm an aspiring frontend developer with a strong interest in modern web technologies. I enjoy turning ideas into interfaces that feel intuitive and fast, with a focus on responsive layouts and reusable components.
-            </p>
-            <p class="about-para">
-              I regularly work with HTML, CSS, JavaScript, and React, and I'm actively exploring backend tools like Node.js and Django to become more full-stack.
-            </p>
-
-            <div class="about-tags">
-              <span class="tag">Pixel-perfect</span>
-              <span class="tag">Responsive</span>
-              <span class="tag">Performance</span>
-              <span class="tag">Clean Code</span>
-              <span class="tag">Accessibility</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======= SKILLS ======= -->
-    <section id="skills" class="section section-alt">
-      <div class="section-container">
-        <div class="section-header reveal-up">
-          <span class="section-tag">02 / Skills</span>
-          <h2 class="section-title">My <em>Stack</em></h2>
-          <div class="title-line-dec"></div>
-        </div>
-
-        <div class="skills-grid">
-          <div class="skill-card reveal-up" style="--delay: 0s">
-            <div class="skill-icon-wrap">
-              <i class="fab fa-html5"></i>
-            </div>
-            <div class="skill-info">
-              <div class="skill-meta">
-                <span class="skill-name">HTML & CSS</span>
-                <span class="skill-pct">80%</span>
-              </div>
-              <div class="skill-bar">
-                <div class="skill-fill" data-width="80"></div>
-              </div>
-              <span class="skill-tags">HTML5 · CSS3 · Flexbox · Grid</span>
-            </div>
-          </div>
-
-          <div class="skill-card reveal-up" style="--delay: 0.1s">
-            <div class="skill-icon-wrap">
-              <i class="fab fa-js"></i>
-            </div>
-            <div class="skill-info">
-              <div class="skill-meta">
-                <span class="skill-name">JavaScript</span>
-                <span class="skill-pct">60%</span>
-              </div>
-              <div class="skill-bar">
-                <div class="skill-fill" data-width="60"></div>
-              </div>
-              <span class="skill-tags">ES6+ · DOM · APIs · Async</span>
-            </div>
-          </div>
-
-          <div class="skill-card reveal-up" style="--delay: 0.2s">
-            <div class="skill-icon-wrap">
-              <i class="fab fa-react"></i>
-            </div>
-            <div class="skill-info">
-              <div class="skill-meta">
-                <span class="skill-name">React</span>
-                <span class="skill-pct">10%</span>
-              </div>
-              <div class="skill-bar">
-                <div class="skill-fill" data-width="10"></div>
-              </div>
-              <span class="skill-tags">React · Redux · React Router</span>
-            </div>
-          </div>
-
-          <div class="skill-card reveal-up" style="--delay: 0.3s">
-            <div class="skill-icon-wrap">
-              <i class="fab fa-linux"></i>
-            </div>
-            <div class="skill-info">
-              <div class="skill-meta">
-                <span class="skill-name">Networking</span>
-                <span class="skill-pct">60%</span>
-              </div>
-              <div class="skill-bar">
-                <div class="skill-fill" data-width="60"></div>
-              </div>
-              <span class="skill-tags">TCP/IP · DNS · Routing · Switching</span>
-            </div>
-          </div>
-
-          <div class="skill-card reveal-up" style="--delay: 0.4s">
-            <div class="skill-icon-wrap">
-              <i class="fab fa-github"></i>
-            </div>
-            <div class="skill-info">
-              <div class="skill-meta">
-                <span class="skill-name">Version Control</span>
-                <span class="skill-pct">90%</span>
-              </div>
-              <div class="skill-bar">
-                <div class="skill-fill" data-width="90"></div>
-              </div>
-              <span class="skill-tags">Git · GitHub · VS Code · Postman</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======= PROJECTS ======= -->
-    <section id="project" class="section">
-      <div class="section-container">
-        <div class="section-header reveal-up">
-          <span class="section-tag">03 / Projects</span>
-          <h2 class="section-title">Featured <em>Work</em></h2>
-          <div class="title-line-dec"></div>
-        </div>
-
-        <div class="filter-row reveal-up">
-          <button class="filter-btn active" data-f="all">All</button>
-          <button class="filter-btn" data-f="web">Web Apps</button>
-          <button class="filter-btn" data-f="ui">UI Design</button>
-        </div>
-
-        <div class="projects-grid">
-          <div class="project-card reveal-up" data-cat="web ui" style="--delay: 0s">
-            <div class="project-thumb">
-              <img src="project-1.png" alt="Smart Quiz System" />
-              <div class="project-overlay">
-                <a href="https://github.com/Joyceson71/Quiz-app" target="_blank" class="project-link">
-                  <i class="fas fa-arrow-up-right-from-square"></i>
-                </a>
-              </div>
-              <div class="project-tag-chip">PRJ-001</div>
-            </div>
-            <div class="project-body">
-              <h3 class="project-title">Smart <span>Quiz</span> System</h3>
-              <p class="project-desc">Test your technical knowledge with curated MCQ challenges. 20 questions, 20 minutes — compete with up to 300 participants in real-time!</p>
-              <div class="project-tech">
-                <span>HTML</span><span>CSS</span><span>JS</span>
-              </div>
-              <div class="project-actions">
-                <a href="https://github.com/Joyceson71/Quiz-app" target="_blank" class="project-cta">
-                  Live Demo <i class="fas fa-arrow-right"></i>
-                </a>
-                <a href="https://github.com/Joyceson71/Quiz-app" target="_blank" class="project-gh">
-                  <i class="fab fa-github"></i> Code
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="project-card reveal-up" data-cat="web" style="--delay: 0.15s">
-            <div class="project-thumb">
-              <img src="project-2.png" alt="Learning Management System" />
-              <div class="project-overlay">
-                <a href="https://github.com/Joyceson71/kings-lms" target="_blank" class="project-link">
-                  <i class="fas fa-arrow-up-right-from-square"></i>
-                </a>
-              </div>
-              <div class="project-tag-chip">PRJ-002</div>
-            </div>
-            <div class="project-body">
-              <h3 class="project-title">Learning <span>Management</span> System</h3>
-              <p class="project-desc">Kings EC Platform — Campus Learning & Management System, with features for students, teachers, and administrators to manage courses, assignments, and grades. Also includes a responsive design and user-friendly interface.</p>
-              <div class="project-tech">
-                <span>HTML</span><span>CSS</span><span>JS</span>
-              </div>
-              <div class="project-actions">
-                <a href="https://github.com/Joyceson71/kings-lms" target="_blank" class="project-cta">
-                  Live Demo <i class="fas fa-arrow-right"></i>
-                </a>
-                <a href="https://github.com/Joyceson71/kings-lms" target="_blank" class="project-gh">
-                  <i class="fab fa-github"></i> Code
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div class="project-card reveal-up" data-cat="web ui" style="--delay: 0.3s">
-            <div class="project-thumb">
-              <img src="project-3.jpg" alt="Netflix UI" />
-              <div class="project-overlay">
-                <a href="#" class="project-link">
-                  <i class="fas fa-arrow-up-right-from-square"></i>
-                </a>
-              </div>
-              <div class="project-tag-chip">PRJ-003</div>
-            </div>
-            <div class="project-body">
-              <h3 class="project-title">Net<span>flix</span> Inspired UI</h3>
-              <p class="project-desc">Netflix-style UI with category rows, hover effects and smooth interactions throughout.</p>
-              <div class="project-tech">
-                <span>HTML</span><span>CSS</span><span>JS</span>
-              </div>
-              <div class="project-actions">
-                <a href="#" class="project-cta">
-                  Live Demo <i class="fas fa-arrow-right"></i>
-                </a>
-                <a href="#" class="project-gh">
-                  <i class="fab fa-github"></i> Code
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ======= CONTACT ======= -->
-    <section id="contact" class="section section-alt">
-      <div class="section-container">
-        <div class="section-header reveal-up">
-          <span class="section-tag">04 / Contact</span>
-          <h2 class="section-title">Get In <em>Touch</em></h2>
-          <div class="title-line-dec"></div>
-        </div>
-
-        <div class="contact-grid">
-          <div class="contact-info reveal-left">
-            <p class="contact-intro">Collaborate, discuss a project, or just say hi — always open to exciting opportunities.</p>
-
-            <div class="contact-links">
-              <a href="https://github.com/Joyceson71" target="_blank" class="contact-link-item">
-                <div class="cl-icon"><i class="fab fa-github"></i></div>
-                <div class="cl-text">
-                  <span class="cl-label">GitHub</span>
-                  <span class="cl-val">github.com/Joyceson71</span>
+            <div class="skills-grid">
+              <div class="skill-card" data-level="80">
+                <div class="skill-icon"><i class="fab fa-html5"></i></div>
+                <div class="skill-detail">
+                  <div class="skill-top">
+                    <span class="skill-name">HTML & CSS</span>
+                    <span class="skill-pct">80%</span>
+                  </div>
+                  <div class="skill-track"><div class="skill-fill" data-w="80"></div></div>
+                  <span class="skill-sub">HTML5 · CSS3 · Flexbox · Grid</span>
                 </div>
-                <i class="fas fa-arrow-up-right-from-square cl-arrow"></i>
-              </a>
-              <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" class="contact-link-item">
-                <div class="cl-icon"><i class="fab fa-linkedin"></i></div>
-                <div class="cl-text">
-                  <span class="cl-label">LinkedIn</span>
-                  <span class="cl-val">joyceson-danielraj</span>
+              </div>
+              <div class="skill-card" data-level="60">
+                <div class="skill-icon"><i class="fab fa-js"></i></div>
+                <div class="skill-detail">
+                  <div class="skill-top">
+                    <span class="skill-name">JavaScript</span>
+                    <span class="skill-pct">60%</span>
+                  </div>
+                  <div class="skill-track"><div class="skill-fill" data-w="60"></div></div>
+                  <span class="skill-sub">ES6+ · DOM · APIs · Async</span>
                 </div>
-                <i class="fas fa-arrow-up-right-from-square cl-arrow"></i>
-              </a>
-              <a href="https://www.instagram.com/still_jodaniel/" target="_blank" class="contact-link-item">
-                <div class="cl-icon"><i class="fab fa-instagram"></i></div>
-                <div class="cl-text">
-                  <span class="cl-label">Instagram</span>
-                  <span class="cl-val">still_jodaniel</span>
+              </div>
+              <div class="skill-card" data-level="10">
+                <div class="skill-icon"><i class="fab fa-react"></i></div>
+                <div class="skill-detail">
+                  <div class="skill-top">
+                    <span class="skill-name">React</span>
+                    <span class="skill-pct">10%</span>
+                  </div>
+                  <div class="skill-track"><div class="skill-fill" data-w="10"></div></div>
+                  <span class="skill-sub">React · Redux · React Router</span>
                 </div>
-                <i class="fas fa-arrow-up-right-from-square cl-arrow"></i>
-              </a>
+              </div>
+              <div class="skill-card" data-level="60">
+                <div class="skill-icon"><i class="fab fa-linux"></i></div>
+                <div class="skill-detail">
+                  <div class="skill-top">
+                    <span class="skill-name">Networking</span>
+                    <span class="skill-pct">60%</span>
+                  </div>
+                  <div class="skill-track"><div class="skill-fill" data-w="60"></div></div>
+                  <span class="skill-sub">TCP/IP · DNS · Routing · Switching</span>
+                </div>
+              </div>
+              <div class="skill-card" data-level="90">
+                <div class="skill-icon"><i class="fab fa-github"></i></div>
+                <div class="skill-detail">
+                  <div class="skill-top">
+                    <span class="skill-name">Version Control</span>
+                    <span class="skill-pct">90%</span>
+                  </div>
+                  <div class="skill-track"><div class="skill-fill" data-w="90"></div></div>
+                  <span class="skill-sub">Git · GitHub · VS Code · Postman</span>
+                </div>
+              </div>
             </div>
           </div>
+        </section>
 
-          <form class="contact-form reveal-right" id="contactForm" onsubmit="return false;">
-            <div class="form-group">
-              <label class="form-label">Your Name</label>
-              <input type="text" class="form-input" placeholder="John Doe" required />
+        <!-- ──────── PROJECTS ──────── -->
+        <section id="project" class="section">
+          <div class="section-container">
+            <div class="section-head">
+              <span class="sec-tag">03 / Projects</span>
+              <h2 class="sec-title split-title">Featured <em>Work</em></h2>
+              <div class="sec-rule"></div>
             </div>
-            <div class="form-group">
-              <label class="form-label">Email Address</label>
-              <input type="email" class="form-input" placeholder="john@example.com" required />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Message</label>
-              <textarea class="form-textarea" rows="5" placeholder="Let's build something amazing..." required></textarea>
-            </div>
-            <button type="submit" class="btn-primary" id="submitBtn">
-              <span class="btn-text">Send Message</span>
-              <span class="btn-icon"><i class="fas fa-paper-plane"></i></span>
-            </button>
-          </form>
-        </div>
-      </div>
-    </section>
-    </div> <!-- End Prison Realm -->
-    </main> <!-- End Universe -->
 
-    <!-- ======= FOOTER ======= -->
-    <footer>
-      <div class="footer-inner">
-        <span class="footer-logo">[JD]</span>
-        <span class="footer-copy">© 2026 Joyceson Danielraj · Built with passion</span>
-        <div class="footer-socials">
-          <a href="https://github.com/Joyceson71" target="_blank"><i class="fab fa-github"></i></a>
-          <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank"><i class="fab fa-linkedin"></i></a>
-        </div>
-      </div>
-    </footer>
+            <div class="filter-bar">
+              <button class="filter-btn active" data-f="all">All</button>
+              <button class="filter-btn" data-f="web">Web Apps</button>
+              <button class="filter-btn" data-f="ui">UI Design</button>
+            </div>
+
+            <div class="projects-grid">
+              <article class="pcard" data-cat="web ui">
+                <div class="pcard-thumb">
+                  <img src="project-1.png" alt="Smart Quiz System" loading="lazy" />
+                  <div class="pcard-overlay">
+                    <a href="https://github.com/Joyceson71/Quiz-app" target="_blank" class="pcard-visit">
+                      <i class="fas fa-arrow-up-right-from-square"></i>
+                    </a>
+                  </div>
+                  <span class="pcard-tag">PRJ-001</span>
+                </div>
+                <div class="pcard-body">
+                  <h3 class="pcard-title">Smart <em>Quiz</em> System</h3>
+                  <p class="pcard-desc">Test your technical knowledge with curated MCQ challenges. 20 questions, 20 minutes — compete with up to 300 participants in real-time!</p>
+                  <div class="pcard-tech"><span>HTML</span><span>CSS</span><span>JS</span></div>
+                  <div class="pcard-actions">
+                    <a href="https://github.com/Joyceson71/Quiz-app" target="_blank" class="pcard-cta">Live Demo <i class="fas fa-arrow-right"></i></a>
+                    <a href="https://github.com/Joyceson71/Quiz-app" target="_blank" class="pcard-gh"><i class="fab fa-github"></i> Code</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="pcard" data-cat="web">
+                <div class="pcard-thumb">
+                  <img src="project-2.png" alt="Learning Management System" loading="lazy" />
+                  <div class="pcard-overlay">
+                    <a href="https://github.com/Joyceson71/kings-lms" target="_blank" class="pcard-visit">
+                      <i class="fas fa-arrow-up-right-from-square"></i>
+                    </a>
+                  </div>
+                  <span class="pcard-tag">PRJ-002</span>
+                </div>
+                <div class="pcard-body">
+                  <h3 class="pcard-title">Learning <em>Management</em> System</h3>
+                  <p class="pcard-desc">Kings EC Platform — Campus LMS with features for students, teachers, and administrators. Fully responsive design with modern UI.</p>
+                  <div class="pcard-tech"><span>HTML</span><span>CSS</span><span>JS</span></div>
+                  <div class="pcard-actions">
+                    <a href="https://github.com/Joyceson71/kings-lms" target="_blank" class="pcard-cta">Live Demo <i class="fas fa-arrow-right"></i></a>
+                    <a href="https://github.com/Joyceson71/kings-lms" target="_blank" class="pcard-gh"><i class="fab fa-github"></i> Code</a>
+                  </div>
+                </div>
+              </article>
+
+              <article class="pcard" data-cat="web ui">
+                <div class="pcard-thumb">
+                  <img src="project-3.jpg" alt="Netflix UI Clone" loading="lazy" />
+                  <div class="pcard-overlay">
+                    <a href="#" class="pcard-visit"><i class="fas fa-arrow-up-right-from-square"></i></a>
+                  </div>
+                  <span class="pcard-tag">PRJ-003</span>
+                </div>
+                <div class="pcard-body">
+                  <h3 class="pcard-title">Net<em>flix</em> Inspired UI</h3>
+                  <p class="pcard-desc">Netflix-style UI with category rows, hover effects and smooth interactions throughout.</p>
+                  <div class="pcard-tech"><span>HTML</span><span>CSS</span><span>JS</span></div>
+                  <div class="pcard-actions">
+                    <a href="#" class="pcard-cta">Live Demo <i class="fas fa-arrow-right"></i></a>
+                    <a href="#" class="pcard-gh"><i class="fab fa-github"></i> Code</a>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- ──────── CONTACT ──────── -->
+        <section id="contact" class="section section-alt">
+          <div class="section-container">
+            <div class="section-head">
+              <span class="sec-tag">04 / Contact</span>
+              <h2 class="sec-title split-title">Get In <em>Touch</em></h2>
+              <div class="sec-rule"></div>
+            </div>
+
+            <div class="contact-grid">
+              <div class="contact-info">
+                <p class="contact-intro">Collaborate, discuss a project, or just say hi — always open to exciting opportunities.</p>
+
+                <div class="contact-links">
+                  <a href="https://github.com/Joyceson71" target="_blank" class="clink">
+                    <div class="clink-icon"><i class="fab fa-github"></i></div>
+                    <div class="clink-text">
+                      <span class="clink-label">GitHub</span>
+                      <span class="clink-val">github.com/Joyceson71</span>
+                    </div>
+                    <i class="fas fa-arrow-up-right-from-square clink-arrow"></i>
+                  </a>
+                  <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" class="clink">
+                    <div class="clink-icon"><i class="fab fa-linkedin"></i></div>
+                    <div class="clink-text">
+                      <span class="clink-label">LinkedIn</span>
+                      <span class="clink-val">joyceson-danielraj</span>
+                    </div>
+                    <i class="fas fa-arrow-up-right-from-square clink-arrow"></i>
+                  </a>
+                  <a href="https://www.instagram.com/still_jodaniel/" target="_blank" class="clink">
+                    <div class="clink-icon"><i class="fab fa-instagram"></i></div>
+                    <div class="clink-text">
+                      <span class="clink-label">Instagram</span>
+                      <span class="clink-val">still_jodaniel</span>
+                    </div>
+                    <i class="fas fa-arrow-up-right-from-square clink-arrow"></i>
+                  </a>
+                </div>
+              </div>
+
+              <form class="contact-form" id="contactForm">
+                <div class="fg">
+                  <label class="flabel">Your Name</label>
+                  <input type="text" class="finput" id="nameInput" placeholder="John Doe" />
+                  <span class="ferror" id="nameError">Name must be at least 2 characters.</span>
+                </div>
+                <div class="fg">
+                  <label class="flabel">Email Address</label>
+                  <input type="email" class="finput" id="emailInput" placeholder="john@example.com" />
+                  <span class="ferror" id="emailError">Please enter a valid email.</span>
+                </div>
+                <div class="fg">
+                  <label class="flabel">Message</label>
+                  <textarea class="finput ftextarea" id="msgInput" rows="5" placeholder="Let's build something amazing..."></textarea>
+                  <span class="ferror" id="msgError">Message must be at least 10 characters.</span>
+                </div>
+                <button type="submit" class="btn-primary jjk-btn" id="submitBtn">
+                  <span class="btn-text">Send Message</span>
+                  <span class="btn-icon"><i class="fas fa-paper-plane"></i></span>
+                  <div class="jjk-slash"></div>
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- ──────── FOOTER ──────── -->
+        <footer>
+          <div class="footer-inner">
+            <span class="footer-logo">[JD]</span>
+            <span class="footer-copy">© 2026 Joyceson Danielraj · Built with cursed energy</span>
+            <div class="footer-socials">
+              <a href="https://github.com/Joyceson71" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+              <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            </div>
+          </div>
+        </footer>
+
+      </div><!-- /smooth-content -->
+    </div><!-- /smooth-wrapper -->
 
     <script src="script.js"></script>
   </body>

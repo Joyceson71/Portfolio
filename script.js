@@ -1,537 +1,668 @@
-/* =============================================
-   JOYCESON PORTFOLIO — MAIN SCRIPT
-   Cosmic / Tech Theme
-   3D Particles · Magnetic Cursor · Typed Text
-   ============================================= */
-
+/**
+ * JOYCESON PORTFOLIO — script.js
+ * Powered by: Three.js · GSAP · Lenis · ScrollTrigger · TextPlugin
+ */
 (function () {
   "use strict";
 
-  /* ===================================================
-     1. HELPERS
-     =================================================== */
-  const $ = (sel, ctx = document) => ctx.querySelector(sel);
-  const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
-  const isMobile = window.matchMedia("(hover: none)").matches;
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* ─────────────────────────────────────────────────
+     HELPERS
+  ───────────────────────────────────────────────── */
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => [...document.querySelectorAll(s)];
 
-  /* ===================================================
-     2. CUSTOM MAGNETIC CURSOR WITH TRAIL
-     =================================================== */
-  if (!isMobile) {
-    const dot   = $("#cursorDot");
-    const ring  = $("#cursorRing");
-    const trail = $("#cursorTrail");
+  /* ─────────────────────────────────────────────────
+     1. LOADER  (fake progress with promise)
+  ───────────────────────────────────────────────── */
+  function initLoader() {
+    return new Promise((resolve) => {
+      const bar  = $("#loaderBar");
+      const text = $("#loaderText");
+      const msgs = ["Initializing Domain...", "Summoning Cursed Energy...", "Expanding Barriers...", "Domain Open."];
+      let progress = 0;
 
-    let mx = -200, my = -200;
-    let rx = -200, ry = -200;
-    let trailDots = [];
-    const TRAIL_LENGTH = 8;
+      const step = () => {
+        progress += Math.random() * 18 + 4;
+        if (progress >= 100) progress = 100;
+        bar.style.width = progress + "%";
+        const idx = Math.min(Math.floor(progress / 25), msgs.length - 1);
+        text.textContent = msgs[idx];
+        if (progress < 100) {
+          setTimeout(step, 80 + Math.random() * 80);
+        } else {
+          setTimeout(() => {
+            gsap.to("#loader", {
+              opacity: 0, duration: 0.8, ease: "power2.inOut",
+              onComplete: () => {
+                $("#loader").classList.add("hidden");
+                resolve();
+              }
+            });
+          }, 400);
+        }
+      };
+      step();
+    });
+  }
 
-    // Initialize trail dots
-    for (let i = 0; i < TRAIL_LENGTH; i++) {
-      const t = document.createElement("div");
-      t.className = "trail-dot";
-      t.style.opacity = 0;
-      t.style.width  = `${Math.max(2, 5 - i * 0.4)}px`;
-      t.style.height = t.style.width;
-      trail.appendChild(t);
-      trailDots.push({ el: t, x: -200, y: -200 });
+  /* ─────────────────────────────────────────────────
+     2. THREE.JS — Cursed Energy Background
+  ───────────────────────────────────────────────── */
+  function initThreeBackground() {
+    const canvas = $("#threeCanvas");
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 500);
+    camera.position.z = 80;
+
+    /* ── Cursed Smoke Particles ── */
+    const PCOUNT = window.innerWidth < 768 ? 3000 : 8000;
+    const positions = new Float32Array(PCOUNT * 3);
+    const colors    = new Float32Array(PCOUNT * 3);
+    const sizes     = new Float32Array(PCOUNT);
+
+    for (let i = 0; i < PCOUNT; i++) {
+      const i3 = i * 3;
+      positions[i3]     = (Math.random() - 0.5) * 200;
+      positions[i3 + 1] = (Math.random() - 0.5) * 200;
+      positions[i3 + 2] = (Math.random() - 0.5) * 200;
+      sizes[i] = Math.random() * 2 + 0.5;
+
+      // JJK Color: deep red OR hollow purple
+      if (Math.random() > 0.5) {
+        colors[i3] = 0.9;  colors[i3+1] = 0.0;  colors[i3+2] = 0.22; // Red
+      } else {
+        colors[i3] = 0.42; colors[i3+1] = 0.05; colors[i3+2] = 0.68; // Purple
+      }
     }
+
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute("color",    new THREE.BufferAttribute(colors, 3));
+    geo.setAttribute("size",     new THREE.BufferAttribute(sizes, 1));
+
+    const mat = new THREE.PointsMaterial({
+      size: 0.8,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.55,
+      sizeAttenuation: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+
+    const particles = new THREE.Points(geo, mat);
+    scene.add(particles);
+
+    /* ── Glowing Wireframe Ring Seals ── */
+    function makeRingSeal(radius, color, opacity = 0.4) {
+      const geo = new THREE.TorusGeometry(radius, 0.15, 6, 64);
+      const mat = new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity });
+      return new THREE.Mesh(geo, mat);
+    }
+
+    const ring1 = makeRingSeal(30, 0xe60039, 0.25);
+    const ring2 = makeRingSeal(22, 0x6a0dad, 0.2);
+    const ring3 = makeRingSeal(15, 0xff3374, 0.15);
+    ring1.rotation.x = Math.PI / 4;
+    ring2.rotation.y = Math.PI / 3;
+    ring3.rotation.z = Math.PI / 6;
+    scene.add(ring1, ring2, ring3);
+
+    /* ── Mouse interaction ── */
+    const mouse3D = { x: 0, y: 0 };
+    window.addEventListener("mousemove", (e) => {
+      mouse3D.x = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouse3D.y = -(e.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    /* ── Resize ── */
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    /* ── Animate ── */
+    const clock = new THREE.Clock();
+    const animate = () => {
+      requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+
+      // Drift particles
+      particles.rotation.y = t * 0.012;
+      particles.rotation.x = t * 0.006;
+
+      // Mouse parallax on camera
+      camera.position.x += (mouse3D.x * 8 - camera.position.x) * 0.04;
+      camera.position.y += (mouse3D.y * 6 - camera.position.y) * 0.04;
+
+      // Rotate seals
+      ring1.rotation.x = t * 0.2;
+      ring1.rotation.z = t * 0.1;
+      ring2.rotation.y = t * 0.15;
+      ring2.rotation.x = t * 0.08;
+      ring3.rotation.z = -t * 0.25;
+      ring3.rotation.y = t * 0.12;
+
+      // Pulsing opacity
+      mat.opacity = 0.45 + Math.sin(t * 0.8) * 0.1;
+
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    return { renderer, scene, camera };
+  }
+
+  /* ─────────────────────────────────────────────────
+     3. THREE.JS — About Section Sigil
+  ───────────────────────────────────────────────── */
+  function initAboutSigil() {
+    const container = $("#about3d");
+    if (!container) return;
+
+    const w = container.clientWidth || 300;
+    const h = container.clientHeight || 300;
+
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(w, h);
+    container.appendChild(renderer.domElement);
+
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+    camera.position.z = 4;
+
+    /* Outer Cursed Cube */
+    const outerGeo = new THREE.BoxGeometry(2, 2, 2);
+    const outerMat = new THREE.MeshBasicMaterial({ color: 0xe60039, wireframe: true, transparent: true, opacity: 0.5 });
+    const outerCube = new THREE.Mesh(outerGeo, outerMat);
+    scene.add(outerCube);
+
+    /* Inner Purple Cube */
+    const innerGeo = new THREE.BoxGeometry(1, 1, 1);
+    const innerMat = new THREE.MeshBasicMaterial({ color: 0x6a0dad, wireframe: true, transparent: true, opacity: 0.7 });
+    const innerCube = new THREE.Mesh(innerGeo, innerMat);
+    scene.add(innerCube);
+
+    /* Hollow Purple Ring */
+    const torusGeo = new THREE.TorusGeometry(1.6, 0.04, 8, 48);
+    const torusMat = new THREE.MeshBasicMaterial({ color: 0x6a0dad, transparent: true, opacity: 0.55 });
+    const torus1 = new THREE.Mesh(torusGeo, torusMat);
+    torus1.rotation.x = Math.PI / 2;
+    scene.add(torus1);
+
+    const torus2 = torus1.clone();
+    torus2.rotation.set(Math.PI / 4, Math.PI / 4, 0);
+    const torus2Mat = new THREE.MeshBasicMaterial({ color: 0xe60039, transparent: true, opacity: 0.4 });
+    torus2.material = torus2Mat;
+    scene.add(torus2);
+
+    /* Glowing Core Sphere */
+    const coreGeo = new THREE.SphereGeometry(0.18, 16, 16);
+    const coreMat = new THREE.MeshBasicMaterial({ color: 0xff3374 });
+    const core = new THREE.Mesh(coreGeo, coreMat);
+    scene.add(core);
+
+    /* Animate */
+    const clock = new THREE.Clock();
+    const animate = () => {
+      requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+
+      outerCube.rotation.x = t * 0.4;
+      outerCube.rotation.y = t * 0.6;
+      innerCube.rotation.x = -t * 0.6;
+      innerCube.rotation.y = t * 0.5;
+      innerCube.rotation.z = t * 0.3;
+      torus1.rotation.z = t * 0.3;
+      torus2.rotation.x = t * 0.25;
+      torus2.rotation.y = t * 0.35;
+
+      core.scale.setScalar(1 + Math.sin(t * 3) * 0.3);
+      outerMat.opacity = 0.35 + Math.sin(t * 1.2) * 0.15;
+      innerMat.opacity = 0.5 + Math.sin(t * 2) * 0.2;
+
+      renderer.render(scene, camera);
+    };
+    animate();
+  }
+
+  /* ─────────────────────────────────────────────────
+     4. LENIS SMOOTH SCROLL
+  ───────────────────────────────────────────────── */
+  function initLenis() {
+    const lenis = new Lenis({
+      wrapper: $("#smooth-wrapper"),
+      content: $("#smooth-content"),
+      duration: 1.4,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: "vertical",
+      smooth: true,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      ScrollTrigger.update();
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // Scroll progress bar
+    const scrollBar = $("#scroll-bar");
+    lenis.on("scroll", ({ scroll, limit }) => {
+      const pct = (scroll / limit) * 100;
+      if (scrollBar) scrollBar.style.width = pct + "%";
+    });
+
+    return lenis;
+  }
+
+  /* ─────────────────────────────────────────────────
+     5. GSAP ANIMATIONS
+  ───────────────────────────────────────────────── */
+  function initGSAP(lenis) {
+    gsap.registerPlugin(ScrollTrigger, TextPlugin);
+
+    // Connect Lenis to ScrollTrigger
+    ScrollTrigger.scrollerProxy("#smooth-wrapper", {
+      scrollTop(value) {
+        if (arguments.length) lenis.scrollTo(value);
+        return lenis.scroll;
+      },
+      getBoundingClientRect() {
+        return { top: 0, left: 0, width: window.innerWidth, height: window.innerHeight };
+      },
+    });
+
+    /* ── HERO entrance ── */
+    const heroTl = gsap.timeline({ delay: 0.2 });
+    heroTl
+      .from(".hero-badge",  { opacity: 0, y: 20, duration: 0.6, ease: "power3.out" })
+      .from(".ht-hello",    { opacity: 0, x: -30, duration: 0.7, ease: "power3.out" }, "-=0.3")
+      .from(".ht-name",     { opacity: 0, x: -50, duration: 0.8, ease: "power3.out", skewX: -5 }, "-=0.4")
+      .from(".ht-role",     { opacity: 0, x: -30, duration: 0.6, ease: "power3.out" }, "-=0.4")
+      .from(".hero-desc",   { opacity: 0, y: 20, duration: 0.6, ease: "power2.out" }, "-=0.3")
+      .from(".hero-stats",  { opacity: 0, y: 20, duration: 0.5, ease: "power2.out" }, "-=0.2")
+      .from(".hero-btns",   { opacity: 0, y: 20, duration: 0.5, ease: "power2.out" }, "-=0.2")
+      .from(".domain-orb",  { opacity: 0, scale: 0.7, duration: 1.2, ease: "elastic.out(1, 0.5)" }, 0.4)
+      .from(".scroll-hint", { opacity: 0, y: 10, duration: 0.4, ease: "power2.out" }, "-=0.3");
+
+    /* ── Stat counter animation ── */
+    $$(".stat-num[data-count]").forEach((el) => {
+      const target = parseInt(el.dataset.count);
+      gsap.fromTo(el, { textContent: 0 }, {
+        textContent: target,
+        duration: 2.5,
+        ease: "power2.out",
+        delay: 1.5,
+        snap: { textContent: 1 },
+        onUpdate: function () { el.textContent = Math.round(this.targets()[0].textContent); }
+      });
+    });
+
+    /* ── Section reveal helper ── */
+    function revealSection(sectionId, elements) {
+      elements.forEach(({ sel, from, delay = 0 }) => {
+        $$(sel).forEach((el) => {
+          if (!el.closest(sectionId)) return;
+          gsap.from(el, {
+            ...from,
+            duration: 0.8,
+            ease: "power3.out",
+            delay,
+            scrollTrigger: {
+              trigger: el,
+              scroller: "#smooth-wrapper",
+              start: "top 85%",
+              toggleActions: "play none none none",
+            }
+          });
+        });
+      });
+    }
+
+    /* About */
+    revealSection("#about", [
+      { sel: ".section-head", from: { opacity: 0, y: 40 } },
+      { sel: ".about-vis",    from: { opacity: 0, x: -60 }, delay: 0.2 },
+      { sel: ".about-content",from: { opacity: 0, x: 60 }, delay: 0.3 },
+    ]);
+
+    /* Skills */
+    $$(".skill-card").forEach((card, i) => {
+      gsap.from(card, {
+        opacity: 0, x: -40, duration: 0.7,
+        ease: "power3.out", delay: i * 0.1,
+        scrollTrigger: {
+          trigger: card, scroller: "#smooth-wrapper",
+          start: "top 88%", toggleActions: "play none none none",
+          onEnter: () => {
+            const fill = card.querySelector(".skill-fill");
+            if (fill) fill.style.width = fill.dataset.w + "%";
+          }
+        }
+      });
+    });
+
+    /* Projects */
+    $$(".pcard").forEach((card, i) => {
+      gsap.from(card, {
+        opacity: 0, y: 60, duration: 0.8,
+        ease: "power3.out", delay: i * 0.15,
+        scrollTrigger: {
+          trigger: card, scroller: "#smooth-wrapper",
+          start: "top 88%", toggleActions: "play none none none",
+        }
+      });
+    });
+
+    /* Contact */
+    revealSection("#contact", [
+      { sel: ".contact-info", from: { opacity: 0, x: -50 }, delay: 0.1 },
+      { sel: ".contact-form", from: { opacity: 0, x: 50 }, delay: 0.2 },
+    ]);
+  }
+
+  /* ─────────────────────────────────────────────────
+     6. TYPED TEXT EFFECT
+  ───────────────────────────────────────────────── */
+  function initTyped() {
+    const el = $("#typedText");
+    if (!el) return;
+    const phrases = ["Frontend Developer", "UI Enthusiast", "React Learner", "Problem Solver"];
+    let pi = 0, ci = 0, deleting = false;
+
+    function type() {
+      const word = phrases[pi];
+      el.textContent = deleting ? word.slice(0, ci--) : word.slice(0, ci++);
+
+      const pause = deleting ? (ci < 0 ? 500 : 50) : ci > word.length ? 2000 : 90;
+      if (!deleting && ci > word.length) { deleting = true; }
+      if (deleting && ci < 0)          { deleting = false; pi = (pi + 1) % phrases.length; ci = 0; }
+      setTimeout(type, pause);
+    }
+    setTimeout(type, 1200);
+  }
+
+  /* ─────────────────────────────────────────────────
+     7. CUSTOM CURSOR
+  ───────────────────────────────────────────────── */
+  function initCursor() {
+    const isMobile = window.matchMedia("(hover: none)").matches;
+    if (isMobile) return;
+
+    const outer = $("#cursor-outer");
+    const inner = $("#cursor-inner");
+    let mx = -100, my = -100, ox = -100, oy = -100;
 
     document.addEventListener("mousemove", (e) => {
-      mx = e.clientX;
-      my = e.clientY;
-      dot.style.left = mx + "px";
-      dot.style.top  = my + "px";
+      mx = e.clientX; my = e.clientY;
+      inner.style.left = mx + "px";
+      inner.style.top  = my + "px";
     });
 
-    // Smooth ring follow
-    function animateCursor() {
-      rx += (mx - rx) * 0.12;
-      ry += (my - ry) * 0.12;
-      ring.style.left = rx + "px";
-      ring.style.top  = ry + "px";
+    (function followOuter() {
+      ox += (mx - ox) * 0.1;
+      oy += (my - oy) * 0.1;
+      outer.style.left = ox + "px";
+      outer.style.top  = oy + "px";
+      requestAnimationFrame(followOuter);
+    })();
 
-      // Trail: each dot follows the next with delay
-      for (let i = TRAIL_LENGTH - 1; i > 0; i--) {
-        trailDots[i].x += (trailDots[i - 1].x - trailDots[i].x) * 0.28;
-        trailDots[i].y += (trailDots[i - 1].y - trailDots[i].y) * 0.28;
-      }
-      trailDots[0].x = mx;
-      trailDots[0].y = my;
-
-      trailDots.forEach((t, idx) => {
-        t.el.style.left    = t.x + "px";
-        t.el.style.top     = t.y + "px";
-        t.el.style.opacity = `${(1 - idx / TRAIL_LENGTH) * 0.45}`;
-        t.el.style.background = idx < TRAIL_LENGTH / 2
-          ? "rgba(99,102,241,0.9)"
-          : "rgba(6,182,212,0.7)";
-      });
-
-      requestAnimationFrame(animateCursor);
-    }
-    animateCursor();
-
-    // Hover states
-    const hoverEls = $$("a, button, .skill-card, .project-card, .contact-link-item, .filter-btn");
-    hoverEls.forEach((el) => {
-      el.addEventListener("mouseenter", () => ring.classList.add("is-hovered"));
-      el.addEventListener("mouseleave", () => ring.classList.remove("is-hovered"));
+    $$("a, button, .skill-card, .pcard, .clink, .filter-btn").forEach((el) => {
+      el.addEventListener("mouseenter", () => document.body.classList.add("cursor-hover"));
+      el.addEventListener("mouseleave", () => document.body.classList.remove("cursor-hover"));
     });
 
-    document.addEventListener("mousedown", () => ring.classList.add("is-clicked"));
-    document.addEventListener("mouseup",   () => ring.classList.remove("is-clicked"));
-
-    // Hide when leaving window
-    document.addEventListener("mouseleave", () => {
-      dot.style.opacity  = "0";
-      ring.style.opacity = "0";
-    });
-    document.addEventListener("mouseenter", () => {
-      dot.style.opacity  = "1";
-      ring.style.opacity = "1";
-    });
+    document.addEventListener("mouseleave", () => { inner.style.opacity = "0"; outer.style.opacity = "0"; });
+    document.addEventListener("mouseenter", () => { inner.style.opacity = "1"; outer.style.opacity = "1"; });
   }
 
-  /* ===================================================
-     3. 3D PARTICLE SYSTEM (WebGL-inspired Canvas)
-     =================================================== */
-  const canvas = $("#bgCanvas");
-  const ctx = canvas.getContext("2d");
+  /* ─────────────────────────────────────────────────
+     8. HEADER SCROLL STATE
+  ───────────────────────────────────────────────── */
+  function initHeader(lenis) {
+    const header = $("header");
+    lenis.on("scroll", ({ scroll }) => {
+      header.classList.toggle("scrolled", scroll > 30);
+    });
 
-  let W = 0, H = 0;
-  function resizeCanvas() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  resizeCanvas();
-  window.addEventListener("resize", resizeCanvas);
-
-  const mouse = { x: W / 2, y: H / 2, vx: 0, vy: 0 };
-  window.addEventListener("mousemove", (e) => {
-    mouse.vx = e.clientX - mouse.x;
-    mouse.vy = e.clientY - mouse.y;
-    mouse.x  = e.clientX;
-    mouse.y  = e.clientY;
-  });
-
-  // Cursed Energy Particles
-  class CursedParticle {
-    constructor() {
-      this.init();
-      this.y = Math.random() * H; // initial random spread
-    }
-    init() {
-      this.x = Math.random() * W;
-      this.y = H + Math.random() * 100;
-      this.r = 4 + Math.random() * 20;
-      this.vx = (Math.random() - 0.5) * 2;
-      this.vy = -(1 + Math.random() * 4);
-      this.alpha = 0.2 + Math.random() * 0.6;
-      this.life = 1;
-      this.decay = 0.003 + Math.random() * 0.015;
-      this.hue = Math.random() > 0.5 ? 345 : 280; // Red or Deep Purple
-    }
-    update() {
-      this.x += this.vx;
-      this.y += this.vy;
-      this.life -= this.decay;
-      
-      // Turbulence
-      this.vx += (Math.random() - 0.5) * 0.6;
-      this.r += 0.1; // Expand as it dissipates
-
-      if (this.life <= 0 || this.r > 50) {
-        this.init();
-      }
-
-      // Mouse repulsion (Curse aura avoiding mouse)
-      if (!isMobile) {
-        const dx = this.x - mouse.x;
-        const dy = this.y - mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 200) {
-          const force = (1 - dist / 200) * 3;
-          this.x += (dx / dist) * force;
-          this.y += (dy / dist) * force;
+    /* Active nav based on section in view */
+    const sections = $$("section[id]");
+    const links    = $$(".nav-link");
+    lenis.on("scroll", ({ scroll }) => {
+      const halfway = window.innerHeight / 2;
+      sections.forEach((sec) => {
+        const top    = sec.offsetTop - 100;
+        const bottom = top + sec.offsetHeight;
+        if (scroll + halfway >= top && scroll + halfway < bottom) {
+          links.forEach(l => l.classList.remove("active-nav"));
+          const link = links.find(l => l.getAttribute("href") === `#${sec.id}`);
+          if (link) link.classList.add("active-nav");
         }
-      }
-    }
-    draw() {
-      ctx.save();
-      ctx.globalCompositeOperation = "lighter";
-      ctx.globalAlpha = this.alpha * this.life;
-      
-      const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
-      grad.addColorStop(0, `hsla(${this.hue}, 100%, 50%, 0.8)`);
-      grad.addColorStop(0.4, `hsla(${this.hue}, 80%, 30%, 0.4)`);
-      grad.addColorStop(1, "transparent");
-      
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    }
-  }
-
-  const PARTICLE_COUNT = isMobile ? 60 : 150;
-  const particles = Array.from({ length: PARTICLE_COUNT }, () => new CursedParticle());
-
-  function renderFrame() {
-    // Trailing dark smoke effect instead of clearRect
-    ctx.fillStyle = "rgba(5, 2, 2, 0.15)";
-    ctx.fillRect(0, 0, W, H);
-
-    if (!reducedMotion) {
-      particles.forEach((p) => { p.update(); p.draw(); });
-    }
-
-    requestAnimationFrame(renderFrame);
-  }
-  renderFrame();
-
-  /* ===================================================
-     4. TYPED TEXT EFFECT
-     =================================================== */
-  const typedEl = $("#typedText");
-  const phrases = [
-    "Frontend Developer",
-    "UI Enthusiast",
-    "React Learner",
-    "Problem Solver",
-  ];
-  let pIdx = 0, cIdx = 0, isDeleting = false;
-
-  function type() {
-    const phrase = phrases[pIdx];
-    if (!typedEl) return;
-
-    if (isDeleting) {
-      typedEl.textContent = phrase.substring(0, --cIdx);
-    } else {
-      typedEl.textContent = phrase.substring(0, ++cIdx);
-    }
-
-    let delay = isDeleting ? 45 : 85;
-
-    if (!isDeleting && cIdx === phrase.length) {
-      delay = 1800;
-      isDeleting = true;
-    } else if (isDeleting && cIdx === 0) {
-      isDeleting = false;
-      pIdx = (pIdx + 1) % phrases.length;
-      delay = 300;
-    }
-
-    setTimeout(type, delay);
-  }
-  type();
-
-  /* ===================================================
-     5. HEADER SCROLL EFFECT
-     =================================================== */
-  const header = $("header");
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 30) {
-      header.classList.add("scrolled");
-    } else {
-      header.classList.remove("scrolled");
-    }
-  });
-
-  /* ===================================================
-     6. SCROLL REVEAL
-     =================================================== */
-  function setupReveal() {
-    const revealEls = $$(
-      ".reveal-up, .reveal-left, .reveal-right, .reveal-scale"
-    );
-
-    if (reducedMotion) {
-      revealEls.forEach((el) => {
-        el.classList.add("visible");
-        activateSkills(el);
       });
-      return;
-    }
+    });
+  }
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            activateSkills(entry.target);
-            io.unobserve(entry.target);
-          }
+  /* ─────────────────────────────────────────────────
+     9. MOBILE BURGER
+  ───────────────────────────────────────────────── */
+  function initBurger() {
+    const burger = $("#burger");
+    const nav    = $("#mainNav");
+    if (!burger || !nav) return;
+
+    burger.addEventListener("click", () => {
+      burger.classList.toggle("open");
+      nav.classList.toggle("open");
+    });
+
+    // Close on link click
+    $$(".nav-link").forEach((l) => {
+      l.addEventListener("click", () => {
+        burger.classList.remove("open");
+        nav.classList.remove("open");
+      });
+    });
+  }
+
+  /* ─────────────────────────────────────────────────
+     10. SMOOTH NAV LINKS (Lenis scroll-to)
+  ───────────────────────────────────────────────── */
+  function initNavLinks(lenis) {
+    $$("a[href^='#']").forEach((a) => {
+      a.addEventListener("click", (e) => {
+        const target = $(a.getAttribute("href"));
+        if (target) {
+          e.preventDefault();
+          lenis.scrollTo(target, { offset: -68, duration: 1.6 });
+        }
+      });
+    });
+  }
+
+  /* ─────────────────────────────────────────────────
+     11. PROJECT FILTER
+  ───────────────────────────────────────────────── */
+  function initFilter() {
+    const btns  = $$(".filter-btn");
+    const cards = $$(".pcard");
+
+    btns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        btns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const f = btn.dataset.f;
+
+        cards.forEach((card) => {
+          const show = f === "all" || (card.dataset.cat || "").includes(f);
+          gsap.to(card, {
+            opacity: show ? 1 : 0.2,
+            scale:   show ? 1 : 0.95,
+            duration: 0.35, ease: "power2.out",
+            pointerEvents: show ? "auto" : "none",
+          });
         });
-      },
-      { threshold: 0.15 }
-    );
-
-    revealEls.forEach((el) => io.observe(el));
+      });
+    });
   }
 
-  function activateSkills(el) {
-    $$(".skill-fill", el).forEach((fill) => {
-      fill.style.width = (fill.dataset.width || 0) + "%";
-    });
-    // Also check parent cards
-    if (el.classList.contains("skill-card")) {
-      const fill = $(".skill-fill", el);
-      if (fill) fill.style.width = (fill.dataset.width || 0) + "%";
+  /* ─────────────────────────────────────────────────
+     12. CONTACT FORM — Validation + Google Sheets
+  ───────────────────────────────────────────────── */
+  function initContactForm() {
+    const form    = $("#contactForm");
+    const nameEl  = $("#nameInput");
+    const emailEl = $("#emailInput");
+    const msgEl   = $("#msgInput");
+    const nameErr = $("#nameError");
+    const emailErr= $("#emailError");
+    const msgErr  = $("#msgError");
+    const submitBtn = $("#submitBtn");
+    if (!form) return;
+
+    function validateEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+    function setError(input, errEl, show) {
+      input.classList.toggle("error", show);
+      errEl.classList.toggle("show", show);
     }
-  }
 
-  setupReveal();
+    // Real-time feedback
+    nameEl.addEventListener("input",  () => setError(nameEl,  nameErr,  nameEl.value.trim().length < 2 && nameEl.value.trim().length > 0));
+    emailEl.addEventListener("input", () => setError(emailEl, emailErr, !validateEmail(emailEl.value.trim()) && emailEl.value.trim().length > 0));
+    msgEl.addEventListener("input",   () => setError(msgEl,   msgErr,   msgEl.value.trim().length < 10 && msgEl.value.trim().length > 0));
 
-  /* ===================================================
-     7. MOBILE MENU
-     =================================================== */
-  const menuBtn = $("#menuToggle");
-  const mainNav = $("#mainNav");
-
-  if (menuBtn) {
-    menuBtn.addEventListener("click", () => {
-      mainNav.classList.toggle("open");
-      menuBtn.classList.toggle("is-open");
-    });
-
-    $$(".nav-link").forEach((link) => {
-      link.addEventListener("click", () => {
-        mainNav.classList.remove("open");
-        menuBtn.classList.remove("is-open");
-      });
-    });
-  }
-
-  /* ===================================================
-     8. PROJECT FILTERING
-     =================================================== */
-  $$(".filter-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      $$(".filter-btn").forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      const f = btn.dataset.f;
-      $$(".project-card").forEach((card) => {
-        const cats = (card.dataset.cat || "").split(" ");
-        const show = f === "all" || cats.includes(f);
-        card.style.display = show ? "" : "none";
-        if (show) {
-          setTimeout(() => {
-            card.style.opacity = "1";
-            card.style.transform = "none";
-          }, 20);
-        }
-      });
-    });
-  });
-
-  /* ===================================================
-     9. CONTACT FORM VALIDATION
-     =================================================== */
-  const contactForm = $("#contactForm");
-  const submitBtn   = $("#submitBtn");
-  const nameInput   = $("#nameInput");
-  const emailInput  = $("#emailInput");
-  const msgInput    = $("#messageInput");
-
-  const nameError   = $("#nameError");
-  const emailError  = $("#emailError");
-  const msgError    = $("#messageError");
-
-  function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(String(email).toLowerCase());
-  }
-
-  if (contactForm) {
-    contactForm.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      
-      let isValid = true;
 
-      // Validate Name
-      if (nameInput.value.trim().length < 2) {
-        nameInput.classList.add("input-error");
-        nameError.style.display = "block";
-        isValid = false;
-      } else {
-        nameInput.classList.remove("input-error");
-        nameError.style.display = "none";
-      }
+      const name  = nameEl.value.trim();
+      const email = emailEl.value.trim();
+      const msg   = msgEl.value.trim();
 
-      // Validate Email
-      if (!validateEmail(emailInput.value.trim())) {
-        emailInput.classList.add("input-error");
-        emailError.style.display = "block";
-        isValid = false;
-      } else {
-        emailInput.classList.remove("input-error");
-        emailError.style.display = "none";
-      }
+      let valid = true;
+      if (name.length  < 2)           { setError(nameEl, nameErr, true);   valid = false; }
+      if (!validateEmail(email))       { setError(emailEl, emailErr, true); valid = false; }
+      if (msg.length   < 10)          { setError(msgEl, msgErr, true);     valid = false; }
+      if (!valid) return;
 
-      // Validate Message
-      if (msgInput.value.trim().length < 10) {
-        msgInput.classList.add("input-error");
-        msgError.style.display = "block";
-        isValid = false;
-      } else {
-        msgInput.classList.remove("input-error");
-        msgError.style.display = "none";
-      }
-
-      if (!isValid) return;
+      const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_URL/exec";
 
       const origText = submitBtn.querySelector(".btn-text").textContent;
-      const origIcon = submitBtn.querySelector(".btn-icon").innerHTML;
-
-      // 1. Setup the Web App URL here from your Google Apps Script
-      // Replace this string with the URL you get after deploying your Google Apps Script
-      const scriptURL = "https://script.google.com/u/0/home/projects/1jQVhY4NL99K73S3hk9pMhQ12v_s7bdmLFmd4gt87k9ucuAY0U5hBAKBR/edit";
-
-      // Show sending state
       submitBtn.querySelector(".btn-text").textContent = "Sending...";
       submitBtn.disabled = true;
 
-      // Prepare form data
-      const formData = new FormData();
-      formData.append("Name", nameInput.value.trim());
-      formData.append("Email", emailInput.value.trim());
-      formData.append("Message", msgInput.value.trim());
+      const data = new FormData();
+      data.append("Name", name);
+      data.append("Email", email);
+      data.append("Message", msg);
 
-      // Send the data
-      fetch(scriptURL, { method: "POST", body: formData, mode: "no-cors" })
-        .then(() => {
-          // Success state
-          submitBtn.querySelector(".btn-text").textContent = "Message Sent!";
-          submitBtn.querySelector(".btn-icon").innerHTML = '<i class="fas fa-check"></i>';
-          submitBtn.style.background = "linear-gradient(135deg, #059669, #10b981)";
-          submitBtn.style.boxShadow  = "0 4px 24px rgba(16, 185, 129, 0.4)";
-
-          setTimeout(() => {
-            submitBtn.querySelector(".btn-text").textContent = origText;
-            submitBtn.querySelector(".btn-icon").innerHTML   = origIcon;
-            submitBtn.style.background = "";
-            submitBtn.style.boxShadow  = "";
-            submitBtn.disabled = false;
-            contactForm.reset();
-          }, 3000);
-        })
-        .catch(error => {
-          console.error("Error!", error.message);
-          submitBtn.querySelector(".btn-text").textContent = "Error! Try Again.";
-          setTimeout(() => {
-            submitBtn.querySelector(".btn-text").textContent = origText;
-            submitBtn.disabled = false;
-          }, 3000);
-        });
+      try {
+        await fetch(SCRIPT_URL, { method: "POST", body: data, mode: "no-cors" });
+        submitBtn.querySelector(".btn-text").textContent = "Message Sent!";
+        gsap.to(submitBtn, { backgroundColor: "#059669", duration: 0.4 });
+        setTimeout(() => {
+          submitBtn.querySelector(".btn-text").textContent = origText;
+          gsap.to(submitBtn, { backgroundColor: "", duration: 0.4 });
+          submitBtn.disabled = false;
+          form.reset();
+        }, 3000);
+      } catch (err) {
+        console.error(err);
+        submitBtn.querySelector(".btn-text").textContent = "Error! Try Again.";
+        setTimeout(() => {
+          submitBtn.querySelector(".btn-text").textContent = origText;
+          submitBtn.disabled = false;
+        }, 3000);
+      }
     });
   }
 
-  /* ===================================================
-     10. HERO AVATAR 3D PARALLAX
-     =================================================== */
-  const avatarContainer = $("#avatarContainer");
-  if (avatarContainer && !isMobile) {
+  /* ─────────────────────────────────────────────────
+     13. HERO ORB — mouse parallax
+  ───────────────────────────────────────────────── */
+  function initOrbParallax() {
+    const orb = $("#domainOrb");
+    if (!orb || window.matchMedia("(hover: none)").matches) return;
+
     document.addEventListener("mousemove", (e) => {
-      const rect   = avatarContainer.getBoundingClientRect();
-      const cx     = rect.left + rect.width / 2;
-      const cy     = rect.top  + rect.height / 2;
-      const dx     = (e.clientX - cx) / (window.innerWidth / 2);
-      const dy     = (e.clientY - cy) / (window.innerHeight / 2);
-      const rotX   = dy * -12;
-      const rotY   = dx * 12;
-
-      avatarContainer.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+      const rx = ((e.clientX / window.innerWidth)  - 0.5) * 20;
+      const ry = ((e.clientY / window.innerHeight) - 0.5) * -20;
+      gsap.to(orb, { rotateX: ry, rotateY: rx, duration: 0.6, ease: "power2.out", transformPerspective: 1000 });
     });
+  }
 
-    document.addEventListener("mouseleave", () => {
-      avatarContainer.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg)";
-    });
+  /* ─────────────────────────────────────────────────
+     INIT (after loader)
+  ───────────────────────────────────────────────── */
+  async function init() {
+    // Start Three.js background immediately (visible behind loader)
+    initThreeBackground();
+
+    // Wait for loader
+    await initLoader();
+
+    // Init everything else
+    initAboutSigil();
+    const lenis = initLenis();
+    initGSAP(lenis);
+    initTyped();
+    initCursor();
+    initHeader(lenis);
+    initBurger();
+    initNavLinks(lenis);
+    initFilter();
+    initContactForm();
+    initOrbParallax();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+  /* ===================================================
+     13. SCROLL PROGRESS BAR
+     =================================================== */
+  const progressBar = $("#scrollProgressBar");
+  if (progressBar) {
+    window.addEventListener("scroll", () => {
+      const scrollTotal = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (scrollTotal / height) * 100;
+      progressBar.style.width = scrolled + "%";
+    }, { passive: true });
   }
 
   /* ===================================================
-     11. HERO SCENE PARALLAX (subtle)
+     14. DARK/LIGHT THEME TOGGLE
      =================================================== */
-  const heroScene = $("#heroScene");
-  if (heroScene && !isMobile) {
-    window.addEventListener("mousemove", (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 20;
-      const y = (e.clientY / window.innerHeight - 0.5) * 20;
-      heroScene.style.transform = `translate(${x}px, ${y}px)`;
+  const themeToggle = $("#themeToggle");
+  if (themeToggle) {
+    const icon = themeToggle.querySelector("i");
+    const currentTheme = localStorage.getItem("portfolio_theme");
+    
+    if (currentTheme === "light") {
+      document.body.classList.add("light-mode");
+      icon.className = "fas fa-sun";
+    } else {
+      icon.className = "fas fa-moon";
+    }
+
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("light-mode");
+      if (document.body.classList.contains("light-mode")) {
+        icon.className = "fas fa-sun";
+        localStorage.setItem("portfolio_theme", "light");
+      } else {
+        icon.className = "fas fa-moon";
+        localStorage.setItem("portfolio_theme", "dark");
+      }
     });
   }
-
-  /* ===================================================
-     12. 3D UNIVERSE NAVIGATION (DOMAIN EXPANSION)
-     =================================================== */
-  const prisonRealm = $("#prison-realm");
-  const sectionsList = ['home', 'about', 'skills', 'project', 'contact'];
-  const navLinksList = $$(".nav-link");
-  let currentSectionIdx = 0;
-
-  function goToSection(index) {
-    if (index < 0 || index >= sectionsList.length || !prisonRealm) return;
-    currentSectionIdx = index;
-    const secId = sectionsList[index];
-    
-    // Update Prison Realm Rotation Class
-    prisonRealm.className = `show-${secId}`;
-    
-    // Update Nav active states
-    navLinksList.forEach(l => l.classList.remove("active-nav"));
-    const targetHref = secId === 'project' ? '#projects' : `#${secId}`;
-    const activeLink = Array.from(navLinksList).find(l => l.getAttribute('href') === targetHref || l.getAttribute('href') === `#${secId}`);
-    if (activeLink) activeLink.classList.add("active-nav");
-
-    // Close mobile menu if open
-    if (typeof nav !== 'undefined' && nav.classList.contains("open")) {
-      nav.classList.remove("open");
-      menuToggle.classList.remove("is-open");
-    }
-  }
-
-  // Handle Nav Clicks
-  navLinksList.forEach(link => {
-    link.addEventListener("click", (e) => {
-      const href = link.getAttribute("href");
-      if (href && href.startsWith("#")) {
-        e.preventDefault();
-        let targetId = href.substring(1);
-        if (targetId === 'projects') targetId = 'project'; // id mismatch mapping
-        const idx = sectionsList.indexOf(targetId);
-        if (idx !== -1) goToSection(idx);
-      }
-    });
-  });
-
-  // Handle Wheel Scroll (Debounced to match CSS transition)
-  let isScrolling3D = false;
-  window.addEventListener("wheel", (e) => {
-    // Only intercept if we are at the top/bottom of the current section's internal scroll, or simply just override entirely.
-    // For simplicity, we just use wheel to switch scenes and rely on users dragging the scrollbar if internal content overflows.
-    if (isScrolling3D) return;
-    
-    if (e.deltaY > 50) {
-      if (currentSectionIdx < sectionsList.length - 1) {
-        goToSection(currentSectionIdx + 1);
-        isScrolling3D = true;
-        setTimeout(() => isScrolling3D = false, 1200);
-      }
-    } else if (e.deltaY < -50) {
-      if (currentSectionIdx > 0) {
-        goToSection(currentSectionIdx - 1);
-        isScrolling3D = true;
-        setTimeout(() => isScrolling3D = false, 1200);
-      }
-    }
-  }, { passive: true });
-
-  // Init First Scene
-  goToSection(0);
 
 })();
