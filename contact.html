@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Joyceson · Frontend Developer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Joyceson Danielraj — Frontend Developer & UI Enthusiast crafting immersive, responsive web experiences." />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+    <div class="cursor-trail-container" id="cursorTrail"></div>
+
+    <!-- 3D Particle Canvas -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Grid Lines -->
+    <div class="grid-overlay"></div>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress-container">
+      <div id="scrollProgressBar"></div>
+    </div>
+
+    <!-- ======= HEADER ======= -->
+    <header id="header">
+      <a href="index.html" class="logo" id="logo">
+        <span class="logo-bracket">[</span>
+        <span class="logo-text">JD</span>
+        <span class="logo-bracket">]</span>
+      </a>
+      <nav id="mainNav">
+        <a href="about.html" class="nav-link" data-text="About">About</a>
+        <a href="skills.html" class="nav-link" data-text="Skills">Skills</a>
+        <a href="projects.html" class="nav-link" data-text="Projects">Projects</a>
+        <a href="contact.html" class="nav-link" data-text="Contact">Contact</a>
+      </nav>
+      <div class="header-right">
+        <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+        <a href="Joyceson-CV.pdf" target="_blank" class="resume-btn">
+          <i class="fas fa-arrow-up-right-from-square"></i> Resume
+        </a>
+      </div>
+    </header>
+
+    <!-- ======= CONTACT ======= -->
+    <section id="contact" class="section section-alt">
+      <div class="section-container">
+        <div class="section-header reveal-up">
+          <span class="section-tag">04 / Contact</span>
+          <h2 class="section-title">Get In <em>Touch</em></h2>
+          <div class="title-line-dec"></div>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-info reveal-left">
+            <p class="contact-intro">Collaborate, discuss a project, or just say hi — always open to exciting opportunities.</p>
+
+            <div class="contact-links">
+              <a href="https://github.com/Joyceson71" target="_blank" class="contact-link-item">
+                <div class="cl-icon"><i class="fab fa-github"></i></div>
+                <div class="cl-text">
+                  <span class="cl-label">GitHub</span>
+                  <span class="cl-val">github.com/Joyceson71</span>
+                </div>
+                <i class="fas fa-arrow-up-right-from-square cl-arrow"></i>
+              </a>
+              <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" class="contact-link-item">
+                <div class="cl-icon"><i class="fab fa-linkedin"></i></div>
+                <div class="cl-text">
+                  <span class="cl-label">LinkedIn</span>
+                  <span class="cl-val">joyceson-danielraj</span>
+                </div>
+                <i class="fas fa-arrow-up-right-from-square cl-arrow"></i>
+              </a>
+              <a href="https://www.instagram.com/still_jodaniel/" target="_blank" class="contact-link-item">
+                <div class="cl-icon"><i class="fab fa-instagram"></i></div>
+                <div class="cl-text">
+                  <span class="cl-label">Instagram</span>
+                  <span class="cl-val">still_jodaniel</span>
+                </div>
+                <i class="fas fa-arrow-up-right-from-square cl-arrow"></i>
+              </a>
+            </div>
+          </div>
+
+          <form class="contact-form reveal-right" id="contactForm" novalidate>
+            <div class="form-group">
+              <label class="form-label">Your Name</label>
+              <input type="text" class="form-input" id="nameInput" placeholder="John Doe" />
+              <div class="error-msg" id="nameError">Please enter a valid name.</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" class="form-input" id="emailInput" placeholder="john@example.com" />
+              <div class="error-msg" id="emailError">Please enter a valid email address.</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Message</label>
+              <textarea class="form-textarea" id="messageInput" rows="5" placeholder="Let's build something amazing..."></textarea>
+              <div class="error-msg" id="messageError">Message must be at least 10 characters.</div>
+            </div>
+            <button type="submit" class="btn-primary" id="submitBtn">
+              <span class="btn-text">Send Message</span>
+              <span class="btn-icon"><i class="fas fa-paper-plane"></i></span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= FOOTER ======= -->
+    <footer>
+      <div class="footer-inner">
+        <span class="footer-logo">[JD]</span>
+        <span class="footer-copy">© 2026 Joyceson Danielraj · Built with passion</span>
+        <div class="footer-socials">
+          <a href="https://github.com/Joyceson71" target="_blank"><i class="fab fa-github"></i></a>
+          <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

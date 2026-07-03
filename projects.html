@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Joyceson · Frontend Developer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Joyceson Danielraj — Frontend Developer & UI Enthusiast crafting immersive, responsive web experiences." />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+    <div class="cursor-trail-container" id="cursorTrail"></div>
+
+    <!-- 3D Particle Canvas -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Grid Lines -->
+    <div class="grid-overlay"></div>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress-container">
+      <div id="scrollProgressBar"></div>
+    </div>
+
+    <!-- ======= HEADER ======= -->
+    <header id="header">
+      <a href="index.html" class="logo" id="logo">
+        <span class="logo-bracket">[</span>
+        <span class="logo-text">JD</span>
+        <span class="logo-bracket">]</span>
+      </a>
+      <nav id="mainNav">
+        <a href="about.html" class="nav-link" data-text="About">About</a>
+        <a href="skills.html" class="nav-link" data-text="Skills">Skills</a>
+        <a href="projects.html" class="nav-link" data-text="Projects">Projects</a>
+        <a href="contact.html" class="nav-link" data-text="Contact">Contact</a>
+      </nav>
+      <div class="header-right">
+        <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+        <a href="Joyceson-CV.pdf" target="_blank" class="resume-btn">
+          <i class="fas fa-arrow-up-right-from-square"></i> Resume
+        </a>
+      </div>
+    </header>
+
+    <!-- ======= PROJECTS ======= -->
+    <section id="project" class="section">
+      <div class="section-container">
+        <div class="section-header reveal-up">
+          <span class="section-tag">03 / Projects</span>
+          <h2 class="section-title">Featured <em>Work</em></h2>
+          <div class="title-line-dec"></div>
+        </div>
+
+        <div class="filter-row reveal-up">
+          <button class="filter-btn active" data-f="all">All</button>
+          <button class="filter-btn" data-f="web">Web Apps</button>
+          <button class="filter-btn" data-f="ui">UI Design</button>
+        </div>
+
+        <div class="projects-grid">
+          <div class="project-card reveal-up" data-cat="web ui" style="--delay: 0s">
+            <div class="project-thumb">
+              <img src="project-1.png" alt="Smart Quiz System" />
+              <div class="project-overlay">
+                <a href="https://github.com/Joyceson71/Quiz-app" target="_blank" class="project-link">
+                  <i class="fas fa-arrow-up-right-from-square"></i>
+                </a>
+              </div>
+              <div class="project-tag-chip">PRJ-001</div>
+            </div>
+            <div class="project-body">
+              <h3 class="project-title">Smart <span>Quiz</span> System</h3>
+              <p class="project-desc">Test your technical knowledge with curated MCQ challenges. 20 questions, 20 minutes — compete with up to 300 participants in real-time!</p>
+              <div class="project-tech">
+                <span>HTML</span><span>CSS</span><span>JS</span>
+              </div>
+              <div class="project-actions">
+                <a href="https://github.com/Joyceson71/Quiz-app" target="_blank" class="project-cta">
+                  Live Demo <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="https://github.com/Joyceson71/Quiz-app" target="_blank" class="project-gh">
+                  <i class="fab fa-github"></i> Code
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="project-card reveal-up" data-cat="web" style="--delay: 0.15s">
+            <div class="project-thumb">
+              <img src="project-2.png" alt="Learning Management System" />
+              <div class="project-overlay">
+                <a href="https://github.com/Joyceson71/kings-lms" target="_blank" class="project-link">
+                  <i class="fas fa-arrow-up-right-from-square"></i>
+                </a>
+              </div>
+              <div class="project-tag-chip">PRJ-002</div>
+            </div>
+            <div class="project-body">
+              <h3 class="project-title">Learning <span>Management</span> System</h3>
+              <p class="project-desc">Kings EC Platform — Campus Learning & Management System, with features for students, teachers, and administrators to manage courses, assignments, and grades. Also includes a responsive design and user-friendly interface.</p>
+              <div class="project-tech">
+                <span>HTML</span><span>CSS</span><span>JS</span>
+              </div>
+              <div class="project-actions">
+                <a href="https://github.com/Joyceson71/kings-lms" target="_blank" class="project-cta">
+                  Live Demo <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="https://github.com/Joyceson71/kings-lms" target="_blank" class="project-gh">
+                  <i class="fab fa-github"></i> Code
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card reveal-up" data-cat="web ui" style="--delay: 0.3s">
+            <div class="project-thumb">
+              <img src="project-3.jpg" alt="Netflix UI" />
+              <div class="project-overlay">
+                <a href="#" class="project-link">
+                  <i class="fas fa-arrow-up-right-from-square"></i>
+                </a>
+              </div>
+              <div class="project-tag-chip">PRJ-003</div>
+            </div>
+            <div class="project-body">
+              <h3 class="project-title">Net<span>flix</span> Inspired UI</h3>
+              <p class="project-desc">Netflix-style UI with category rows, hover effects and smooth interactions throughout.</p>
+              <div class="project-tech">
+                <span>HTML</span><span>CSS</span><span>JS</span>
+              </div>
+              <div class="project-actions">
+                <a href="#" class="project-cta">
+                  Live Demo <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="#" class="project-gh">
+                  <i class="fab fa-github"></i> Code
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======= FOOTER ======= -->
+    <footer>
+      <div class="footer-inner">
+        <span class="footer-logo">[JD]</span>
+        <span class="footer-copy">© 2026 Joyceson Danielraj · Built with passion</span>
+        <div class="footer-socials">
+          <a href="https://github.com/Joyceson71" target="_blank"><i class="fab fa-github"></i></a>
+          <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

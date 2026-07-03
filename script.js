@@ -117,46 +117,43 @@
     mouse.y  = e.clientY;
   });
 
-  // Particle class with simulated 3D depth
-  class Particle {
+  // Cursed Energy Particles
+  class CursedParticle {
     constructor() {
       this.init();
+      this.y = Math.random() * H; // initial random spread
     }
     init() {
-      this.x   = Math.random() * W;
-      this.y   = Math.random() * H;
-      this.z   = Math.random();          // depth 0–1 (1 = close, 0 = far)
-      this.vx  = (Math.random() - 0.5) * 0.25 * (this.z + 0.3);
-      this.vy  = (Math.random() - 0.5) * 0.25 * (this.z + 0.3);
-      this.baseR = (this.z * 1.8) + 0.4;
-      this.r   = this.baseR;
-      this.alpha = 0.15 + this.z * 0.55;
-      this.hue = 220 + this.z * 60; // indigo to cyan
+      this.x = Math.random() * W;
+      this.y = H + Math.random() * 100;
+      this.r = 4 + Math.random() * 20;
+      this.vx = (Math.random() - 0.5) * 2;
+      this.vy = -(1 + Math.random() * 4);
+      this.alpha = 0.2 + Math.random() * 0.6;
+      this.life = 1;
+      this.decay = 0.003 + Math.random() * 0.015;
+      this.hue = Math.random() > 0.5 ? 345 : 280; // Red or Deep Purple
     }
     update() {
-      // Subtle parallax based on depth + mouse velocity
-      const parallax = (1 - this.z) * 0.012;
-      this.x += this.vx + mouse.vx * parallax * 0.4;
-      this.y += this.vy + mouse.vy * parallax * 0.4;
+      this.x += this.vx;
+      this.y += this.vy;
+      this.life -= this.decay;
+      
+      // Turbulence
+      this.vx += (Math.random() - 0.5) * 0.6;
+      this.r += 0.1; // Expand as it dissipates
 
-      // Slow drift oscillation
-      this.x += Math.sin(Date.now() * 0.0003 + this.z * 10) * 0.06;
-      this.y += Math.cos(Date.now() * 0.0004 + this.z * 8) * 0.04;
+      if (this.life <= 0 || this.r > 50) {
+        this.init();
+      }
 
-      // Wrap around edges
-      if (this.x < -10) this.x = W + 10;
-      if (this.x > W + 10) this.x = -10;
-      if (this.y < -10) this.y = H + 10;
-      if (this.y > H + 10) this.y = -10;
-
-      // Mouse repulsion (stronger for close particles)
+      // Mouse repulsion (Curse aura avoiding mouse)
       if (!isMobile) {
-        const dx   = this.x - mouse.x;
-        const dy   = this.y - mouse.y;
+        const dx = this.x - mouse.x;
+        const dy = this.y - mouse.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        const repelR = 80 + this.z * 80;
-        if (dist < repelR) {
-          const force = (1 - dist / repelR) * (0.5 + this.z * 1.5);
+        if (dist < 200) {
+          const force = (1 - dist / 200) * 3;
           this.x += (dx / dist) * force;
           this.y += (dy / dist) * force;
         }
@@ -164,18 +161,15 @@
     }
     draw() {
       ctx.save();
-      ctx.globalAlpha = this.alpha;
-      // Glow
-      const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 3);
-      grad.addColorStop(0, `hsl(${this.hue}, 80%, 72%)`);
+      ctx.globalCompositeOperation = "lighter";
+      ctx.globalAlpha = this.alpha * this.life;
+      
+      const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
+      grad.addColorStop(0, `hsla(${this.hue}, 100%, 50%, 0.8)`);
+      grad.addColorStop(0.4, `hsla(${this.hue}, 80%, 30%, 0.4)`);
       grad.addColorStop(1, "transparent");
+      
       ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r * 3, 0, Math.PI * 2);
-      ctx.fill();
-      // Core dot
-      ctx.globalAlpha = this.alpha * 1.5;
-      ctx.fillStyle = `hsl(${this.hue}, 90%, 78%)`;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
       ctx.fill();
@@ -183,102 +177,16 @@
     }
   }
 
-  // Draw connecting lines between close particles
-  function connectParticles(particles) {
-    const maxDist = 120;
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const p1 = particles[i], p2 = particles[j];
-        const dx   = p1.x - p2.x;
-        const dy   = p1.y - p2.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < maxDist) {
-          const depthFactor = (p1.z + p2.z) / 2;
-          const alpha = (1 - dist / maxDist) * 0.22 * depthFactor;
-          const hue = 220 + depthFactor * 55;
-          ctx.save();
-          ctx.globalAlpha = alpha;
-          ctx.strokeStyle = `hsl(${hue}, 75%, 65%)`;
-          ctx.lineWidth = depthFactor * 0.8;
-          ctx.beginPath();
-          ctx.moveTo(p1.x, p1.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.stroke();
-          ctx.restore();
-        }
-      }
-    }
-  }
-
-  const PARTICLE_COUNT = isMobile ? 40 : 80;
-  const particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle());
-
-  // Floating geometric shapes (3D wireframe feel)
-  class Shape {
-    constructor() {
-      this.reset();
-    }
-    reset() {
-      this.x     = Math.random() * W;
-      this.y     = Math.random() * H;
-      this.size  = 20 + Math.random() * 50;
-      this.angle = Math.random() * Math.PI * 2;
-      this.speed = (Math.random() - 0.5) * 0.3;
-      this.rotSpeed = (Math.random() - 0.5) * 0.008;
-      this.alpha = 0.05 + Math.random() * 0.08;
-      this.type  = Math.floor(Math.random() * 3); // 0=square, 1=triangle, 2=hex
-      this.drift = { x: (Math.random() - 0.5) * 0.15, y: (Math.random() - 0.5) * 0.1 };
-    }
-    update() {
-      this.angle += this.rotSpeed;
-      this.x += this.drift.x;
-      this.y += this.drift.y;
-      if (this.x < -100) this.x = W + 100;
-      if (this.x > W + 100) this.x = -100;
-      if (this.y < -100) this.y = H + 100;
-      if (this.y > H + 100) this.y = -100;
-    }
-    draw() {
-      ctx.save();
-      ctx.translate(this.x, this.y);
-      ctx.rotate(this.angle);
-      ctx.globalAlpha = this.alpha;
-      ctx.strokeStyle = "rgba(99, 102, 241, 0.8)";
-      ctx.lineWidth = 0.7;
-      ctx.beginPath();
-      if (this.type === 0) {
-        // Square
-        ctx.rect(-this.size / 2, -this.size / 2, this.size, this.size);
-      } else if (this.type === 1) {
-        // Triangle
-        ctx.moveTo(0, -this.size * 0.6);
-        ctx.lineTo(this.size * 0.5, this.size * 0.4);
-        ctx.lineTo(-this.size * 0.5, this.size * 0.4);
-        ctx.closePath();
-      } else {
-        // Hexagon
-        for (let i = 0; i < 6; i++) {
-          const a = (i * Math.PI) / 3;
-          if (i === 0) ctx.moveTo(Math.cos(a) * this.size / 2, Math.sin(a) * this.size / 2);
-          else ctx.lineTo(Math.cos(a) * this.size / 2, Math.sin(a) * this.size / 2);
-        }
-        ctx.closePath();
-      }
-      ctx.stroke();
-      ctx.restore();
-    }
-  }
-
-  const SHAPE_COUNT = isMobile ? 6 : 14;
-  const shapes = Array.from({ length: SHAPE_COUNT }, () => new Shape());
+  const PARTICLE_COUNT = isMobile ? 60 : 150;
+  const particles = Array.from({ length: PARTICLE_COUNT }, () => new CursedParticle());
 
   function renderFrame() {
-    ctx.clearRect(0, 0, W, H);
+    // Trailing dark smoke effect instead of clearRect
+    ctx.fillStyle = "rgba(5, 2, 2, 0.15)";
+    ctx.fillRect(0, 0, W, H);
 
     if (!reducedMotion) {
-      shapes.forEach((s) => { s.update(); s.draw(); });
       particles.forEach((p) => { p.update(); p.draw(); });
-      connectParticles(particles);
     }
 
     requestAnimationFrame(renderFrame);

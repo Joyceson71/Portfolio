@@ -1,36 +1,41 @@
 /* =============================================
-   JOYCESON PORTFOLIO — COSMIC / TECH THEME
+   JOYCESON PORTFOLIO — JUJUTSU KAISEN THEME
    ============================================= */
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600;700&family=Rubik+Glitch&display=swap');
 
 /* ---- DESIGN TOKENS ---- */
 :root {
-  --bg: #050508;
-  --bg-2: #080b12;
-  --bg-3: #0c1020;
-  --surface: rgba(255, 255, 255, 0.03);
-  --surface-hover: rgba(255, 255, 255, 0.06);
-  --border: rgba(255, 255, 255, 0.07);
-  --border-accent: rgba(99, 102, 241, 0.4);
+  /* Obsidian Black Base */
+  --bg: #050202;
+  --bg-2: #0b0404;
+  --bg-3: #110505;
+  --surface: rgba(255, 255, 255, 0.02);
+  --surface-hover: rgba(230, 0, 57, 0.05);
+  --border: rgba(255, 255, 255, 0.06);
+  --border-accent: rgba(230, 0, 57, 0.4);
 
-  /* Accent palette: Electric Indigo + Cyan */
-  --indigo: #6366f1;
-  --indigo-bright: #818cf8;
-  --indigo-glow: rgba(99, 102, 241, 0.3);
-  --cyan: #06b6d4;
-  --cyan-bright: #22d3ee;
-  --cyan-glow: rgba(6, 182, 212, 0.25);
-  --violet: #a78bfa;
-  --pink: #f472b6;
+  /* Cursed Energy Palette: Sukuna Red + Hollow Purple */
+  --indigo: #b3002d;           /* Mapped to Red */
+  --indigo-bright: #e60039;
+  --indigo-glow: rgba(230, 0, 57, 0.3);
+  
+  --cyan: #6a0dad;             /* Mapped to Purple */
+  --cyan-bright: #9c27b0;
+  --cyan-glow: rgba(156, 39, 176, 0.25);
+  
+  --violet: #2f004a;           /* Deep curse shadow */
+  --pink: #ffb3c6;             /* Highlight */
 
   /* Text */
-  --text-primary: #f1f5f9;
-  --text-secondary: rgba(241, 245, 249, 0.55);
-  --text-muted: rgba(241, 245, 249, 0.3);
+  --text-primary: #f2e6e6;     /* Bone white */
+  --text-secondary: rgba(242, 230, 230, 0.6);
+  --text-muted: rgba(242, 230, 230, 0.3);
 
   /* Typography */
-  --font-head: 'Syne', sans-serif;
+  --font-head: 'Teko', sans-serif;
   --font-body: 'Space Grotesk', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+  --font-curse: 'Rubik Glitch', system-ui;
 
   --tr: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --tr-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -96,20 +101,20 @@ body {
 .cursor-dot {
   width: 8px;
   height: 8px;
-  background: var(--cyan);
+  background: var(--pink);
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
   transition: transform 0.1s ease, background 0.2s ease;
-  box-shadow: 0 0 10px var(--cyan), 0 0 20px var(--cyan-glow);
+  box-shadow: 0 0 10px var(--pink), 0 0 20px var(--indigo);
   mix-blend-mode: screen;
 }
 .cursor-ring {
   width: 36px;
   height: 36px;
-  border: 1.5px solid rgba(99, 102, 241, 0.5);
+  border: 1.5px solid rgba(230, 0, 57, 0.5); /* Cursed Red */
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
@@ -120,13 +125,15 @@ body {
 .cursor-ring.is-hovered {
   width: 60px;
   height: 60px;
-  border-color: rgba(99, 102, 241, 0.8);
-  background: rgba(99, 102, 241, 0.05);
+  border-color: rgba(230, 0, 57, 0.8);
+  background: rgba(230, 0, 57, 0.05);
+  border-style: dashed;
+  animation: ringSpin 4s linear infinite;
 }
 .cursor-ring.is-clicked {
   width: 20px;
   height: 20px;
-  background: rgba(6, 182, 212, 0.2);
+  background: rgba(255, 179, 198, 0.2);
 }
 .cursor-trail-container {
   position: fixed;
@@ -139,7 +146,7 @@ body {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: var(--indigo);
+  background: var(--pink);
   transform: translate(-50%, -50%);
   pointer-events: none;
   animation: trailFade 0.6s forwards;
@@ -553,33 +560,52 @@ nav {
   align-items: center;
   gap: 10px;
   padding: 14px 28px;
-  background: linear-gradient(135deg, var(--indigo), #7c3aed);
-  border-radius: 6px;
+  background: var(--indigo);
+  border-radius: 2px;
   color: white;
   font-family: var(--font-mono);
   font-size: 0.8rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
-  border: none;
+  border: 1px solid var(--indigo-bright);
   position: relative;
   overflow: hidden;
   transition: all var(--tr);
-  box-shadow: 0 4px 24px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 24px var(--indigo-glow);
 }
 .btn-primary::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, #7c3aed, var(--cyan));
-  opacity: 0;
-  transition: opacity var(--tr);
+  background: var(--bg-2);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--tr);
 }
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 8px 32px var(--indigo-glow);
+  border-color: var(--pink);
 }
-.btn-primary:hover::before { opacity: 1; }
+.btn-primary:hover::before { 
+  transform: scaleX(1); 
+  transform-origin: left;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: 0%;
+  width: 15px; height: 200%;
+  background: #fff;
+  transform: rotate(35deg) translateY(-150%);
+  box-shadow: 0 0 15px #fff, 0 0 30px var(--pink);
+  transition: none;
+}
+.btn-primary:hover::after {
+  transform: rotate(35deg) translateY(150%);
+  transition: transform 0.4s cubic-bezier(0.1, 0.8, 0.3, 1);
+}
 .btn-text, .btn-icon {
   position: relative;
   z-index: 1;
@@ -591,18 +617,20 @@ nav {
   gap: 8px;
   padding: 13px 26px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 2px;
   color: var(--text-secondary);
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  letter-spacing: 0.08em;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  overflow: hidden;
   transition: all var(--tr);
 }
 .btn-ghost:hover {
-  border-color: var(--border-accent);
-  color: var(--text-primary);
-  background: var(--surface-hover);
+  border-color: var(--pink);
+  color: var(--pink);
+  background: rgba(255, 0, 60, 0.05);
 }
 
 /* Avatar */
@@ -842,14 +870,14 @@ nav {
   animation: rotateCube 20s linear infinite;
 }
 
-/* Outer Cube */
+/* Outer Cube - Cursed Box */
 .cube-face {
   position: absolute;
   width: 140px;
   height: 140px;
-  border: 1px solid var(--cyan);
-  background: rgba(6, 182, 212, 0.03);
-  box-shadow: inset 0 0 30px rgba(6, 182, 212, 0.15), 0 0 10px rgba(6, 182, 212, 0.2);
+  border: 1px solid var(--indigo);
+  background: rgba(179, 0, 45, 0.05);
+  box-shadow: inset 0 0 30px rgba(179, 0, 45, 0.15), 0 0 10px rgba(179, 0, 45, 0.2);
 }
 .cube-face.front  { transform: translateZ(70px); }
 .cube-face.back   { transform: rotateY(180deg) translateZ(70px); }
@@ -858,7 +886,7 @@ nav {
 .cube-face.top    { transform: rotateX(90deg) translateZ(70px); }
 .cube-face.bottom { transform: rotateX(-90deg) translateZ(70px); }
 
-/* Inner Cube */
+/* Inner Cube - Sealed Core */
 .cube-inner {
   position: absolute;
   top: 50%; left: 50%;
@@ -870,9 +898,9 @@ nav {
 .cube-inner .cube-face {
   width: 70px;
   height: 70px;
-  border-color: var(--indigo-bright);
-  background: rgba(99, 102, 241, 0.1);
-  box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.3), 0 0 15px rgba(99, 102, 241, 0.5);
+  border-color: var(--pink);
+  background: rgba(255, 179, 198, 0.1);
+  box-shadow: inset 0 0 20px rgba(230, 0, 57, 0.3), 0 0 15px rgba(230, 0, 57, 0.5);
 }
 .cube-inner .front  { transform: translateZ(35px); }
 .cube-inner .back   { transform: rotateY(180deg) translateZ(35px); }
@@ -881,35 +909,35 @@ nav {
 .cube-inner .top    { transform: rotateX(90deg) translateZ(35px); }
 .cube-inner .bottom { transform: rotateX(-90deg) translateZ(35px); }
 
-/* Orbit Rings */
+/* Orbit Rings - Cursed Seals */
 .ring {
   position: absolute;
   top: 50%; left: 50%;
   width: 240px;
   height: 240px;
   border-radius: 50%;
-  border: 1.5px dashed rgba(6, 182, 212, 0.4);
+  border: 1.5px dashed rgba(106, 13, 173, 0.6); /* Hollow Purple */
   transform-style: preserve-3d;
-  box-shadow: inset 0 0 20px rgba(6, 182, 212, 0.05);
+  box-shadow: inset 0 0 20px rgba(106, 13, 173, 0.1);
 }
 .ring-x { animation: ringSpinX 15s linear infinite; }
-.ring-y { border-color: rgba(99, 102, 241, 0.5); animation: ringSpinY 25s linear infinite reverse; }
-.ring-z { border-style: solid; border-color: rgba(167, 139, 250, 0.3); animation: ringSpinZ 20s linear infinite; }
+.ring-y { border-color: rgba(230, 0, 57, 0.5); animation: ringSpinY 25s linear infinite reverse; }
+.ring-z { border-style: solid; border-color: rgba(255, 179, 198, 0.3); animation: ringSpinZ 20s linear infinite; }
 
 @keyframes ringSpinX { 0% { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(0deg); } 100% { transform: translate(-50%, -50%) rotateX(75deg) rotateZ(360deg); } }
 @keyframes ringSpinY { 0% { transform: translate(-50%, -50%) rotateY(75deg) rotateZ(0deg); } 100% { transform: translate(-50%, -50%) rotateY(75deg) rotateZ(360deg); } }
 @keyframes ringSpinZ { 0% { transform: translate(-50%, -50%) rotateX(45deg) rotateY(45deg) rotateZ(0deg); } 100% { transform: translate(-50%, -50%) rotateX(45deg) rotateY(45deg) rotateZ(360deg); } }
 
-/* Core Glow */
+/* Core Glow - Sukuna Eye */
 .core-glow {
   position: absolute;
   top: 50%; left: 50%;
   width: 24px;
   height: 24px;
-  background: var(--cyan-bright);
+  background: var(--pink);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 30px var(--cyan), 0 0 60px var(--cyan), 0 0 100px var(--indigo);
+  box-shadow: 0 0 30px var(--pink), 0 0 60px var(--indigo-bright), 0 0 100px var(--indigo);
   animation: pulseCore 3s ease-in-out infinite;
 }
 @keyframes pulseCore {
@@ -917,24 +945,25 @@ nav {
   50% { transform: translate(-50%, -50%) scale(1.4); opacity: 1; }
 }
 
-/* Floating Labels */
+/* Floating Labels - Cursed Text */
 .float-label {
   position: absolute;
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  font-family: var(--font-curse); /* Glitch font */
+  font-size: 1.2rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--cyan);
-  background: rgba(12, 16, 32, 0.8);
+  color: var(--pink);
+  background: rgba(11, 4, 4, 0.8);
   border: 1px solid var(--border-accent);
-  padding: 4px 10px;
-  border-radius: 4px;
+  padding: 6px 12px;
+  border-radius: 0px;
   backdrop-filter: blur(4px);
   transform-style: preserve-3d;
+  text-shadow: 0 0 8px var(--pink);
 }
 .label-1 { top: -20px; right: -80px; transform: translateZ(50px) rotateY(-30deg); animation: floatSync1 4s ease-in-out infinite; }
-.label-2 { bottom: -40px; left: -60px; transform: translateZ(80px) rotateY(30deg); animation: floatSync2 5s ease-in-out infinite reverse; color: var(--indigo-bright); }
-.label-3 { top: 40%; left: -100px; transform: translateZ(-40px) rotateX(20deg); animation: floatSync3 6s ease-in-out infinite; color: var(--violet); }
+.label-2 { bottom: -40px; left: -60px; transform: translateZ(80px) rotateY(30deg); animation: floatSync2 5s ease-in-out infinite reverse; color: var(--text-primary); border-color: var(--text-secondary); text-shadow: none; }
+.label-3 { top: 40%; left: -100px; transform: translateZ(-40px) rotateX(20deg); animation: floatSync3 6s ease-in-out infinite; color: var(--cyan-bright); border-color: var(--cyan); text-shadow: 0 0 8px var(--cyan); }
 
 @keyframes floatSync1 {
   0%, 100% { transform: translateY(0) translateZ(50px) rotateY(-20deg); }
@@ -1188,7 +1217,7 @@ nav {
 .project-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 4px;
   overflow: hidden;
   transition: all var(--tr-slow);
   position: relative;
@@ -1197,21 +1226,38 @@ nav {
   height: 100%;
 }
 .project-card:hover {
-  border-color: rgba(99, 102, 241, 0.5);
+  border-color: var(--pink);
   transform: translateY(-8px);
-  box-shadow: 0 24px 48px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 24px 48px var(--indigo-glow);
 }
 .project-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--cyan), var(--indigo), transparent);
+  background: linear-gradient(90deg, transparent, var(--pink), var(--indigo), transparent);
   opacity: 0;
   transition: opacity var(--tr);
   z-index: 10;
 }
 .project-card:hover::before { opacity: 1; }
+
+.project-card::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 15px; height: 200%;
+  background: #fff;
+  transform: rotate(35deg) translateY(-150%);
+  box-shadow: 0 0 15px #fff, 0 0 30px var(--pink);
+  transition: none;
+  z-index: 20;
+  pointer-events: none;
+}
+.project-card:hover::after {
+  transform: rotate(35deg) translateY(150%);
+  transition: transform 0.5s cubic-bezier(0.1, 0.8, 0.3, 1);
+}
 .project-thumb {
   position: relative;
   aspect-ratio: 16/9;
