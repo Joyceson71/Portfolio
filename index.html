@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Joyceson · Shadow Monarch Portfolio</title>
+  <title>Joyceson · Frontend Developer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Joyceson Danielraj — Frontend Developer. Arise." />
+  <meta name="description" content="Joyceson Danielraj — Frontend Developer." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Montserrat:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -24,12 +24,11 @@
 
   <!-- LOADER -->
   <div id="loader">
-    <div class="loader-panel">
-      <div class="loader-title">SYSTEM</div>
-      <div class="loader-subtitle">Accessing Shadow Archives</div>
-      <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
-      <span class="loader-text" id="loaderText">Booting...</span>
+    <div class="loader-seal">
+      DOM<span>AIN</span><br/>EXPANSION
+      <div class="loader-glitch">DOM<span>AIN</span><br/>EXPANSION</div>
     </div>
+    <span class="loader-text">Infinite Void</span>
   </div>
 
   <div id="scroll-progress"><div id="scroll-bar"></div></div>
@@ -46,7 +45,7 @@
     </nav>
     <div class="header-actions">
       <a href="Joyceson-CV.pdf" target="_blank" class="resume-btn">
-        <i class="fas fa-terminal"></i> Extract CV
+        <i class="fas fa-file-alt"></i> Resume
       </a>
       <button class="burger" id="burger" aria-label="Menu">
         <span></span><span></span><span></span>
@@ -62,60 +61,36 @@
       <section id="home" class="section hero-section">
         <div class="hero-inner">
           <div class="hero-left">
-            <div class="hero-eyebrow">[PLAYER_FOUND]</div>
+            <div class="hero-eyebrow">Portfolio 2026</div>
 
             <h1 class="hero-title">Joyceson<br/><span>Danielraj</span></h1>
 
             <div class="hero-role">
-              <span class="role-sep">►</span>
-              <span id="typedText"></span><span class="caret">_</span>
+              <span id="typedText"></span><span class="caret">|</span>
             </div>
 
             <p class="hero-desc">
-              "You have been granted the qualifications of a Player.<br/>
-              Will you accept the quest to build the ultimate web interface?"
+              I specialize in building exceptional digital experiences. By combining modern web technologies like React and Three.js with deep design principles, I craft interfaces that leave a lasting impact.
             </p>
-
-            <div class="hero-rule"></div>
-
-            <div class="hero-stats">
-              <div class="stat">
-                <span class="stat-num" data-count="99">0</span>
-                <span class="stat-lbl">Level</span>
-              </div>
-              <div class="stat-sep"></div>
-              <div class="stat">
-                <span class="stat-num">S-Rank</span>
-                <span class="stat-lbl">Class</span>
-              </div>
-              <div class="stat-sep"></div>
-              <div class="stat">
-                <span class="stat-num">100%</span>
-                <span class="stat-lbl">Awakened</span>
-              </div>
-            </div>
 
             <div class="hero-btns">
               <a href="projects.html" class="btn-primary">
-                <i class="fas fa-bolt"></i>
-                <span>Accept Quest</span>
+                View Projects
               </a>
               <a href="about.html" class="btn-ghost">
-                <i class="fas fa-search"></i>
-                <span>View Status</span>
+                About Me
               </a>
             </div>
           </div>
 
           <div class="hero-right">
             <canvas id="hero3DCanvas"></canvas>
-            <div class="sys-label">ITEM: KNIGHT'S KILLER</div>
           </div>
         </div>
 
         <div class="scroll-hint">
           <div class="sh-line"></div>
-          <span>Scroll to level up</span>
+          <span>Scroll</span>
         </div>
       </section>
 
@@ -123,7 +98,7 @@
       <footer>
         <div class="footer-inner">
           <span class="footer-logo">JD<span class="logo-accent">.</span></span>
-          <span class="footer-quote">"I shall protect my code... even if it means destroying everything."</span>
+          <span class="footer-quote">"Building the web, one line of code at a time."</span>
           <div class="footer-socials">
             <a href="https://github.com/Joyceson71" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
             <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>

@@ -1,7 +1,7 @@
 /**
  * ╔══════════════════════════════════════════════════════╗
  * ║   JOYCESON PORTFOLIO — script.js                    ║
- * ║   SOLO LEVELING / SHADOW MONARCH THEME              ║
+ * ║   JUJUTSU KAISEN THEME (CURSED ENERGY)              ║
  * ║   Stack: Three.js · GSAP · ScrollTrigger            ║
  * ╚══════════════════════════════════════════════════════╝
  */
@@ -14,24 +14,14 @@
   const isMobile = window.matchMedia("(hover:none)").matches;
 
   /* ══════════════════════════════════════════════════
-     1. SYSTEM LOADER
+     1. DOMAIN EXPANSION LOADER
   ══════════════════════════════════════════════════ */
   function initLoader() {
     return new Promise((resolve) => {
-      const bar   = $("#loaderBar");
-      const text  = $("#loaderText");
       const loader = $("#loader");
 
-      const msgs = {
-        home:     ["[SYSTEM] Booting...", "[SYSTEM] Checking Player Stats...", "[SYSTEM] Level: 99", "[SYSTEM] ARISE."],
-        about:    ["[SYSTEM] Accessing Player Info...", "[SYSTEM] Class: Shadow Monarch...", "[SYSTEM] Status Verified.", "[SYSTEM] ARISE."],
-        skills:   ["[SYSTEM] Loading Skill Tree...", "[SYSTEM] Passive: Ruler's Authority...", "[SYSTEM] Active: Shadow Extraction...", "[SYSTEM] ARISE."],
-        projects: ["[SYSTEM] Loading Quests...", "[SYSTEM] S-Rank Gates detected...", "[SYSTEM] Ready for Entry.", "[SYSTEM] ARISE."],
-        contact:  ["[SYSTEM] Establishing comms...", "[SYSTEM] Warning: High Mana Signature...", "[SYSTEM] Channel Open.", "[SYSTEM] ARISE."],
-      };
-      const pageM = msgs[PAGE] || msgs.home;
-
-      const failsafe = setTimeout(hideLoader, 3500);
+      // We have a glitch effect for 2-3 seconds, then hide
+      const failsafe = setTimeout(hideLoader, 3000);
 
       function hideLoader() {
         clearTimeout(failsafe);
@@ -39,28 +29,13 @@
         loader.style.opacity = "0";
         loader.style.visibility = "hidden";
         loader.style.pointerEvents = "none";
-        setTimeout(resolve, 100);
+        setTimeout(resolve, 600); // Wait for transition
       }
-
-      let progress = 0;
-      function step() {
-        progress += Math.random() * 20 + 8;
-        if (progress >= 100) progress = 100;
-        if (bar) bar.style.width = progress + "%";
-        if (text) text.textContent = pageM[Math.min(Math.floor(progress / 25), pageM.length - 1)];
-
-        if (progress < 100) {
-          setTimeout(step, 60 + Math.random() * 60);
-        } else {
-          setTimeout(hideLoader, 350);
-        }
-      }
-      step();
     });
   }
 
   /* ══════════════════════════════════════════════════
-     2. THREE.JS — SHADOW AURA BACKGROUND
+     2. THREE.JS — CURSED ENERGY BACKGROUND
   ══════════════════════════════════════════════════ */
   function initBackgroundThree() {
     const canvas = $("#threeCanvas");
@@ -74,7 +49,7 @@
     const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 300);
     camera.position.z = 60;
 
-    const PCOUNT = isMobile ? 500 : 1200;
+    const PCOUNT = isMobile ? 600 : 1500;
     const positions = new Float32Array(PCOUNT * 3);
     const colors    = new Float32Array(PCOUNT * 3);
     const speeds    = new Float32Array(PCOUNT);
@@ -84,16 +59,16 @@
       positions[i*3]     = (Math.random() - 0.5) * 160;
       positions[i*3 + 1] = (Math.random() - 0.5) * 160;
       positions[i*3 + 2] = (Math.random() - 0.5) * 100;
-      speeds[i]  = 0.04 + Math.random() * 0.06;
+      speeds[i]  = 0.05 + Math.random() * 0.1; // Chaotic speed
       swayOff[i] = Math.random() * Math.PI * 2;
 
-      const isBlue = Math.random() > 0.4;
-      if (isBlue) {
-        // Neon blue
-        colors[i*3] = 0.0; colors[i*3+1] = 0.8; colors[i*3+2] = 1.0;
+      const rand = Math.random();
+      if (rand > 0.3) {
+        // Cursed Purple
+        colors[i*3] = 0.6; colors[i*3+1] = 0.0; colors[i*3+2] = 1.0;
       } else {
-        // Shadow purple
-        colors[i*3] = 0.4; colors[i*3+1] = 0.0; colors[i*3+2] = 0.8;
+        // Pitch black / Dark Grey
+        colors[i*3] = 0.1; colors[i*3+1] = 0.1; colors[i*3+2] = 0.1;
       }
     }
 
@@ -102,10 +77,10 @@
     geo.setAttribute("color",    new THREE.BufferAttribute(colors, 3));
 
     const mat = new THREE.PointsMaterial({
-      size: 1.2,
+      size: 1.5,
       vertexColors: true,
       transparent: true,
-      opacity: 0.6,
+      opacity: 0.5,
       sizeAttenuation: true,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
@@ -136,9 +111,11 @@
       const t = clock.getElapsedTime();
 
       for (let i = 0; i < PCOUNT; i++) {
-        // Embers rise upwards
+        // Swirling erratic motion
         posArr[i*3 + 1] += speeds[i];
-        posArr[i*3]     += Math.sin(t * 0.5 + swayOff[i]) * 0.02;
+        posArr[i*3]     += Math.sin(t * 2 + swayOff[i]) * 0.05;
+        posArr[i*3 + 2] += Math.cos(t * 1.5 + swayOff[i]) * 0.05;
+        
         if (posArr[i*3 + 1] > 80) {
           posArr[i*3 + 1] = -80;
           posArr[i*3]     = (Math.random() - 0.5) * 160;
@@ -147,19 +124,19 @@
       geo.attributes.position.needsUpdate = true;
 
       if (!isMobile) {
-        camera.position.x += (mouse.x * 4 - camera.position.x) * 0.05;
-        camera.position.y += (mouse.y * 3 - camera.position.y) * 0.05;
+        camera.position.x += (mouse.x * 5 - camera.position.x) * 0.05;
+        camera.position.y += (mouse.y * 5 - camera.position.y) * 0.05;
       }
 
-      mat.opacity = 0.4 + Math.sin(t * 1.5) * 0.15;
+      mat.opacity = 0.3 + Math.sin(t * 3) * 0.2;
       renderer.render(scene, camera);
     })();
   }
 
   /* ══════════════════════════════════════════════════
-     3. THREE.JS — KNIGHT'S KILLER (HOME)
+     3. THREE.JS — PRISON REALM CUBE (HOME)
   ══════════════════════════════════════════════════ */
-  function initDaggerScene() {
+  function initPrisonRealm() {
     const canvas = $("#hero3DCanvas");
     if (!canvas || typeof THREE === "undefined") return;
 
@@ -176,46 +153,40 @@
     const camera = new THREE.PerspectiveCamera(40, W / H, 0.1, 100);
     camera.position.set(0, 0, 10);
 
-    scene.add(new THREE.AmbientLight(0x1a1a2e, 1));
-    const blueL = new THREE.PointLight(0x00e5ff, 4, 15);
-    blueL.position.set(3, 4, 5); scene.add(blueL);
-    const purpleL = new THREE.PointLight(0x7a00ff, 3, 15);
-    purpleL.position.set(-3, -4, -3); scene.add(purpleL);
+    scene.add(new THREE.AmbientLight(0x111111, 2));
+    const pLight = new THREE.PointLight(0x9d00ff, 4, 20);
+    pLight.position.set(3, 4, 5); scene.add(pLight);
+    const rLight = new THREE.PointLight(0xff0033, 2, 20);
+    rLight.position.set(-3, -4, -3); scene.add(rLight);
 
-    const dagger = new THREE.Group();
+    const boxGroup = new THREE.Group();
 
-    // Blade
-    const bladeGeo = new THREE.CylinderGeometry(0, 0.4, 4, 4);
-    const bladeMat = new THREE.MeshPhongMaterial({
-      color: 0x111115, shininess: 100, specular: 0x00e5ff, emissive: 0x001a22
+    // Base Cube
+    const cubeGeo = new THREE.BoxGeometry(3, 3, 3);
+    const cubeMat = new THREE.MeshPhongMaterial({
+      color: 0x050505, shininess: 80, specular: 0x9d00ff
     });
-    const blade = new THREE.Mesh(bladeGeo, bladeMat);
-    blade.position.y = 1;
-    dagger.add(blade);
+    const cube = new THREE.Mesh(cubeGeo, cubeMat);
+    boxGroup.add(cube);
 
-    // Hilt / Crossguard
-    const guardGeo = new THREE.BoxGeometry(1.6, 0.2, 0.4);
-    const hiltMat = new THREE.MeshPhongMaterial({ color: 0x050508, shininess: 50, specular: 0x7a00ff });
-    const guard = new THREE.Mesh(guardGeo, hiltMat);
-    guard.position.y = -1;
-    dagger.add(guard);
-
-    // Handle
-    const handleGeo = new THREE.CylinderGeometry(0.15, 0.15, 1.2, 8);
-    const handle = new THREE.Mesh(handleGeo, hiltMat);
-    handle.position.y = -1.7;
-    dagger.add(handle);
-
-    // Glowing core line
-    const coreGeo = new THREE.CylinderGeometry(0.02, 0.02, 3.8, 4);
-    const coreMat = new THREE.MeshBasicMaterial({ color: 0x00e5ff });
+    // Inner Glowing Core (Visible through gaps)
+    const coreGeo = new THREE.IcosahedronGeometry(1.2, 0);
+    const coreMat = new THREE.MeshBasicMaterial({ color: 0xff0033, wireframe: true });
     const core = new THREE.Mesh(coreGeo, coreMat);
-    core.position.y = 1;
-    core.position.z = 0.21;
-    dagger.add(core);
+    boxGroup.add(core);
 
-    dagger.rotation.z = Math.PI / 6;
-    scene.add(dagger);
+    // Floating outer fragments
+    const fragments = new THREE.Group();
+    for(let i=0; i<8; i++) {
+      const fGeo = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+      const fMat = new THREE.MeshPhongMaterial({ color: 0x111111, emissive: 0x220033, specular: 0xff0000 });
+      const f = new THREE.Mesh(fGeo, fMat);
+      f.position.set((Math.random()-0.5)*5, (Math.random()-0.5)*5, (Math.random()-0.5)*5);
+      fragments.add(f);
+    }
+    boxGroup.add(fragments);
+
+    scene.add(boxGroup);
 
     const mouse = { x: 0, y: 0 };
     if (!isMobile) {
@@ -230,19 +201,27 @@
       requestAnimationFrame(animate);
       const t = clock.getElapsedTime();
       
-      dagger.position.y = Math.sin(t * 2) * 0.2;
-      dagger.rotation.y = t * 0.5 + mouse.x * 0.5;
-      dagger.rotation.x = mouse.y * 0.5;
+      boxGroup.position.y = Math.sin(t * 2) * 0.3;
+      cube.rotation.y = t * 0.5 + mouse.x * 0.5;
+      cube.rotation.x = t * 0.3 + mouse.y * 0.5;
       
-      blueL.intensity = 3 + Math.sin(t * 3) * 1.5;
+      core.rotation.z = -t;
+      core.scale.setScalar(1 + Math.sin(t * 5) * 0.1); // Pulse
+      
+      fragments.rotation.y = -t * 0.2;
+      fragments.children.forEach((f, idx) => {
+        f.rotation.x += 0.02 + idx*0.01;
+        f.rotation.y += 0.02;
+      });
+      
       renderer.render(scene, camera);
     })();
   }
 
   /* ══════════════════════════════════════════════════
-     4. THREE.JS — SYSTEM PORTAL (ABOUT)
+     4. THREE.JS — HOLLOW PURPLE ORB (ABOUT)
   ══════════════════════════════════════════════════ */
-  function initPortalScene() {
+  function initCursedOrb() {
     const canvas = $("#about3DCanvas");
     if (!canvas || typeof THREE === "undefined") return;
 
@@ -261,69 +240,50 @@
 
     const group = new THREE.Group();
 
-    function createRing(radius, color, dash) {
-      const geo = new THREE.TorusGeometry(radius, 0.015, 16, 100);
-      let mat;
-      if (dash) {
-        mat = new THREE.LineDashedMaterial({ color, dashSize: 0.2, gapSize: 0.1 });
-        const edges = new THREE.EdgesGeometry(geo);
-        const line = new THREE.LineSegments(edges, mat);
-        line.computeLineDistances();
-        return line;
-      } else {
-        mat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.6 });
-        return new THREE.Mesh(geo, mat);
-      }
-    }
+    // Inner red orb (Reversal Red)
+    const redGeo = new THREE.SphereGeometry(1, 32, 32);
+    const redMat = new THREE.MeshBasicMaterial({ color: 0xff0033 });
+    const redOrb = new THREE.Mesh(redGeo, redMat);
 
-    const r1 = createRing(2.5, 0x00e5ff, false);
-    const r2 = createRing(2.2, 0x7a00ff, true);
-    const r3 = createRing(1.8, 0x00e5ff, true);
-    const r4 = createRing(0.5, 0x00e5ff, false);
-    
-    // Portal core
-    const core = new THREE.Mesh(
-      new THREE.SphereGeometry(0.3, 16, 16),
-      new THREE.MeshBasicMaterial({ color: 0x7a00ff })
-    );
+    // Outer blue/purple orb (Lapse Blue -> Hollow Purple)
+    const purpGeo = new THREE.SphereGeometry(1.5, 32, 32);
+    const purpMat = new THREE.MeshBasicMaterial({ color: 0x4400ff, transparent: true, opacity: 0.6, wireframe: true });
+    const purpOrb = new THREE.Mesh(purpGeo, purpMat);
 
-    group.add(r1, r2, r3, r4, core);
+    // Chaotic rings
+    const ringGeo = new THREE.TorusGeometry(2, 0.05, 16, 100);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0x9d00ff });
+    const ring1 = new THREE.Mesh(ringGeo, ringMat);
+    const ring2 = new THREE.Mesh(ringGeo, ringMat);
+    ring2.rotation.x = Math.PI / 2;
 
-    // Floating data particles inside
-    const pGeo = new THREE.BufferGeometry();
-    const pPos = new Float32Array(50 * 3);
-    for(let i=0; i<150; i++) {
-      pPos[i] = (Math.random() - 0.5) * 4;
-    }
-    pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
-    const pMat = new THREE.PointsMaterial({ color: 0x00e5ff, size: 0.05 });
-    const points = new THREE.Points(pGeo, pMat);
-    group.add(points);
-
+    group.add(redOrb, purpOrb, ring1, ring2);
     scene.add(group);
-    group.rotation.x = 0.5;
 
     const clock = new THREE.Clock();
     (function animate() {
       requestAnimationFrame(animate);
       const t = clock.getElapsedTime();
       
-      r1.rotation.z = t * 0.2;
-      r2.rotation.z = -t * 0.4;
-      r3.rotation.z = t * 0.5;
-      r2.rotation.x = Math.sin(t * 0.5) * 0.2;
+      purpOrb.rotation.y = t * 2;
+      purpOrb.rotation.x = t * 1.5;
       
-      points.rotation.y = t * 0.3;
-      core.scale.setScalar(1 + Math.sin(t * 4) * 0.2);
+      ring1.rotation.y = t * 3;
+      ring1.rotation.x = Math.sin(t) * 0.5;
+      ring2.rotation.z = -t * 3;
+      
+      // Merge simulation (pulsing scale)
+      redOrb.scale.setScalar(1 + Math.sin(t * 8) * 0.1);
+      purpOrb.scale.setScalar(1 + Math.cos(t * 6) * 0.05);
       
       renderer.render(scene, camera);
     })();
   }
 
   /* ══════════════════════════════════════════════════
-     5. THREE.JS — SHADOW CRYSTAL (SKILLS)
+     5. THREE.JS — DOMAIN STRUCTURE (SKILLS)
   ══════════════════════════════════════════════════ */
-  function initCrystalScene() {
+  function initDomainScene() {
     const canvas = $("#skills3DCanvas");
     if (!canvas || typeof THREE === "undefined") return;
 
@@ -338,58 +298,36 @@
 
     const scene  = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 100);
-    camera.position.set(0, 0, 8);
+    camera.position.set(0, -3, 10);
+    camera.lookAt(0,0,0);
 
-    scene.add(new THREE.AmbientLight(0x0a0510, 1.5));
-    const blueL = new THREE.PointLight(0x00e5ff, 5, 12);
-    blueL.position.set(3, 4, 4); scene.add(blueL);
-    const purpL = new THREE.PointLight(0x7a00ff, 4, 10);
-    purpL.position.set(-3, -2, 2); scene.add(purpL);
+    const group = new THREE.Group();
 
-    // Icosahedron crystal
-    const geo = new THREE.IcosahedronGeometry(1.5, 0);
-    const mat = new THREE.MeshPhongMaterial({
-      color: 0x050508, emissive: 0x0a001a, shininess: 100, specular: 0x00e5ff, flatShading: true
-    });
-    const crystal = new THREE.Mesh(geo, mat);
-    
-    // Wireframe overlay
-    const wire = new THREE.Mesh(
-      geo,
-      new THREE.MeshBasicMaterial({ color: 0x00e5ff, wireframe: true, transparent: true, opacity: 0.3 })
-    );
-    wire.scale.setScalar(1.02);
-    crystal.add(wire);
-
-    // Orbiting shards
-    const shards = new THREE.Group();
-    for(let i=0; i<6; i++) {
-      const s = new THREE.Mesh(
-        new THREE.TetrahedronGeometry(0.3, 0),
-        new THREE.MeshPhongMaterial({ color: 0x111, emissive: 0x202, specular: 0x7a00ff, flatShading: true })
-      );
-      const angle = (i / 6) * Math.PI * 2;
-      s.position.set(Math.cos(angle) * 3, Math.sin(angle) * 3, 0);
-      shards.add(s);
+    // Concentric glowing squares (Domain floor)
+    for(let i=1; i<=5; i++) {
+      const sGeo = new THREE.BoxGeometry(i*1.5, 0.05, i*1.5);
+      const edges = new THREE.EdgesGeometry(sGeo);
+      const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0x9d00ff, transparent: true, opacity: 1 - (i*0.15) }));
+      group.add(line);
     }
     
-    scene.add(crystal, shards);
+    // Floating Shrine / Eye at center
+    const eyeGeo = new THREE.OctahedronGeometry(0.8, 0);
+    const eyeMat = new THREE.MeshBasicMaterial({ color: 0xff0033, wireframe: true });
+    const eye = new THREE.Mesh(eyeGeo, eyeMat);
+    eye.position.y = 2;
+    group.add(eye);
+
+    scene.add(group);
 
     const clock = new THREE.Clock();
     (function animate() {
       requestAnimationFrame(animate);
       const t = clock.getElapsedTime();
       
-      crystal.rotation.y = t * 0.4;
-      crystal.rotation.x = t * 0.2;
-      crystal.position.y = Math.sin(t * 1.5) * 0.2;
-      
-      shards.rotation.z = t * 0.3;
-      shards.rotation.y = t * 0.2;
-      shards.children.forEach(s => {
-        s.rotation.x += 0.02;
-        s.rotation.y += 0.03;
-      });
+      group.rotation.y = t * 0.2;
+      eye.rotation.y = -t;
+      eye.position.y = 2 + Math.sin(t * 3) * 0.3;
       
       renderer.render(scene, camera);
     })();
@@ -404,26 +342,16 @@
 
     /* ── Hero Entrance ── */
     if (PAGE === "home") {
-      const tl = gsap.timeline({ delay: 0.2 });
+      const tl = gsap.timeline({ delay: 0.5 });
       tl.from(".hero-eyebrow", { opacity:0, y:20,  duration:0.6, ease:"power3.out" })
-        .from(".hero-title",   { opacity:0, x:-40, duration:0.8, ease:"power3.out" }, "-=0.3")
+        .from(".hero-title",   { opacity:0, x:-50, duration:0.8, ease:"power3.out", skewX: -5 }, "-=0.3")
         .from(".hero-role",    { opacity:0, x:-20, duration:0.6, ease:"power3.out" }, "-=0.4")
         .from(".hero-desc",    { opacity:0, y:15,  duration:0.6, ease:"power2.out" }, "-=0.3")
-        .from(".hero-rule",    { scaleX:0,         duration:0.6, ease:"power3.out", transformOrigin:"left" }, "-=0.2")
-        .from(".hero-stats",   { opacity:0, y:20,  duration:0.5, ease:"power2.out" }, "-=0.2")
         .from(".hero-btns",    { opacity:0, y:20,  duration:0.5, ease:"power2.out" }, "-=0.2")
         .from(".hero-right",   { opacity:0, scale:0.8, duration:1.2, ease:"elastic.out(1,0.6)" }, 0.2)
         .from(".scroll-hint",  { opacity:0, y:10,  duration:0.4 }, "-=0.3");
-
-      $$(".stat-num[data-count]").forEach(el => {
-        const target = parseInt(el.dataset.count);
-        gsap.fromTo(el, { textContent: 0 }, {
-          textContent: target, duration: 2, ease: "power2.out", delay: 1, snap: { textContent: 1 },
-          onUpdate() { el.textContent = Math.round(this.targets()[0].textContent); }
-        });
-      });
     } else {
-      gsap.from(".section-head", { opacity:0, y:30, duration:0.7, ease:"power3.out", delay:0.2 });
+      gsap.from(".section-head", { opacity:0, y:30, duration:0.7, ease:"power3.out", delay:0.3 });
     }
 
     /* ── Standard Reveals ── */
@@ -438,12 +366,12 @@
   }
 
   /* ══════════════════════════════════════════════════
-     7. TYPED TEXT (System Mode)
+     7. TYPED TEXT (Simple Version)
   ══════════════════════════════════════════════════ */
   function initTyped() {
     const el = $("#typedText");
     if (!el) return;
-    const phrases = ["Shadow Monarch", "Frontend Architect", "System Player", "UI Awakened"];
+    const phrases = ["Frontend Developer", "UI/UX Engineer", "Web Architect"];
     let pi = 0, ci = 0, deleting = false;
 
     function type() {
@@ -499,8 +427,8 @@
 
     const overlay = $("#page-transition");
     if (overlay && typeof gsap !== "undefined") {
-      gsap.set(overlay, { scaleY: 1, transformOrigin: "top" });
-      gsap.to(overlay, { scaleY: 0, duration: 0.6, ease: "power3.out", delay: 0.05 });
+      gsap.set(overlay, { scaleX: 1, transformOrigin: "right" });
+      gsap.to(overlay, { scaleX: 0, duration: 0.6, ease: "power3.out", delay: 0.1 });
 
       $$("a[href]").forEach(a => {
         const href = a.getAttribute("href");
@@ -508,7 +436,7 @@
         a.addEventListener("click", e => {
           e.preventDefault();
           gsap.to(overlay, {
-            scaleY: 1, transformOrigin: "bottom", duration: 0.4, ease: "power3.in",
+            scaleX: 1, transformOrigin: "left", duration: 0.4, ease: "power3.in",
             onComplete: () => window.location.href = href
           });
         });
@@ -539,9 +467,9 @@
     
     await initLoader();
 
-    if (PAGE === "home")   initDaggerScene();
-    if (PAGE === "about")  initPortalScene();
-    if (PAGE === "skills") initCrystalScene();
+    if (PAGE === "home")   initPrisonRealm();
+    if (PAGE === "about")  initCursedOrb();
+    if (PAGE === "skills") initDomainScene();
 
     initGSAP();
     initTyped();

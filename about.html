@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Montserrat:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -23,12 +23,11 @@
 
   <!-- LOADER -->
   <div id="loader">
-    <div class="loader-panel">
-      <div class="loader-title">SYSTEM</div>
-      <div class="loader-subtitle">Accessing Shadow Archives</div>
-      <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
-      <span class="loader-text" id="loaderText">Booting...</span>
+    <div class="loader-seal">
+      DOM<span>AIN</span><br/>EXPANSION
+      <div class="loader-glitch">DOM<span>AIN</span><br/>EXPANSION</div>
     </div>
+    <span class="loader-text">Infinite Void</span>
   </div>
 
   <div id="scroll-progress"><div id="scroll-bar"></div></div>
@@ -54,58 +53,42 @@
       
       <section class="section">
         <div class="section-head reveal">
-          <span class="section-title-sub">[PLAYER_INFO]</span>
-          <h2 class="section-title">Status Window</h2>
+          <span class="section-title-sub">About Me</span>
+          <h2 class="section-title">The <span>Architect</span></h2>
         </div>
 
         <div class="about-grid">
           <div class="about-text reveal-left">
-            <div class="sys-window">
-              <div class="sys-row">
-                <span class="sys-label-text">Name</span>
-                <span class="sys-value highlight">Joyceson Danielraj</span>
+            <p>
+              I am a <strong>Frontend Developer</strong> passionate about creating interactive, accessible, and high-performance web applications. My expertise lies in translating complex designs into seamless digital realities.
+            </p>
+            <p>
+              With a strong foundation in modern JavaScript frameworks and a keen eye for UX/UI, I aim to bridge the gap between design and engineering. I believe that exceptional products are born from continuous learning and meticulous attention to detail.
+            </p>
+            <div class="stats-grid">
+              <div class="stat-box">
+                <div class="stat-num">01+</div>
+                <div class="stat-label">Years Experience</div>
               </div>
-              <div class="sys-row">
-                <span class="sys-label-text">Level</span>
-                <span class="sys-value">99</span>
-              </div>
-              <div class="sys-row">
-                <span class="sys-label-text">Class</span>
-                <span class="sys-value">Frontend Architect</span>
-              </div>
-              <div class="sys-row">
-                <span class="sys-label-text">Title</span>
-                <span class="sys-value highlight">Shadow Monarch of UI</span>
-              </div>
-              <div class="sys-row">
-                <span class="sys-label-text">Mana</span>
-                <span class="sys-value">Infinite</span>
+              <div class="stat-box">
+                <div class="stat-num">10+</div>
+                <div class="stat-label">Projects Completed</div>
               </div>
             </div>
-            <br/>
-            <p>
-              I am an awakened developer specializing in creating high-performance, visually stunning web interfaces. 
-              My journey started at the bottom, but through continuous leveling and relentless grinding, I have achieved mastery over the DOM.
-            </p>
-            <p>
-              With expertise in React, Next.js, and Three.js, I extract the shadows of complex logic and weave them into seamless user experiences. 
-              Like a true monarch, I command my code to execute flawlessly.
-            </p>
-            <a href="projects.html" class="btn-primary" style="display:inline-flex;margin-top:1rem;">
-              <i class="fas fa-arrow-right"></i> View Quests
+            <a href="projects.html" class="btn-ghost" style="display:inline-flex;margin-top:2rem;">
+              View My Work
             </a>
           </div>
 
           <div class="about-model reveal-scale" style="position:relative; display:flex; justify-content:center;">
             <canvas id="about3DCanvas"></canvas>
-            <div class="sys-label">SYSTEM PORTAL ACTIVE</div>
           </div>
         </div>
 
         <!-- Experience Timeline -->
         <div class="section-head reveal" style="margin-top:8rem;">
-          <span class="section-title-sub">[QUEST_LOG]</span>
-          <h2 class="section-title">Experience</h2>
+          <span class="section-title-sub">Career Journey</span>
+          <h2 class="section-title">Professional <span>Experience</span></h2>
         </div>
 
         <div class="timeline">
@@ -128,7 +111,7 @@
               <h3 class="timeline-title">Frontend Intern</h3>
               <div class="timeline-org">Innoovatum</div>
               <div class="timeline-desc">
-                Contributed to the core dashboard architecture. Implemented responsive designs and collaborated with backend mages to sync REST APIs flawlessly.
+                Contributed to the core dashboard architecture. Implemented responsive designs and collaborated with backend developers to sync REST APIs flawlessly.
               </div>
             </div>
           </div>
@@ -139,7 +122,7 @@
       <footer>
         <div class="footer-inner">
           <span class="footer-logo">JD<span class="logo-accent">.</span></span>
-          <span class="footer-quote">"If you're not getting stronger, you're falling behind."</span>
+          <span class="footer-quote">"Building the web, one line of code at a time."</span>
           <div class="footer-socials">
             <a href="https://github.com/Joyceson71" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
             <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>

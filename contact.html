@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Montserrat:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -23,12 +23,11 @@
 
   <!-- LOADER -->
   <div id="loader">
-    <div class="loader-panel">
-      <div class="loader-title">SYSTEM</div>
-      <div class="loader-subtitle">Accessing Shadow Archives</div>
-      <div class="loader-bar-wrap"><div class="loader-bar" id="loaderBar"></div></div>
-      <span class="loader-text" id="loaderText">Booting...</span>
+    <div class="loader-seal">
+      DOM<span>AIN</span><br/>EXPANSION
+      <div class="loader-glitch">DOM<span>AIN</span><br/>EXPANSION</div>
     </div>
+    <span class="loader-text">Infinite Void</span>
   </div>
 
   <div id="scroll-progress"><div id="scroll-bar"></div></div>
@@ -56,36 +55,36 @@
         
         <div class="contact-wrap">
           <div class="section-head reveal">
-            <span class="section-title-sub">[COMMS_CHANNEL]</span>
-            <h2 class="section-title">Establish Link</h2>
+            <span class="section-title-sub">Get In Touch</span>
+            <h2 class="section-title">Contact <span>Me</span></h2>
           </div>
 
           <div class="contact-intro reveal">
-            <p>Ready to invite a Shadow Monarch to your guild? Send a direct message through the system to initiate contact.</p>
+            <p>Interested in working together or have a question? Fill out the form below and I'll get back to you as soon as possible.</p>
           </div>
 
           <div class="sys-form reveal-scale">
             <form id="contactForm">
               <div class="input-group">
                 <input type="text" id="nameInput" placeholder=" " required />
-                <label>PLAYER_NAME</label>
-                <div class="error-msg" id="nameError">[ERROR] Name required.</div>
+                <label>Name</label>
+                <div class="error-msg" id="nameError">Please enter your name.</div>
               </div>
 
               <div class="input-group">
                 <input type="email" id="emailInput" placeholder=" " required />
-                <label>PLAYER_EMAIL</label>
-                <div class="error-msg" id="emailError">[ERROR] Invalid email signature.</div>
+                <label>Email</label>
+                <div class="error-msg" id="emailError">Please enter a valid email.</div>
               </div>
 
               <div class="input-group" style="margin-bottom: 3rem;">
                 <textarea id="msgInput" rows="4" placeholder=" " required></textarea>
-                <label>TRANSMISSION_DATA</label>
-                <div class="error-msg" id="msgError">[ERROR] Data too short.</div>
+                <label>Message</label>
+                <div class="error-msg" id="msgError">Please enter a message.</div>
               </div>
 
               <button type="submit" class="form-submit" id="submitBtn">
-                <span class="btn-text">Transmit Signal</span>
+                Send Message
               </button>
             </form>
           </div>
@@ -96,7 +95,7 @@
       <footer>
         <div class="footer-inner">
           <span class="footer-logo">JD<span class="logo-accent">.</span></span>
-          <span class="footer-quote">"Only the strongest survive."</span>
+          <span class="footer-quote">"Building the web, one line of code at a time."</span>
           <div class="footer-socials">
             <a href="https://github.com/Joyceson71" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
             <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
