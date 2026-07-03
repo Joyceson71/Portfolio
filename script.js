@@ -483,7 +483,7 @@
 
       // 1. Setup the Web App URL here from your Google Apps Script
       // Replace this string with the URL you get after deploying your Google Apps Script
-      const scriptURL = "YOUR_GOOGLE_SCRIPT_WEB_APP_URL_HERE";
+      const scriptURL = "https://script.google.com/u/0/home/projects/1jQVhY4NL99K73S3hk9pMhQ12v_s7bdmLFmd4gt87k9ucuAY0U5hBAKBR/edit";
 
       // Show sending state
       submitBtn.querySelector(".btn-text").textContent = "Sending...";
