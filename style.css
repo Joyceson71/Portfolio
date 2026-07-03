@@ -1482,7 +1482,7 @@ footer {
     grid-template-columns: 1fr;
     gap: 48px;
   }
-  .about-image { max-width: 340px; margin: 0 auto; }
+  .about-visual { max-width: 340px; margin: 0 auto; }
   .contact-grid { grid-template-columns: 1fr; gap: 40px; }
 }
 
