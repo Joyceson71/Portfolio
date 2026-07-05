@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, CheckCircle2, Github, Linkedin, Twitter } from "lucide-react";
+import { Send, CheckCircle2 } from "lucide-react";
+import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -110,13 +111,13 @@ export function Contact() {
           
           <div className="flex gap-6">
             <a href="https://github.com/Joyceson71" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-primary hover:scale-110 transition-all">
-              <Github className="w-5 h-5" />
+              <FaGithub className="w-5 h-5" />
             </a>
             <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-primary hover:scale-110 transition-all">
-              <Linkedin className="w-5 h-5" />
+              <FaLinkedin className="w-5 h-5" />
             </a>
             <a href="#" className="text-muted-foreground hover:text-primary hover:scale-110 transition-all">
-              <Twitter className="w-5 h-5" />
+              <FaTwitter className="w-5 h-5" />
             </a>
           </div>
         </div>
