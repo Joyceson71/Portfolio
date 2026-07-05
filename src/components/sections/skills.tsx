@@ -5,6 +5,9 @@ import { View, Float, Icosahedron, TorusKnot, Sphere, Box } from "@react-three/d
 import { motion } from "framer-motion";
 import { Code2, Monitor, Paintbrush, Database } from "lucide-react";
 
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
+
 type SkillModelProps = {
   hovered: boolean;
   color: string;
@@ -13,7 +16,14 @@ type SkillModelProps = {
 
 function Skill3DModel({ hovered, color, type }: SkillModelProps) {
   const meshRef = useRef<any>(null);
-  const scale = hovered ? 1.2 : 1;
+  const groupRef = useRef<THREE.Group>(null);
+  const targetScale = hovered ? 1.2 : 1;
+
+  useFrame((state, delta) => {
+    if (groupRef.current) {
+      groupRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 8 * delta);
+    }
+  });
 
   const material = (
     <meshStandardMaterial 
@@ -31,10 +41,7 @@ function Skill3DModel({ hovered, color, type }: SkillModelProps) {
       <ambientLight intensity={0.5} />
       <directionalLight position={[2, 5, 2]} intensity={1} />
       <Float speed={hovered ? 4 : 2} rotationIntensity={hovered ? 2 : 1} floatIntensity={1}>
-        <motion.group
-          animate={{ scale }}
-          transition={{ type: "spring", stiffness: 200, damping: 20 }}
-        >
+        <group ref={groupRef}>
           {type === "cube" && (
             <Box ref={meshRef} args={[1.5, 1.5, 1.5]}>
               {material}
@@ -55,7 +62,7 @@ function Skill3DModel({ hovered, color, type }: SkillModelProps) {
               {material}
             </Icosahedron>
           )}
-        </motion.group>
+        </group>
       </Float>
     </>
   );
