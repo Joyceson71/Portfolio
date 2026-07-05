@@ -1,0 +1,138 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-heading: var(--font-heading);
+  --font-mono: var(--font-mono);
+  
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  
+  --color-purple-glow: var(--purple-glow);
+  --color-red-glow: var(--red-glow);
+  --color-surface: var(--surface);
+  --color-surface-light: var(--surface-light);
+  
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+}
+
+@layer base {
+  :root {
+    --background: #030303;
+    --foreground: #f4f4f5;
+    
+    --card: #0a0a0a;
+    --card-foreground: #f4f4f5;
+    
+    --popover: #0a0a0a;
+    --popover-foreground: #f4f4f5;
+    
+    --primary: #9d00ff;
+    --primary-foreground: #ffffff;
+    
+    --secondary: #151515;
+    --secondary-foreground: #9ca3af;
+    
+    --muted: #151515;
+    --muted-foreground: #9ca3af;
+    
+    --accent: #1a1a1a;
+    --accent-foreground: #f4f4f5;
+    
+    --destructive: #ff0033;
+    --destructive-foreground: #ffffff;
+    
+    --border: rgba(255, 255, 255, 0.05);
+    --input: rgba(255, 255, 255, 0.05);
+    --ring: rgba(157, 0, 255, 0.4);
+    
+    --radius: 0.75rem;
+
+    /* Custom Theme Colors */
+    --surface: #0a0a0a;
+    --surface-light: #151515;
+    --purple-glow: rgba(157, 0, 255, 0.4);
+    --red-glow: rgba(255, 0, 51, 0.4);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    overflow-x: hidden;
+  }
+  
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #030303;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9d00ff;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
+  }
+  .glass-card {
+    @apply bg-[#0a0a0a]/60 backdrop-blur-xl border border-white/5 hover:border-white/10 transition-colors;
+  }
+  .text-glow {
+    text-shadow: 0 0 20px var(--purple-glow);
+  }
+  .glow-border {
+    box-shadow: 0 0 15px var(--purple-glow);
+  }
+}
+
+/* Hide native cursor for custom cursor */
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+  a, button, input, textarea, [role="button"] {
+    cursor: none;
+  }
+}
