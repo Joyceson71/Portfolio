@@ -9,31 +9,31 @@ import Image from "next/image";
 const projectsData = [
   {
     id: 1,
-    title: "GoFloaters Portal",
+    title: "Complete Quiz App",
     category: "web",
-    desc: "Engineered the main user dashboard to manage bookings and real-time statuses with enhanced performance.",
-    tech: ["React", "Redux", "Tailwind"],
-    image: "https://images.unsplash.com/photo-1627398225058-f4f408731858?q=80&w=600&auto=format&fit=crop",
+    desc: "A full-stack, highly interactive quiz application with real-time scoring, leaderboards, and comprehensive admin dashboard.",
+    tech: ["React", "Node.js", "MongoDB", "Tailwind"],
+    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?q=80&w=600&auto=format&fit=crop",
     demo: "#",
     github: "#"
   },
   {
     id: 2,
-    title: "Innoovatum Dashboard",
-    category: "web ui",
-    desc: "Redesigned the administrative interface for better data visualization and control systems.",
-    tech: ["Next.js", "SASS", "Chart.js"],
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&auto=format&fit=crop",
+    title: "Smart Learning Campus",
+    category: "web",
+    desc: "A comprehensive digital learning platform for colleges, integrating virtual classrooms, assignment tracking, and student analytics.",
+    tech: ["Next.js", "TypeScript", "PostgreSQL", "Prisma"],
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=600&auto=format&fit=crop",
     demo: "#",
     github: "#"
   },
   {
     id: 3,
-    title: "Cursed Energy UI",
+    title: "3D Interactive Portfolio",
     category: "ui",
-    desc: "A conceptual component library featuring intense animations and 3D elements.",
-    tech: ["Three.js", "GSAP", "TypeScript"],
-    image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=600&auto=format&fit=crop",
+    desc: "This very website. A futuristic, immersive 3D portfolio experience blending WebGL, Framer Motion, and Next.js.",
+    tech: ["Three.js", "React Three Fiber", "GSAP", "Tailwind"],
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
     demo: "#",
     github: "#"
   }

@@ -54,21 +54,6 @@ function Workspace3DScene() {
   );
 }
 
-const timelineData = [
-  {
-    date: "Jan 2025 – Present",
-    role: "Software Engineer Intern",
-    company: "GoFloaters",
-    desc: "Developing and maintaining web applications using modern JavaScript frameworks. Collaborating with cross-functional teams to deliver high-quality features.",
-  },
-  {
-    date: "Aug 2023 – Dec 2024",
-    role: "Freelance Web Developer",
-    company: "Self-Employed",
-    desc: "Built custom websites for local businesses, focusing on SEO, performance, and accessible UI/UX design.",
-  }
-];
-
 export function About() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -118,38 +103,6 @@ export function About() {
             <View className="w-full h-full">
               <Workspace3DScene />
             </View>
-          </div>
-        </div>
-
-        {/* Experience Timeline */}
-        <div className="mt-32 max-w-3xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="font-mono text-sm tracking-widest text-destructive uppercase">Career Journey</span>
-            <h3 className="font-heading text-3xl md:text-5xl font-bold uppercase mt-2">Professional Experience</h3>
-          </div>
-
-          <div className="relative border-l-2 border-white/10 pl-8 space-y-16">
-            {timelineData.map((item, index) => (
-              <motion.div 
-                key={index}
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                className="relative"
-              >
-                {/* Glowing Dot */}
-                <div className="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-background border-2 border-primary shadow-[0_0_15px_var(--primary-glow)]" />
-                
-                <div className="glass-card p-8 rounded-xl relative overflow-hidden group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <span className="font-mono text-sm text-primary mb-2 block">{item.date}</span>
-                  <h4 className="font-heading text-2xl font-bold text-foreground mb-1">{item.role}</h4>
-                  <div className="text-lg font-semibold text-muted-foreground mb-4">{item.company}</div>
-                  <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
-                </div>
-              </motion.div>
-            ))}
           </div>
         </div>
       </div>
