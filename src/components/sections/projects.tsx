@@ -9,33 +9,33 @@ import Image from "next/image";
 const projectsData = [
   {
     id: 1,
-    title: "Complete Quiz App",
+    title: "Kings LMS (Smart Attendance)",
+    category: "web",
+    desc: "A smart attendance project and digital learning platform integrating virtual classrooms, assignment tracking, and student analytics.",
+    tech: ["Next.js", "TypeScript", "PostgreSQL", "Prisma"],
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=600&auto=format&fit=crop",
+    demo: "https://kings-lms.vercel.app/",
+    github: "https://github.com/Joyceson71/kings-lms"
+  },
+  {
+    id: 2,
+    title: "Quiz Arena",
     category: "web",
     desc: "A full-stack, highly interactive quiz application with real-time scoring, leaderboards, and comprehensive admin dashboard.",
     tech: ["React", "Node.js", "MongoDB", "Tailwind"],
     image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?q=80&w=600&auto=format&fit=crop",
-    demo: "#",
-    github: "#"
-  },
-  {
-    id: 2,
-    title: "Smart Learning Campus",
-    category: "web",
-    desc: "A comprehensive digital learning platform for colleges, integrating virtual classrooms, assignment tracking, and student analytics.",
-    tech: ["Next.js", "TypeScript", "PostgreSQL", "Prisma"],
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=600&auto=format&fit=crop",
-    demo: "#",
-    github: "#"
+    demo: "https://quizarena71.vercel.app/",
+    github: "https://github.com/Joyceson71/Quiz-app"
   },
   {
     id: 3,
-    title: "3D Interactive Portfolio",
-    category: "ui",
-    desc: "This very website. A futuristic, immersive 3D portfolio experience blending WebGL, Framer Motion, and Next.js.",
-    tech: ["Three.js", "React Three Fiber", "GSAP", "Tailwind"],
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop",
-    demo: "#",
-    github: "#"
+    title: "SmartBiz",
+    category: "web",
+    desc: "A modern business management platform designed for efficiency and growth with a sleek, responsive user interface.",
+    tech: ["React", "Next.js", "Tailwind", "TypeScript"],
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop",
+    demo: "https://smart-biz-inky.vercel.app/",
+    github: "https://github.com/Joyceson71/smart_biz"
   }
 ];
 

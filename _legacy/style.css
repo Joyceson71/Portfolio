@@ -1,15 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Montserrat:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
-
-/* ╔═══════════════════════════════════════════════════╗
-   ║   JOYCESON PORTFOLIO — JUJUTSU KAISEN THEME      ║
-   ║   "DOMAIN EXPANSION: INFINITE VOID"              ║
-   ╚═══════════════════════════════════════════════════╝ */
-
 html { scroll-behavior: smooth; }
-
-/* ───────────────────────────────────────────
-   DESIGN TOKENS
-─────────────────────────────────────────── */
 :root {
   /* Colors */
   --bg: #030303;            /* Deep Void */
