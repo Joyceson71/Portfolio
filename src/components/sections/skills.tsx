@@ -72,7 +72,7 @@ const skillsData = [
   {
     title: "React & Next.js",
     icon: Monitor,
-    color: "#00ff88",
+    color: "#ff3300",
     type: "torus" as const,
     tags: ["Hooks", "Redux", "Context", "SSR", "App Router"],
     proficiency: 95,
@@ -80,7 +80,7 @@ const skillsData = [
   {
     title: "JavaScript / TS",
     icon: Code2,
-    color: "#ff3300",
+    color: "#990000",
     type: "icosahedron" as const,
     tags: ["ES6+", "TypeScript", "DOM", "Async"],
     proficiency: 90,
@@ -88,7 +88,7 @@ const skillsData = [
   {
     title: "CSS & Animations",
     icon: Paintbrush,
-    color: "#a9b0b3",
+    color: "#ffaa00",
     type: "sphere" as const,
     tags: ["GSAP", "Tailwind", "Framer Motion", "Three.js"],
     proficiency: 92,
@@ -96,7 +96,7 @@ const skillsData = [
   {
     title: "Backend & DBs",
     icon: Database,
-    color: "#8b5a2b",
+    color: "#cc2200",
     type: "cube" as const,
     tags: ["Node.js", "Express", "PostgreSQL", "MongoDB"],
     proficiency: 85,

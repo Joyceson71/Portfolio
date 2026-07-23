@@ -29,9 +29,9 @@ function Counter({ from, to, duration = 2 }: { from: number, to: number, duratio
 function Workspace3DScene() {
   return (
     <>
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[5, 10, 5]} intensity={1.5} color="#00ff88" />
-      <pointLight position={[-5, 5, -5]} intensity={2} color="#ff3300" />
+      <ambientLight intensity={0.2} />
+      <directionalLight position={[5, 10, 5]} intensity={2} color="#ff3300" />
+      <pointLight position={[-5, 5, -5]} intensity={3} color="#990000" />
       
       <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
         <group position={[0, -1, 0]}>
@@ -46,7 +46,7 @@ function Workspace3DScene() {
           </Box>
           {/* Laptop Screen */}
           <Box args={[1.5, 1, 0.05]} position={[-1, 0.6, 0]} rotation={[-0.2, 0, 0]}>
-            <meshStandardMaterial color="#050505" emissive="#00ff88" emissiveIntensity={0.2} />
+            <meshStandardMaterial color="#050505" emissive="#ff3300" emissiveIntensity={0.3} />
           </Box>
           
           {/* Monitor */}
@@ -66,7 +66,7 @@ function Workspace3DScene() {
           {/* Glowing Sphere (Hologram) */}
           <Float speed={4} rotationIntensity={2} floatIntensity={2}>
             <Sphere args={[0.2, 16, 16]} position={[1.5, 1, 0.5]}>
-              <meshStandardMaterial color="#00ff88" emissive="#00ff88" emissiveIntensity={2} wireframe />
+              <meshStandardMaterial color="#ff3300" emissive="#ff0000" emissiveIntensity={2.5} wireframe />
             </Sphere>
           </Float>
         </group>
@@ -91,7 +91,7 @@ export function About() {
         <motion.div style={{ opacity, y }} className="mb-16">
           <span className="font-mono text-sm tracking-widest text-primary uppercase">About Me</span>
           <h2 className="font-heading text-4xl md:text-6xl font-bold uppercase mt-2">
-            The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Commander</span>
+            The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Founder</span>
           </h2>
         </motion.div>
 

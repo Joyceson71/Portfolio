@@ -2,56 +2,69 @@
 
 import { useRef } from "react";
 import { View, Environment, Float, Sparkles, PerspectiveCamera } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+
+function CameraShake() {
+  useFrame((state) => {
+    // Subtle but intense continuous rumbling effect
+    state.camera.position.x = Math.sin(state.clock.elapsedTime * 20) * 0.03;
+    state.camera.position.y = Math.cos(state.clock.elapsedTime * 18) * 0.03;
+  });
+  return null;
+}
 
 function Hero3DScene() {
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 0, 8]} fov={50} />
+      <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={50} />
+      <CameraShake />
       
       <Environment preset="night" />
-      <ambientLight intensity={0.2} />
-      <directionalLight position={[10, 10, 5]} intensity={1} color="#00ff88" />
-      <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#ff3300" />
+      <ambientLight intensity={0.1} />
+      <directionalLight position={[10, 10, 5]} intensity={1.5} color="#ff3300" />
+      <directionalLight position={[-10, -10, -5]} intensity={2} color="#990000" />
       
-      {/* Fog for depth */}
-      <fog attach="fog" args={["#030303", 5, 20]} />
+      {/* Apocalyptic Fog */}
+      <fog attach="fog" args={["#1a0000", 5, 30]} />
 
-      <Sparkles count={300} scale={12} size={2} speed={0.4} opacity={0.5} color="#00ff88" />
+      {/* Falling Ash and Embers */}
+      <Sparkles count={1500} scale={20} size={3} speed={0.8} opacity={0.8} color="#ff4400" />
 
-      {/* Floating geometric object (Titan Crystal inspired) */}
-      <Float speed={2} rotationIntensity={1.5} floatIntensity={2}>
-        <mesh position={[2, 0, 0]}>
-          <icosahedronGeometry args={[1.5, 0]} />
+      {/* The Wall Titans (Monoliths) */}
+      {Array.from({ length: 12 }).map((_, i) => (
+        <mesh 
+          key={i}
+          position={[
+            (i - 5.5) * 3, 
+            -2, 
+            -15 - (Math.random() * 10)
+          ]}
+        >
+          <boxGeometry args={[2.5, 30, 2.5]} />
           <meshStandardMaterial 
-            color="#050505" 
-            roughness={0.1} 
-            metalness={0.8}
-            emissive="#00331a"
-            emissiveIntensity={0.8}
-            wireframe
+            color="#050101" 
+            roughness={0.9} 
+            metalness={0.1}
+            emissive="#330000"
+            emissiveIntensity={0.5}
           />
-          {/* Inner crystal core */}
-          <mesh scale={0.8}>
-            <octahedronGeometry args={[1.2, 0]} />
-            <meshStandardMaterial color="#00ff88" emissive="#00ff88" emissiveIntensity={0.5} />
-          </mesh>
         </mesh>
-      </Float>
+      ))}
       
-      {/* Background fragments */}
-      {Array.from({ length: 8 }).map((_, i) => (
-        <Float key={i} speed={1 + Math.random()} rotationIntensity={2} floatIntensity={2}>
+      {/* Background Debris */}
+      {Array.from({ length: 15 }).map((_, i) => (
+        <Float key={`debris-${i}`} speed={2 + Math.random()} rotationIntensity={3} floatIntensity={3}>
           <mesh 
             position={[
-              (Math.random() - 0.5) * 10, 
-              (Math.random() - 0.5) * 10, 
-              (Math.random() - 0.5) * 10 - 2
+              (Math.random() - 0.5) * 20, 
+              (Math.random() - 0.5) * 20, 
+              (Math.random() - 0.5) * 15 - 5
             ]}
           >
-            <octahedronGeometry args={[0.4, 0]} />
-            <meshStandardMaterial color="#111" emissive="#002211" roughness={0.3} />
+            <octahedronGeometry args={[Math.random() * 0.8 + 0.2, 0]} />
+            <meshStandardMaterial color="#111" emissive="#440000" roughness={0.8} />
           </mesh>
         </Float>
       ))}
