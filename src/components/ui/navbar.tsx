@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, FileText } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
@@ -12,45 +13,26 @@ function cn(...inputs: ClassValue[]) {
 }
 
 const navLinks = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
-  { name: "Projects", href: "#projects" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Skills", href: "/skills" },
+  { name: "Projects", href: "/projects" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export function Navbar() {
-  const [activeSection, setActiveSection] = useState("home");
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
-
-      // Simple active section detection based on scroll position
-      const sections = navLinks.map((link) => link.href.substring(1));
-      let current = "home";
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el && window.scrollY >= el.offsetTop - 200) {
-          current = section;
-        }
-      }
-      setActiveSection(current);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const scrollTo = (href: string) => {
-    setMobileMenuOpen(false);
-    const el = document.querySelector(href);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <>
@@ -63,9 +45,8 @@ export function Navbar() {
         <div className="container mx-auto px-6 md:px-12 flex justify-between items-center">
           {/* Logo */}
           <Link
-            href="#home"
+            href="/"
             className="font-heading font-bold text-2xl uppercase tracking-widest text-foreground hover:text-primary transition-colors"
-            onClick={(e) => { e.preventDefault(); scrollTo("#home"); }}
           >
             JD<span className="text-primary">.</span>
           </Link>
@@ -77,29 +58,31 @@ export function Navbar() {
               isScrolled ? "glass" : "bg-transparent"
             )}
           >
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
-                className={cn(
-                  "relative font-heading uppercase tracking-widest text-sm transition-colors hover:text-foreground",
-                  activeSection === link.href.substring(1)
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                )}
-              >
-                {link.name}
-                {activeSection === link.href.substring(1) && (
-                  <motion.div
-                    layoutId="activeNavIndicator"
-                    className="absolute -bottom-2 left-0 right-0 h-[2px] bg-primary glow-border"
-                    initial={false}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={cn(
+                    "relative font-heading uppercase tracking-widest text-sm transition-colors hover:text-foreground",
+                    isActive
+                      ? "text-foreground"
+                      : "text-muted-foreground"
+                  )}
+                >
+                  {link.name}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeNavIndicator"
+                      className="absolute -bottom-2 left-0 right-0 h-[2px] bg-primary glow-border"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
+                  )}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Actions */}
@@ -132,21 +115,24 @@ export function Navbar() {
             className="fixed inset-0 z-40 bg-background/95 backdrop-blur-xl flex flex-col justify-center items-center"
           >
             <nav className="flex flex-col gap-8 text-center">
-              {navLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => { e.preventDefault(); scrollTo(link.href); }}
-                  className={cn(
-                    "font-heading uppercase text-3xl tracking-widest transition-colors",
-                    activeSection === link.href.substring(1)
-                      ? "text-primary text-glow"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {link.name}
-                </a>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href;
+                return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={cn(
+                      "font-heading uppercase text-3xl tracking-widest transition-colors",
+                      isActive
+                        ? "text-primary text-glow"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
               <a
                 href="/Joyceson-CV.pdf"
                 target="_blank"

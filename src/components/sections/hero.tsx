@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { View, Environment, Float, Sparkles, PerspectiveCamera } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { motion } from "framer-motion";
@@ -152,22 +153,22 @@ export function Hero() {
             }}
             className="flex flex-wrap gap-4"
           >
-            <a 
-              href="#projects"
+            <Link 
+              href="/projects"
               className="group relative px-8 py-4 bg-primary text-primary-foreground font-heading uppercase tracking-widest text-sm overflow-hidden rounded-md hover:shadow-[0_0_30px_var(--primary)] transition-all duration-300"
             >
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
               <span className="relative flex items-center gap-2">
                 View Projects <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </span>
-            </a>
+            </Link>
             
-            <a 
-              href="#about"
+            <Link 
+              href="/about"
               className="px-8 py-4 border border-white/20 font-heading uppercase tracking-widest text-sm rounded-md hover:bg-white/5 hover:border-white/40 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all duration-300"
             >
               About Me
-            </a>
+            </Link>
           </motion.div>
         </motion.div>
       </div>

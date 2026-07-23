@@ -4,6 +4,7 @@ import "./globals.css";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll";
 import { SceneProvider } from "@/components/3d/scene";
 import { CustomCursor } from "@/components/ui/custom-cursor";
+import { Navbar } from "@/components/ui/navbar";
 
 const oswald = Oswald({
   variable: "--font-heading",
@@ -40,6 +41,7 @@ export default function RootLayout({
       >
         <SmoothScrollProvider>
           <CustomCursor />
+          <Navbar />
           <div className="relative z-10 w-full h-full flex flex-col">
             {children}
           </div>
