@@ -12,29 +12,30 @@ function Hero3DScene() {
       
       <Environment preset="night" />
       <ambientLight intensity={0.2} />
-      <directionalLight position={[10, 10, 5]} intensity={1} color="#9d00ff" />
-      <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#ff0033" />
+      <directionalLight position={[10, 10, 5]} intensity={1} color="#00ff88" />
+      <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#ff3300" />
       
       {/* Fog for depth */}
       <fog attach="fog" args={["#030303", 5, 20]} />
 
-      <Sparkles count={300} scale={12} size={2} speed={0.4} opacity={0.5} color="#9d00ff" />
+      <Sparkles count={300} scale={12} size={2} speed={0.4} opacity={0.5} color="#00ff88" />
 
-      {/* Floating geometric object (Prison Realm inspired cube) */}
+      {/* Floating geometric object (Titan Crystal inspired) */}
       <Float speed={2} rotationIntensity={1.5} floatIntensity={2}>
         <mesh position={[2, 0, 0]}>
-          <boxGeometry args={[2, 2, 2]} />
+          <icosahedronGeometry args={[1.5, 0]} />
           <meshStandardMaterial 
             color="#050505" 
-            roughness={0.2} 
+            roughness={0.1} 
             metalness={0.8}
-            emissive="#1a0033"
-            emissiveIntensity={0.5}
+            emissive="#00331a"
+            emissiveIntensity={0.8}
+            wireframe
           />
-          {/* Inner core visible through wireframe layer */}
-          <mesh>
-            <icosahedronGeometry args={[1.2, 0]} />
-            <meshBasicMaterial color="#ff0033" wireframe />
+          {/* Inner crystal core */}
+          <mesh scale={0.8}>
+            <octahedronGeometry args={[1.2, 0]} />
+            <meshStandardMaterial color="#00ff88" emissive="#00ff88" emissiveIntensity={0.5} />
           </mesh>
         </mesh>
       </Float>
@@ -49,8 +50,8 @@ function Hero3DScene() {
               (Math.random() - 0.5) * 10 - 2
             ]}
           >
-            <boxGeometry args={[0.5, 0.5, 0.5]} />
-            <meshStandardMaterial color="#111" emissive="#220033" roughness={0.3} />
+            <octahedronGeometry args={[0.4, 0]} />
+            <meshStandardMaterial color="#111" emissive="#002211" roughness={0.3} />
           </mesh>
         </Float>
       ))}

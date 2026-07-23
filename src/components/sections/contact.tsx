@@ -118,7 +118,7 @@ export function Contact() {
             <Button 
               type="submit" 
               disabled={isSubmitting || isSubmitted}
-              className="w-full h-12 mt-4 font-heading uppercase tracking-widest text-sm relative overflow-hidden group bg-primary hover:bg-primary/90 text-white"
+              className="w-full h-12 mt-4 font-heading uppercase tracking-widest text-sm relative overflow-hidden group bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               <span className="relative z-10 flex items-center justify-center gap-2">
                 {isSubmitting ? (
