@@ -4,6 +4,7 @@ import "./globals.css";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll";
 import { SceneProvider } from "@/components/3d/scene";
 import { Navbar } from "@/components/ui/navbar";
+import { AudioToggle } from "@/components/ui/audio-toggle";
 
 const rajdhani = Rajdhani({
   variable: "--font-heading",
@@ -40,6 +41,7 @@ export default function RootLayout({
       >
         <SmoothScrollProvider>
           <Navbar />
+          <AudioToggle />
           <div className="relative z-10 w-full h-full flex flex-col">
             {children}
           </div>

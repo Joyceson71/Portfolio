@@ -13,11 +13,11 @@ function cn(...inputs: ClassValue[]) {
 }
 
 const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Skills", href: "/skills" },
-  { name: "Projects", href: "/projects" },
-  { name: "Contact", href: "/contact" },
+  { name: "Home", href: "#hero" },
+  { name: "About", href: "#about" },
+  { name: "Skills", href: "#skills" },
+  { name: "Projects", href: "#projects" },
+  { name: "Contact", href: "#contact" },
 ];
 
 export function Navbar() {
@@ -59,7 +59,7 @@ export function Navbar() {
             )}
           >
             {navLinks.map((link) => {
-              const isActive = pathname === link.href;
+              const isActive = false; // Disable pathname matching for hash links
               return (
                 <Link
                   key={link.name}
@@ -116,7 +116,7 @@ export function Navbar() {
           >
             <nav className="flex flex-col gap-8 text-center">
               {navLinks.map((link) => {
-                const isActive = pathname === link.href;
+                const isActive = false;
                 return (
                   <Link
                     key={link.name}
