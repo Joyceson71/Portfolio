@@ -123,7 +123,7 @@ export function Hero() {
           
           <motion.p 
             variants={{
-              hidden: { opacity: 0, opacity: 0 },
+              hidden: { opacity: 0 },
               visible: { opacity: 1, transition: { duration: 1 } }
             }}
             className="text-lg text-muted-foreground max-w-lg mb-10 leading-relaxed"
