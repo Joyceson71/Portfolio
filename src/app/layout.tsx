@@ -3,7 +3,6 @@ import { Rajdhani, Inter, Share_Tech_Mono } from "next/font/google";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll";
 import { SceneProvider } from "@/components/3d/scene";
-import { CustomCursor } from "@/components/ui/custom-cursor";
 import { Navbar } from "@/components/ui/navbar";
 
 const rajdhani = Rajdhani({
@@ -37,10 +36,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} ${rajdhani.variable} ${shareTechMono.variable} antialiased bg-background text-foreground min-h-screen relative`}
+        className={`${inter.variable} ${rajdhani.variable} ${shareTechMono.variable} antialiased bg-background text-foreground min-h-screen relative custom-cursor-active`}
       >
         <SmoothScrollProvider>
-          <CustomCursor />
           <Navbar />
           <div className="relative z-10 w-full h-full flex flex-col">
             {children}
