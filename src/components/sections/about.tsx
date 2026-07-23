@@ -80,7 +80,7 @@ export function About() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section id="about" ref={sectionRef} className="relative w-full min-h-screen py-20 overflow-x-hidden bg-background flex flex-col justify-center">
+    <section id="about" ref={sectionRef} className="relative w-full h-[100dvh] pt-24 pb-8 overflow-hidden bg-background flex flex-col justify-center">
       {/* Armored Titan Background Art */}
       <motion.div 
         className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"
@@ -109,22 +109,19 @@ export function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-8"
+          className="mb-4"
         >
           <span className="font-mono text-sm tracking-widest text-primary uppercase">About Me</span>
-          <h2 className="font-heading text-4xl md:text-5xl font-bold uppercase mt-2">
+          <h2 className="font-heading text-3xl md:text-5xl font-bold uppercase mt-1">
             The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Founder</span>
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
           {/* Text Content */}
-          <div className="space-y-4 text-base text-muted-foreground leading-relaxed">
+          <div className="space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed">
             <p>
-              I am a <strong className="text-foreground">Frontend Developer</strong> passionate about creating interactive, accessible, and high-performance web applications. My expertise lies in translating complex designs into seamless digital realities.
-            </p>
-            <p>
-              With a strong foundation in modern JavaScript frameworks and a keen eye for UX/UI, I aim to bridge the gap between design and engineering. I believe that exceptional products are born from continuous learning and meticulous attention to detail.
+              I am a <strong className="text-foreground">Frontend Developer</strong> passionate about creating interactive, accessible, and high-performance web applications. My expertise lies in translating complex designs into seamless digital realities. I believe that exceptional products are born from continuous learning and meticulous attention to detail.
             </p>
             
             <div className="grid grid-cols-2 gap-4 pt-4">
@@ -136,10 +133,10 @@ export function About() {
                 className="p-6 glass-card rounded-lg relative overflow-hidden group"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="font-heading text-4xl font-bold text-foreground mb-2">
+                <div className="font-heading text-3xl font-bold text-foreground mb-1">
                   <Counter from={0} to={1} />+
                 </div>
-                <div className="font-mono text-sm text-primary uppercase tracking-wider">Years Experience</div>
+                <div className="font-mono text-xs text-primary uppercase tracking-wider">Years Experience</div>
               </motion.div>
               <motion.div 
                 initial={{ opacity: 0, y: 30 }}
@@ -149,16 +146,16 @@ export function About() {
                 className="p-6 glass-card rounded-lg relative overflow-hidden group border border-destructive/20 hover:border-destructive"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-destructive/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="font-heading text-4xl font-bold text-foreground mb-2">
+                <div className="font-heading text-3xl font-bold text-foreground mb-1">
                   <Counter from={0} to={10} />+
                 </div>
-                <div className="font-mono text-sm text-destructive uppercase tracking-wider">Projects Completed</div>
+                <div className="font-mono text-xs text-destructive uppercase tracking-wider">Projects Completed</div>
               </motion.div>
             </div>
           </div>
 
           {/* 3D Workspace */}
-          <div className="relative w-full h-[300px] lg:h-[400px] glass rounded-2xl overflow-hidden glow-border">
+          <div className="relative w-full h-[250px] lg:h-[350px] glass rounded-2xl overflow-hidden glow-border">
             <View className="w-full h-full">
               <Workspace3DScene />
             </View>
