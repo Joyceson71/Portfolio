@@ -145,10 +145,10 @@ export function Projects() {
   );
 
   return (
-    <section id="projects" ref={containerRef} className="relative w-full min-h-screen py-32 overflow-hidden bg-background/50">
+    <section id="projects" ref={containerRef} className="relative w-full min-h-screen py-32 overflow-hidden bg-background">
       {/* Mikasa Background Art */}
       <motion.div 
-        className="absolute inset-0 z-[-1] pointer-events-none opacity-10"
+        className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"
         animate={{ 
           scale: [1, 1.03, 1],
           x: [0, 10, 0]
@@ -165,10 +165,10 @@ export function Projects() {
           fill 
           className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background/90" />
       </motion.div>
 
-      <div className="container mx-auto px-6 md:px-12">
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
           <div>
             <span className="font-mono text-sm tracking-widest text-primary uppercase">Portfolio</span>

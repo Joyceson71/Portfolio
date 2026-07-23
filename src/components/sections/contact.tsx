@@ -54,10 +54,10 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative w-full min-h-screen pt-32 pb-12 flex flex-col justify-between overflow-hidden bg-background/50">
+    <section id="contact" className="relative w-full min-h-screen pt-32 pb-12 flex flex-col justify-between overflow-hidden bg-background">
       {/* Attack Titan Background Art */}
       <motion.div 
-        className="absolute inset-0 z-[-1] pointer-events-none opacity-10"
+        className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"
         animate={{ 
           scale: [1, 1.03, 1],
           x: [0, -10, 0]
@@ -74,7 +74,7 @@ export function Contact() {
           fill 
           className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background/90" />
       </motion.div>
 
       <div className="container mx-auto px-6 md:px-12 flex-grow flex flex-col justify-center items-center relative z-10">
