@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { View, Float, Box, Cylinder, Sphere } from "@react-three/drei";
-import { motion, useScroll, useTransform, useInView, animate } from "framer-motion";
+import { motion, useInView, animate } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 
@@ -78,16 +78,9 @@ function Workspace3DScene() {
 
 export function About() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
-    <section id="about" ref={sectionRef} className="relative w-full min-h-screen py-32 overflow-hidden bg-background">
+    <section id="about" ref={sectionRef} className="relative w-full min-h-screen py-32 overflow-x-hidden bg-background">
       {/* Armored Titan Background Art */}
       <motion.div 
         className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"
@@ -111,7 +104,13 @@ export function About() {
       </motion.div>
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <motion.div style={{ opacity, y }} className="mb-16">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mb-16"
+        >
           <span className="font-mono text-sm tracking-widest text-primary uppercase">About Me</span>
           <h2 className="font-heading text-4xl md:text-6xl font-bold uppercase mt-2">
             The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Founder</span>

@@ -106,7 +106,7 @@ const skillsData = [
 
 export function Skills() {
   return (
-    <section id="skills" className="relative w-full min-h-screen py-32 overflow-hidden bg-background">
+    <section id="skills" className="relative w-full min-h-screen py-32 overflow-x-hidden bg-background">
       {/* Levi Background Art */}
       <motion.div 
         className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"

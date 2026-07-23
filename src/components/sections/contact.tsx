@@ -54,7 +54,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative w-full min-h-screen pt-32 pb-12 flex flex-col justify-between overflow-hidden bg-background">
+    <section id="contact" className="relative w-full min-h-screen pt-32 pb-12 flex flex-col justify-between overflow-x-hidden bg-background">
       {/* Attack Titan Background Art */}
       <motion.div 
         className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"

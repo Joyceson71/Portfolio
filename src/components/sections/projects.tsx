@@ -145,7 +145,7 @@ export function Projects() {
   );
 
   return (
-    <section id="projects" ref={containerRef} className="relative w-full min-h-screen py-32 overflow-hidden bg-background">
+    <section id="projects" ref={containerRef} className="relative w-full min-h-screen py-32 overflow-x-hidden bg-background">
       {/* Mikasa Background Art */}
       <motion.div 
         className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"
