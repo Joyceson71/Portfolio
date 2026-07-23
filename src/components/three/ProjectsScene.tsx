@@ -10,19 +10,19 @@ import { useMobileDetect } from "@/hooks/useMobileDetect";
 const projectsData = [
   {
     title: "Kings LMS",
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=600&auto=format&fit=crop",
+    image: "/images/armored.png",
     link: "https://kings-lms.vercel.app/",
     position: [-8, 2, -20] as [number, number, number]
   },
   {
     title: "Quiz Arena",
-    image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?q=80&w=600&auto=format&fit=crop",
+    image: "/images/levi.png",
     link: "https://quizarena71.vercel.app/",
     position: [8, 4, -50] as [number, number, number]
   },
   {
     title: "SmartBiz",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop",
+    image: "/images/mikasa.png",
     link: "https://smart-biz-inky.vercel.app/",
     position: [-6, 3, -80] as [number, number, number]
   }
