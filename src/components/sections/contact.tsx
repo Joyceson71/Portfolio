@@ -1,203 +1,341 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import dynamic from "next/dynamic";
-import { Send, CheckCircle2, AlertCircle, Mail, MapPin } from "lucide-react";
-import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
+import { useState, useRef } from "react";
+import { Mail } from "lucide-react";
 
-const ContactScene = dynamic(() => import("@/components/three/ContactScene").then(m => m.ContactScene), { ssr: false });
+const GithubIcon = ({ size = 24 }: { size?: number }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+);
+const LinkedinIcon = ({ size = 24 }: { size?: number }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+);
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
 export function Contact() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isVisible = useIntersectionObserver(sectionRef, { threshold: 0.1, triggerOnce: true });
-  
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [errors, setErrors] = useState<{name?: string, email?: string, message?: string}>({});
 
-  const validateForm = () => {
-    const newErrors: {name?: string, email?: string, message?: string} = {};
-    if (!formData.name || formData.name.trim().length < 2) {
-      newErrors.name = "Name must be at least 2 characters.";
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (errors[e.target.name]) {
+      setErrors({ ...errors, [e.target.name]: "" });
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email || !emailRegex.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address.";
-    }
-    if (!formData.message || formData.message.trim().length < 10) {
-      newErrors.message = "Message must be at least 10 characters.";
-    }
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
-    setIsSubmitting(true);
     
-    // Dispatch custom event for 3D Scene
-    window.dispatchEvent(new Event("contact-submit"));
+    // Validate
+    const newErrors: { [key: string]: string } = {};
+    if (!formData.name.trim()) newErrors.name = "Name is required";
     
-    // mailto action
-    setTimeout(() => {
-      window.location.href = `mailto:joycesondanielraj21@gmail.com?subject=Contact from ${formData.name}&body=${encodeURIComponent(formData.message)}%0D%0A%0D%0AReply to: ${formData.email}`;
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-      setFormData({ name: "", email: "", message: "" });
-      setTimeout(() => setIsSubmitted(false), 5000);
-    }, 800);
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
-    if (errors[id as keyof typeof errors]) {
-      setErrors(prev => ({ ...prev, [id]: undefined }));
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim() || !emailRegex.test(formData.email)) {
+      newErrors.email = "Valid email is required";
     }
-  };
+    
+    if (!formData.message.trim() || formData.message.length < 20) {
+      newErrors.message = "Message must be at least 20 characters";
+    }
 
-  const handleFocus = () => window.dispatchEvent(new Event("contact-focus"));
-  const handleBlur = () => window.dispatchEvent(new Event("contact-blur"));
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setStatus("submitting");
+
+    // Simulate dispatch and open mailto
+    setTimeout(() => {
+      setStatus("success");
+      
+      const mailtoLink = `mailto:joycesondanielraj@gmail.com?subject=Contact from ${encodeURIComponent(formData.name)}&body=${encodeURIComponent(formData.message)}%0A%0AFrom: ${encodeURIComponent(formData.email)}`;
+      window.location.href = mailtoLink;
+
+      // Reset after 5 seconds
+      setTimeout(() => {
+        setStatus("idle");
+        setFormData({ name: "", email: "", message: "" });
+      }, 5000);
+    }, 1000);
+  };
 
   return (
     <section 
       id="contact" 
       ref={sectionRef}
-      className="relative w-full py-24 lg:py-32 flex flex-col justify-center overflow-hidden bg-obsidian"
+      style={{
+        minHeight: '100vh',
+        backgroundColor: 'var(--bg-secondary)',
+        padding: '6rem 1.5rem',
+        display: 'flex',
+        alignItems: 'center'
+      }}
     >
-      {/* 3D Canvas Background */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <ContactScene />
-      </div>
+      <div className={`container mx-auto max-w-6xl fade-up ${isVisible ? 'in-view' : ''}`}>
+        
+        {/* Section Label */}
+        <div 
+          style={{ 
+            fontFamily: 'var(--font-cinzel)', 
+            color: 'var(--accent-bronze)',
+            letterSpacing: '0.2em'
+          }}
+          className="uppercase font-bold mb-12"
+        >
+          Contact Protocol
+        </div>
 
-      <div 
-        className="container mx-auto px-6 md:px-12 relative z-10 pointer-events-none"
-        style={{
-          opacity: isVisible ? 1 : 0,
-          transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
-          transition: 'opacity 1s ease-out, transform 1s ease-out'
-        }}
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
           
-          {/* Left Column - Contact Details */}
-          <div className="pointer-events-auto bg-smoke/60 p-8 rounded-[2px] backdrop-blur-md border border-white/10 shadow-2xl">
-            <div className="mb-8">
-              <span className="font-cinzel text-sm tracking-[0.3em] text-titan-bronze uppercase shadow-titan">
-                Commence Operations
-              </span>
-              <div className="w-[60px] h-[1px] bg-titan-bronze mt-2 mb-4 shadow-[0_0_10px_rgba(193,127,58,0.8)]" />
-              <h2 className="font-heading text-4xl md:text-5xl font-bold uppercase text-white mb-6 drop-shadow-md">
-                Establish <span className="text-titan-bronze">Comms</span>
-              </h2>
-              <p className="text-parchment leading-relaxed max-w-md font-sans font-light">
-                Whether you have a question, a project proposal, or just want to say hello, my inbox is open. I'll get back to you as soon as possible.
-              </p>
-            </div>
+          {/* Info Column */}
+          <div>
+            <h3 
+              style={{
+                fontFamily: 'var(--font-cinzel-dec)',
+                fontSize: '2rem',
+                color: 'var(--text-primary)',
+                marginBottom: '1.5rem'
+              }}
+            >
+              Let&apos;s build something <span style={{ color: 'var(--accent-bronze)' }}>exceptional.</span>
+            </h3>
+            
+            <p 
+              style={{ 
+                color: 'var(--text-secondary)',
+                fontSize: '1rem',
+                lineHeight: 1.8,
+                marginBottom: '2.5rem'
+              }}
+            >
+              Currently open for new opportunities. Whether you have a question, a project proposal, or just want to connect — my inbox is always open.
+            </p>
 
-            <div className="space-y-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 flex items-center justify-center border border-white/10 bg-obsidian/60 text-titan-bronze backdrop-blur-md">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-titan-bronze drop-shadow-sm">Email</div>
-                  <a href="mailto:joycesondanielraj21@gmail.com" className="font-sans text-white hover:text-titan-bronze transition-colors drop-shadow-md">
-                    joycesondanielraj21@gmail.com
-                  </a>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 flex items-center justify-center border border-white/10 bg-obsidian/60 text-titan-bronze backdrop-blur-md">
-                  <MapPin className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-titan-bronze drop-shadow-sm">Location</div>
-                  <div className="font-sans text-white drop-shadow-md">
-                    India (IST / UTC+5:30)
+            <div className="flex flex-col gap-5">
+              {[
+                { icon: Mail, label: "joycesondanielraj@gmail.com", href: "mailto:joycesondanielraj@gmail.com" },
+                { icon: GithubIcon, label: "github.com/Joyceson71", href: "https://github.com/Joyceson71" },
+                { icon: LinkedinIcon, label: "linkedin.com/in/joyceson-danielraj", href: "https://linkedin.com/in/joyceson-danielraj" }
+              ].map((item, idx) => (
+                <a 
+                  key={idx}
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-4 group"
+                >
+                  <div 
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      border: '1px solid var(--border-color)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'var(--text-muted)',
+                      transition: 'all 0.3s'
+                    }}
+                    className="group-hover:border-[var(--accent-bronze)] group-hover:text-[var(--accent-bronze)]"
+                  >
+                    <item.icon size={18} />
                   </div>
-                </div>
-              </div>
+                  <span 
+                    style={{ 
+                      color: 'var(--text-primary)',
+                      fontFamily: 'var(--font-inter)',
+                      fontSize: '0.95rem',
+                      transition: 'color 0.3s'
+                    }}
+                    className="group-hover:text-[var(--accent-bronze)]"
+                  >
+                    {item.label}
+                  </span>
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Right Column - Form */}
-          <div className="pointer-events-auto bg-smoke/60 backdrop-blur-md p-8 border border-white/10 rounded-[2px] relative shadow-2xl">
-            <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-titan-bronze z-20 pointer-events-none" />
-            <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-titan-bronze z-20 pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-titan-bronze z-20 pointer-events-none" />
-            <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-titan-bronze z-20 pointer-events-none" />
-            
-            {isSubmitted && (
-              <div className="mb-6 p-4 bg-teal/20 border border-teal flex items-center gap-3 text-white backdrop-blur-sm shadow-[0_0_15px_rgba(42,122,106,0.3)]">
-                <CheckCircle2 className="w-5 h-5 text-teal" />
-                <span className="font-cinzel text-sm uppercase tracking-wider font-bold">Message deployed successfully.</span>
-              </div>
-            )}
+          {/* Form Column */}
+          <div>
+            <form 
+              onSubmit={handleSubmit}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.4rem'
+              }}
+            >
+              {status === "success" && (
+                <div 
+                  style={{
+                    backgroundColor: 'rgba(42,122,106,0.15)',
+                    border: '1px solid rgba(42,122,106,0.3)',
+                    color: 'var(--accent-teal)',
+                    padding: '1rem 1.5rem',
+                    borderRadius: '4px',
+                    textAlign: 'center',
+                    marginBottom: '1rem'
+                  }}
+                  className="fade-up in-view"
+                >
+                  Message dispatched successfully. Opening mail client...
+                </div>
+              )}
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
-              <div className="space-y-2">
-                <label htmlFor="name" className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-titan-bronze drop-shadow-sm">Name</label>
+              {/* Name */}
+              <div className="flex flex-col gap-2">
+                <label 
+                  htmlFor="name"
+                  style={{
+                    fontFamily: 'var(--font-cinzel)',
+                    fontSize: '0.7rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.15em',
+                    color: 'var(--text-secondary)'
+                  }}
+                >
+                  Name
+                </label>
                 <input 
-                  id="name" 
+                  type="text" 
+                  id="name"
+                  name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
-                  placeholder="Eren Yeager" 
-                  className={`w-full bg-obsidian/80 backdrop-blur-sm border px-4 py-3 font-sans text-white outline-none transition-colors duration-300 ${errors.name ? 'border-blood focus:border-blood' : 'border-white/10 focus:border-titan-bronze shadow-inner'}`}
+                  placeholder="Eren Yeager"
+                  style={{
+                    backgroundColor: 'rgba(26,26,46,0.6)',
+                    border: `1px solid ${errors.name ? 'var(--accent-blood)' : 'var(--border-color)'}`,
+                    color: 'var(--text-primary)',
+                    padding: '0.9rem 1.2rem',
+                    fontFamily: 'var(--font-inter)',
+                    fontSize: '0.9rem',
+                    transition: 'border-color 0.3s',
+                    outline: 'none'
+                  }}
+                  onFocus={(e) => { if(!errors.name) e.currentTarget.style.borderColor = 'rgba(193,127,58,0.5)' }}
+                  onBlur={(e) => { if(!errors.name) e.currentTarget.style.borderColor = 'var(--border-color)' }}
                 />
-                {errors.name && <p className="text-blood text-[10px] font-cinzel mt-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.name}</p>}
-              </div>
-              
-              <div className="space-y-2">
-                <label htmlFor="email" className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-titan-bronze drop-shadow-sm">Email</label>
-                <input 
-                  id="email" 
-                  type="email" 
-                  value={formData.email}
-                  onChange={handleChange}
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
-                  placeholder="eren@scout.reg" 
-                  className={`w-full bg-obsidian/80 backdrop-blur-sm border px-4 py-3 font-sans text-white outline-none transition-colors duration-300 ${errors.email ? 'border-blood focus:border-blood' : 'border-white/10 focus:border-titan-bronze shadow-inner'}`}
-                />
-                {errors.email && <p className="text-blood text-[10px] font-cinzel mt-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.email}</p>}
-              </div>
-              
-              <div className="space-y-2">
-                <label htmlFor="message" className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-titan-bronze drop-shadow-sm">Message</label>
-                <textarea 
-                  id="message" 
-                  value={formData.message}
-                  onChange={handleChange}
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
-                  placeholder="Mission details..." 
-                  className={`w-full bg-obsidian/80 backdrop-blur-sm border px-4 py-3 min-h-[120px] font-sans text-white outline-none transition-colors duration-300 resize-none ${errors.message ? 'border-blood focus:border-blood' : 'border-white/10 focus:border-titan-bronze shadow-inner'}`}
-                />
-                {errors.message && <p className="text-blood text-[10px] font-cinzel mt-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.message}</p>}
+                {errors.name && (
+                  <span style={{ color: 'var(--accent-blood)', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                    {errors.name}
+                  </span>
+                )}
               </div>
 
-              <button 
-                type="submit" 
-                disabled={isSubmitting || isSubmitted}
-                className="w-full bg-titan-bronze text-obsidian font-cinzel font-bold uppercase tracking-[0.2em] text-sm py-4 rounded-[2px] hover:bg-gold hover:shadow-[0_0_20px_rgba(193,127,58,0.5)] transition-all duration-300 mt-2 flex items-center justify-center gap-2"
-              >
-                {isSubmitting ? (
-                  <div className="w-4 h-4 border-2 border-obsidian/30 border-t-obsidian rounded-full animate-spin" />
-                ) : isSubmitted ? (
-                  <><CheckCircle2 className="w-4 h-4" /> Sent</>
-                ) : (
-                  <><Send className="w-4 h-4" /> Transmit</>
+              {/* Email */}
+              <div className="flex flex-col gap-2">
+                <label 
+                  htmlFor="email"
+                  style={{
+                    fontFamily: 'var(--font-cinzel)',
+                    fontSize: '0.7rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.15em',
+                    color: 'var(--text-secondary)'
+                  }}
+                >
+                  Email
+                </label>
+                <input 
+                  type="email" 
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="eren@surveycorps.com"
+                  style={{
+                    backgroundColor: 'rgba(26,26,46,0.6)',
+                    border: `1px solid ${errors.email ? 'var(--accent-blood)' : 'var(--border-color)'}`,
+                    color: 'var(--text-primary)',
+                    padding: '0.9rem 1.2rem',
+                    fontFamily: 'var(--font-inter)',
+                    fontSize: '0.9rem',
+                    transition: 'border-color 0.3s',
+                    outline: 'none'
+                  }}
+                  onFocus={(e) => { if(!errors.email) e.currentTarget.style.borderColor = 'rgba(193,127,58,0.5)' }}
+                  onBlur={(e) => { if(!errors.email) e.currentTarget.style.borderColor = 'var(--border-color)' }}
+                />
+                {errors.email && (
+                  <span style={{ color: 'var(--accent-blood)', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                    {errors.email}
+                  </span>
                 )}
+              </div>
+
+              {/* Message */}
+              <div className="flex flex-col gap-2">
+                <label 
+                  htmlFor="message"
+                  style={{
+                    fontFamily: 'var(--font-cinzel)',
+                    fontSize: '0.7rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.15em',
+                    color: 'var(--text-secondary)'
+                  }}
+                >
+                  Message
+                </label>
+                <textarea 
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  placeholder="State your coordinates and mission objective..."
+                  style={{
+                    backgroundColor: 'rgba(26,26,46,0.6)',
+                    border: `1px solid ${errors.message ? 'var(--accent-blood)' : 'var(--border-color)'}`,
+                    color: 'var(--text-primary)',
+                    padding: '0.9rem 1.2rem',
+                    fontFamily: 'var(--font-inter)',
+                    fontSize: '0.9rem',
+                    minHeight: '120px',
+                    transition: 'border-color 0.3s',
+                    outline: 'none',
+                    resize: 'vertical'
+                  }}
+                  onFocus={(e) => { if(!errors.message) e.currentTarget.style.borderColor = 'rgba(193,127,58,0.5)' }}
+                  onBlur={(e) => { if(!errors.message) e.currentTarget.style.borderColor = 'var(--border-color)' }}
+                />
+                {errors.message && (
+                  <span style={{ color: 'var(--accent-blood)', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                    {errors.message}
+                  </span>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                disabled={status === "submitting"}
+                style={{
+                  backgroundColor: status === "submitting" ? 'var(--text-muted)' : 'var(--accent-bronze)',
+                  color: 'var(--bg-primary)',
+                  padding: '1rem 2rem',
+                  border: 'none',
+                  borderRadius: '2px',
+                  fontFamily: 'var(--font-cinzel)',
+                  fontSize: '0.8rem',
+                  letterSpacing: '0.15em',
+                  textTransform: 'uppercase',
+                  fontWeight: 700,
+                  cursor: status === "submitting" ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.3s'
+                }}
+                className={status !== "submitting" ? "hover:bg-[var(--accent-gold)] hover:-translate-y-[2px]" : ""}
+              >
+                {status === "submitting" ? "Dispatching..." : "Send Transmission"}
               </button>
+
             </form>
           </div>
+
         </div>
       </div>
     </section>

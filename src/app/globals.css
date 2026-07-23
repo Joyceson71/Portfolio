@@ -1,150 +1,54 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-
-@custom-variant dark (&:is(.dark *));
-
-@theme {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-heading: var(--font-heading);
-  --font-mono: var(--font-mono);
-  
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  
-  --color-orange-glow: var(--orange-glow);
-  --color-red-glow: var(--red-glow);
-  --color-surface: var(--surface);
-  --color-surface-light: var(--surface-light);
-  
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   :root {
-    --obsidian: #0a0a0f;
-    --deep-night: #0f0f1a;
-    --smoke: #1a1a2e;
-    --titan-bronze: #c17f3a;
-    --gold: #e8a845;
-    --teal: #2a7a6a;
-    --teal-light: #3aafa0;
-    --parchment: #d4b896;
-    --parchment-dim: #a8906e;
-    --muted: #8a8070;
-    --white: #f0ece4;
-    --border: #2a2420;
-    --blood: #8b1a1a;
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #0f0f1a;
+    --bg-tertiary: #1a1a2e;
+    --accent-bronze: #c17f3a;
+    --accent-gold: #e8a845;
+    --accent-teal: #2a7a6a;
+    --accent-blood: #8b1a1a;
+    --text-primary: #f0ece4;
+    --text-secondary: #a8906e;
+    --text-muted: #5a5247;
+    --border-color: #2a2420;
+    --border-glow: rgba(193,127,58,0.2);
     
-    /* Mapping to shadcn/ui generic vars */
-    --background: var(--obsidian);
-    --foreground: var(--white);
-    
-    --card: var(--smoke);
-    --card-foreground: var(--parchment);
-    
-    --popover: var(--smoke);
-    --popover-foreground: var(--parchment);
-    
-    --primary: var(--titan-bronze);
-    --primary-foreground: var(--obsidian);
-    
-    --secondary: var(--teal);
-    --secondary-foreground: var(--white);
-    
-    --muted-foreground: var(--parchment-dim);
-    
-    --accent: var(--deep-night);
-    --accent-foreground: var(--gold);
-    
-    --destructive: var(--blood);
-    --destructive-foreground: var(--white);
-    
-    --input: var(--border);
-    --ring: var(--titan-bronze);
-    
-    --radius: 2px;
+    --font-cinzel: 'Cinzel', serif;
+    --font-cinzel-dec: 'Cinzel Decorative', serif;
+    --font-inter: 'Inter', sans-serif;
   }
-}
 
-@layer base {
-  * {
-    @apply border-border;
+  * { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
   }
+  
+  html { 
+    scroll-behavior: smooth; 
+  }
+  
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-inter);
+    line-height: 1.6;
     overflow-x: hidden;
-    position: relative;
-  }
-  
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
-    z-index: 50;
-    opacity: 0.05;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  }
-  
-  /* Custom Scrollbar */
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #0A0A12;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #ff3300;
-    border-radius: 4px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #ffaa00;
   }
 }
 
 @layer utilities {
-  .glass {
-    @apply bg-[#0a0a0a]/80 backdrop-blur-md border border-white/10 shadow-[0_0_20px_rgba(255,51,0,0.1)];
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
   }
-  .glass-card {
-    @apply bg-[#050101]/80 backdrop-blur-md border border-white/5 shadow-[0_0_15px_rgba(255,51,0,0.1)] hover:border-[#ff3300] hover:shadow-[0_0_25px_rgba(255,51,0,0.4)] transition-all duration-300;
-  }
-  .text-glow {
-    text-shadow: 0 0 20px var(--orange-glow);
-  }
-  .glow-border {
-    box-shadow: 0 0 15px var(--orange-glow);
+  .fade-up.in-view {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
-
