@@ -108,7 +108,18 @@ export function Skills() {
   return (
     <section id="skills" className="relative w-full min-h-screen py-32 overflow-hidden bg-background/50">
       {/* Levi Background Art */}
-      <div className="absolute inset-0 z-[-1] pointer-events-none opacity-10">
+      <motion.div 
+        className="absolute inset-0 z-[-1] pointer-events-none opacity-10"
+        animate={{ 
+          scale: [1, 1.03, 1],
+          y: [0, -10, 0]
+        }}
+        transition={{ 
+          duration: 12, 
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      >
         <Image 
           src="/images/levi.png" 
           alt="Soldier Aesthetic" 
@@ -116,7 +127,7 @@ export function Skills() {
           className="object-cover object-center"
         />
         <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px]" />
-      </div>
+      </motion.div>
 
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="text-center mb-24">

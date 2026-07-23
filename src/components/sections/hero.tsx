@@ -17,6 +17,45 @@ function CameraShake() {
   return null;
 }
 
+function MarchingMonoliths() {
+  const groupRef = useRef<any>(null);
+  
+  useFrame((state, delta) => {
+    if (groupRef.current) {
+      groupRef.current.children.forEach((mesh: any) => {
+        mesh.position.z += delta * 1.5; // March forward
+        if (mesh.position.z > 5) {
+          mesh.position.z = -30 - (Math.random() * 10); // Reset far back in the fog
+        }
+      });
+    }
+  });
+
+  return (
+    <group ref={groupRef}>
+      {Array.from({ length: 12 }).map((_, i) => (
+        <mesh 
+          key={i}
+          position={[
+            (i - 5.5) * 3, 
+            -2, 
+            -15 - (Math.random() * 20)
+          ]}
+        >
+          <boxGeometry args={[2.5, 30, 2.5]} />
+          <meshStandardMaterial 
+            color="#050101" 
+            roughness={0.9} 
+            metalness={0.1}
+            emissive="#330000"
+            emissiveIntensity={0.5}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
 function Hero3DScene() {
   return (
     <>
@@ -35,25 +74,7 @@ function Hero3DScene() {
       <Sparkles count={1500} scale={20} size={3} speed={0.8} opacity={0.8} color="#ff4400" />
 
       {/* The Wall Titans (Monoliths) */}
-      {Array.from({ length: 12 }).map((_, i) => (
-        <mesh 
-          key={i}
-          position={[
-            (i - 5.5) * 3, 
-            -2, 
-            -15 - (Math.random() * 10)
-          ]}
-        >
-          <boxGeometry args={[2.5, 30, 2.5]} />
-          <meshStandardMaterial 
-            color="#050101" 
-            roughness={0.9} 
-            metalness={0.1}
-            emissive="#330000"
-            emissiveIntensity={0.5}
-          />
-        </mesh>
-      ))}
+      <MarchingMonoliths />
       
       {/* Background Debris */}
       {Array.from({ length: 15 }).map((_, i) => (
@@ -83,8 +104,19 @@ export function Hero() {
       ref={containerRef} 
       className="relative w-full h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Colossal Titan Background Art */}
-      <div className="absolute inset-0 z-[-1] pointer-events-none opacity-30 mix-blend-screen">
+      {/* Colossal Titan Background Art (Breathing Animation) */}
+      <motion.div 
+        className="absolute inset-0 z-[-1] pointer-events-none opacity-30 mix-blend-screen"
+        animate={{ 
+          scale: [1, 1.05, 1],
+          y: [0, -15, 0]
+        }}
+        transition={{ 
+          duration: 10, 
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      >
         <Image 
           src="/images/titan.png" 
           alt="The Rumbling" 
@@ -93,7 +125,7 @@ export function Hero() {
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-      </div>
+      </motion.div>
 
       {/* 3D View Layer - Covers the whole section */}
       <div className="absolute inset-0 z-0 pointer-events-none">

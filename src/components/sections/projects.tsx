@@ -147,7 +147,18 @@ export function Projects() {
   return (
     <section id="projects" ref={containerRef} className="relative w-full min-h-screen py-32 overflow-hidden">
       {/* Mikasa Background Art */}
-      <div className="absolute inset-0 z-[-1] pointer-events-none opacity-10">
+      <motion.div 
+        className="absolute inset-0 z-[-1] pointer-events-none opacity-10"
+        animate={{ 
+          scale: [1, 1.03, 1],
+          x: [0, 10, 0]
+        }}
+        transition={{ 
+          duration: 15, 
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      >
         <Image 
           src="/images/mikasa.png" 
           alt="Soldier Aesthetic" 
@@ -155,7 +166,7 @@ export function Projects() {
           className="object-cover object-center"
         />
         <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px]" />
-      </div>
+      </motion.div>
 
       <div className="container mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
