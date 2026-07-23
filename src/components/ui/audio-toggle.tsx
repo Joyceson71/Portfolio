@@ -1,122 +1,93 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Volume2, VolumeX } from "lucide-react";
-import { motion } from "framer-motion";
 
 export function AudioToggle() {
   const [isMuted, setIsMuted] = useState(true);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const oscillatorRef = useRef<OscillatorNode | null>(null);
-  const noiseNodeRef = useRef<AudioBufferSourceNode | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);
 
   useEffect(() => {
-    // Cleanup on unmount
-    return () => {
-      if (audioContextRef.current) {
-        audioContextRef.current.close();
-      }
-    };
-  }, []);
+    if (!isMuted && !audioCtxRef.current) {
+      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      const ctx = new AudioContext();
+      audioCtxRef.current = ctx;
 
-  const startAudio = () => {
-    if (!audioContextRef.current) {
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-      audioContextRef.current = new AudioContextClass();
-    }
-    
-    const ctx = audioContextRef.current;
-    if (ctx.state === 'suspended') ctx.resume();
+      const masterGain = ctx.createGain();
+      masterGain.gain.value = 0.3;
+      masterGain.connect(ctx.destination);
+      gainNodeRef.current = masterGain;
 
-    if (!gainNodeRef.current) {
-      gainNodeRef.current = ctx.createGain();
-      gainNodeRef.current.connect(ctx.destination);
-      gainNodeRef.current.gain.value = 0; // start silent
-    }
-
-    // Low rumble oscillator
-    if (!oscillatorRef.current) {
-      oscillatorRef.current = ctx.createOscillator();
-      oscillatorRef.current.type = 'sine';
-      oscillatorRef.current.frequency.value = 45; // deep rumble
+      // Deep rumble (Colossal Titan vibe)
+      const rumble = ctx.createOscillator();
+      rumble.type = "sine";
+      rumble.frequency.value = 40;
       
       const rumbleGain = ctx.createGain();
-      rumbleGain.gain.value = 0.4;
-      oscillatorRef.current.connect(rumbleGain);
-      rumbleGain.connect(gainNodeRef.current);
+      rumbleGain.gain.value = 0.5;
+      rumble.connect(rumbleGain);
+      rumbleGain.connect(masterGain);
       
-      oscillatorRef.current.start();
-    }
-
-    // White noise for wind
-    if (!noiseNodeRef.current) {
-      const bufferSize = ctx.sampleRate * 2; // 2 seconds of noise
+      // Wind (filtered noise)
+      const bufferSize = ctx.sampleRate * 2;
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-      const data = buffer.getChannelData(0);
+      const output = buffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
+        output[i] = Math.random() * 2 - 1;
       }
       
-      noiseNodeRef.current = ctx.createBufferSource();
-      noiseNodeRef.current.buffer = buffer;
-      noiseNodeRef.current.loop = true;
-
-      // Filter the noise to sound like low wind
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      noise.loop = true;
+      
       const filter = ctx.createBiquadFilter();
-      filter.type = 'lowpass';
-      filter.frequency.value = 400; // muffled wind
-
-      // LFO to sweep the filter for howling wind effect
+      filter.type = "lowpass";
+      filter.frequency.value = 400;
+      
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.value = 0.1;
+      
+      noise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(masterGain);
+      
+      // LFO for wind sweeping
       const lfo = ctx.createOscillator();
-      lfo.type = 'sine';
-      lfo.frequency.value = 0.2; // very slow sweep
+      lfo.type = "sine";
+      lfo.frequency.value = 0.1;
+      
       const lfoGain = ctx.createGain();
       lfoGain.gain.value = 200;
+      
       lfo.connect(lfoGain);
       lfoGain.connect(filter.frequency);
-      lfo.start();
-
-      const noiseGain = ctx.createGain();
-      noiseGain.gain.value = 0.15;
-
-      noiseNodeRef.current.connect(filter);
-      filter.connect(noiseGain);
-      noiseGain.connect(gainNodeRef.current);
       
-      noiseNodeRef.current.start();
+      rumble.start();
+      noise.start();
+      lfo.start();
     }
 
-    // Fade in
-    gainNodeRef.current.gain.setTargetAtTime(1, ctx.currentTime, 1);
-  };
-
-  const stopAudio = () => {
-    if (audioContextRef.current && gainNodeRef.current) {
-      gainNodeRef.current.gain.setTargetAtTime(0, audioContextRef.current.currentTime, 0.5);
+    if (audioCtxRef.current) {
+      if (isMuted) {
+        audioCtxRef.current.suspend();
+      } else {
+        audioCtxRef.current.resume();
+      }
     }
-  };
 
-  const toggleMute = () => {
-    const newMutedState = !isMuted;
-    setIsMuted(newMutedState);
-    if (newMutedState) {
-      stopAudio();
-    } else {
-      startAudio();
-    }
-  };
+    return () => {
+      // Don't close context on unmount so it can persist, just suspend
+    };
+  }, [isMuted]);
 
   return (
-    <motion.button
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 2.5 }}
-      onClick={toggleMute}
-      className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-obsidian border border-titan-bronze rounded-full flex items-center justify-center text-titan-bronze hover:bg-titan-bronze hover:text-obsidian transition-colors shadow-[0_0_15px_rgba(193,127,58,0.2)]"
-      aria-label="Toggle Audio"
+    <button
+      onClick={() => setIsMuted(!isMuted)}
+      className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-12 h-12 bg-black/80 border border-[var(--border-color)] rounded-full text-[var(--accent-bronze)] hover:bg-[var(--accent-bronze)] hover:text-black transition-all"
+      aria-label="Toggle audio"
     >
-      {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-    </motion.button>
+      {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+    </button>
   );
 }

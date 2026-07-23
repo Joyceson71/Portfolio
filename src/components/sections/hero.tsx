@@ -4,7 +4,11 @@ import Link from "next/link";
 import { ArrowDown } from "lucide-react";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import { useRef } from "react";
-import { ParticleNetwork } from "@/components/ui/particle-network";
+import dynamic from "next/dynamic";
+
+const HeroScene = dynamic(() => import("@/components/three/HeroScene"), {
+  ssr: false,
+});
 
 export function Hero() {
   const ref = useRef<HTMLDivElement>(null);
@@ -24,7 +28,9 @@ export function Hero() {
         overflow: 'hidden'
       }}
     >
-      <ParticleNetwork />
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <HeroScene />
+      </div>
       
       <div 
         ref={ref}

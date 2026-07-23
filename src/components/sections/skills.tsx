@@ -2,6 +2,11 @@
 
 import { useRef } from "react";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
+import dynamic from "next/dynamic";
+
+const SkillsScene = dynamic(() => import("@/components/three/SkillsScene"), {
+  ssr: false,
+});
 
 const skillsData = [
   { name: "React / Next.js", level: 95, tags: ["Hooks", "SSR", "RSC", "Framer Motion"] },
@@ -22,14 +27,17 @@ export function Skills() {
       ref={sectionRef}
       style={{
         minHeight: '100vh',
-        backgroundColor: 'var(--bg-secondary)',
+        backgroundColor: 'var(--bg-primary)',
         padding: '6rem 1.5rem',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center'
+        position: 'relative',
+        overflow: 'hidden'
       }}
     >
-      <div className={`container mx-auto max-w-6xl fade-up ${isVisible ? 'in-view' : ''}`}>
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <SkillsScene />
+      </div>
+
+      <div className={`container mx-auto max-w-5xl fade-up relative z-10 ${isVisible ? 'in-view' : ''}`}>
         
         {/* Section Label & H2 */}
         <div className="mb-12">

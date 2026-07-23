@@ -2,6 +2,11 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
+import dynamic from "next/dynamic";
+
+const AboutScene = dynamic(() => import("@/components/three/AboutScene"), {
+  ssr: false,
+});
 
 function Counter({ from, to, duration = 2 }: { from: number, to: number, duration?: number }) {
   const [count, setCount] = useState(from);
@@ -40,13 +45,19 @@ export function About() {
       ref={sectionRef} 
       style={{
         minHeight: '100vh',
-        background: 'linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%)',
+        backgroundColor: 'var(--bg-secondary)',
         padding: '6rem 1.5rem',
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        position: 'relative',
+        overflow: 'hidden'
       }}
     >
-      <div className={`container mx-auto max-w-6xl fade-up ${isVisible ? 'in-view' : ''}`}>
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <AboutScene />
+      </div>
+
+      <div className={`container mx-auto max-w-5xl fade-up relative z-10 ${isVisible ? 'in-view' : ''}`}>
         
         {/* Section Label */}
         <div 
