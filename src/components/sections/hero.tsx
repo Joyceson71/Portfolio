@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowDown } from "lucide-react";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import { useRef } from "react";
+import { ParticleNetwork } from "@/components/ui/particle-network";
 
 export function Hero() {
   const ref = useRef<HTMLDivElement>(null);
@@ -19,9 +20,12 @@ export function Hero() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        position: 'relative'
+        position: 'relative',
+        overflow: 'hidden'
       }}
     >
+      <ParticleNetwork />
+      
       <div 
         ref={ref}
         className={`w-full max-w-[900px] mx-auto px-6 flex flex-col items-center text-center fade-up ${isVisible ? 'in-view' : ''}`}
