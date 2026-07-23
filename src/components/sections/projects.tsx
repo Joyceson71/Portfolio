@@ -82,7 +82,7 @@ function ProjectCard({ project, index }: { project: typeof projectsData[0], inde
         className="glass-card relative h-full flex flex-col rounded-2xl overflow-hidden group cursor-pointer border border-white/5"
       >
         {/* Animated Glow Effect */}
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/20 via-transparent to-destructive/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
         {/* Holographic scanning line */}
         <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_15px_var(--primary)] z-20 opacity-0 group-hover:opacity-100 -translate-y-full group-hover:animate-scan" />
@@ -145,35 +145,13 @@ export function Projects() {
   );
 
   return (
-    <section id="projects" ref={containerRef} className="relative w-full min-h-screen py-32 overflow-hidden">
-      {/* Mikasa Background Art */}
-      <motion.div 
-        className="absolute inset-0 z-[-1] pointer-events-none opacity-10"
-        animate={{ 
-          scale: [1, 1.03, 1],
-          x: [0, 10, 0]
-        }}
-        transition={{ 
-          duration: 15, 
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      >
-        <Image 
-          src="/images/mikasa.png" 
-          alt="Soldier Aesthetic" 
-          fill 
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px]" />
-      </motion.div>
-
+    <section id="projects" ref={containerRef} className="relative w-full min-h-screen py-32 overflow-hidden bg-background/50">
       <div className="container mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
           <div>
-            <span className="font-mono text-sm tracking-widest text-primary uppercase">Portfolio</span>
+            <span className="font-mono text-sm tracking-widest text-primary uppercase">System Logs</span>
             <h2 className="font-heading text-4xl md:text-6xl font-bold uppercase mt-2">
-              Selected <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Works</span>
+              Active <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent text-glow">Quests</span>
             </h2>
           </div>
 

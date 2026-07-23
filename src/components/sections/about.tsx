@@ -30,8 +30,8 @@ function Workspace3DScene() {
   return (
     <>
       <ambientLight intensity={0.2} />
-      <directionalLight position={[5, 10, 5]} intensity={2} color="#ff3300" />
-      <pointLight position={[-5, 5, -5]} intensity={3} color="#990000" />
+      <directionalLight position={[5, 10, 5]} intensity={2} color="#3B82F6" />
+      <pointLight position={[-5, 5, -5]} intensity={3} color="#7C3AED" />
       
       <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
         <group position={[0, -1, 0]}>
@@ -66,7 +66,7 @@ function Workspace3DScene() {
           {/* Glowing Sphere (Hologram) */}
           <Float speed={4} rotationIntensity={2} floatIntensity={2}>
             <Sphere args={[0.2, 16, 16]} position={[1.5, 1, 0.5]}>
-              <meshStandardMaterial color="#ff3300" emissive="#ff0000" emissiveIntensity={2.5} wireframe />
+              <meshStandardMaterial color="#3B82F6" emissive="#3B82F6" emissiveIntensity={2.5} wireframe />
             </Sphere>
           </Float>
         </group>
@@ -89,9 +89,9 @@ export function About() {
     <section id="about" ref={sectionRef} className="relative w-full min-h-screen py-32 overflow-hidden">
       <div className="container mx-auto px-6 md:px-12">
         <motion.div style={{ opacity, y }} className="mb-16">
-          <span className="font-mono text-sm tracking-widest text-primary uppercase">About Me</span>
+          <span className="font-mono text-sm tracking-widest text-primary uppercase">System Diagnostics</span>
           <h2 className="font-heading text-4xl md:text-6xl font-bold uppercase mt-2">
-            The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Founder</span>
+            Player <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent text-glow">Status</span>
           </h2>
         </motion.div>
 
@@ -124,13 +124,13 @@ export function About() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="p-6 glass-card rounded-lg relative overflow-hidden group"
+                className="p-6 glass-card rounded-lg relative overflow-hidden group border border-accent/20 hover:border-accent"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-destructive/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 <div className="font-heading text-4xl font-bold text-foreground mb-2">
                   <Counter from={0} to={10} />+
                 </div>
-                <div className="font-mono text-sm text-destructive uppercase tracking-wider">Projects Completed</div>
+                <div className="font-mono text-sm text-accent uppercase tracking-wider">Quests Completed</div>
               </motion.div>
             </div>
           </div>

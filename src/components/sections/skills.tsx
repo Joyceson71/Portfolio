@@ -73,7 +73,7 @@ const skillsData = [
   {
     title: "React & Next.js",
     icon: Monitor,
-    color: "#ff3300",
+    color: "#3B82F6",
     type: "torus" as const,
     tags: ["Hooks", "Redux", "Context", "SSR", "App Router"],
     proficiency: 95,
@@ -81,7 +81,7 @@ const skillsData = [
   {
     title: "JavaScript / TS",
     icon: Code2,
-    color: "#990000",
+    color: "#7C3AED",
     type: "icosahedron" as const,
     tags: ["ES6+", "TypeScript", "DOM", "Async"],
     proficiency: 90,
@@ -89,7 +89,7 @@ const skillsData = [
   {
     title: "CSS & Animations",
     icon: Paintbrush,
-    color: "#ffaa00",
+    color: "#06B6D4",
     type: "sphere" as const,
     tags: ["GSAP", "Tailwind", "Framer Motion", "Three.js"],
     proficiency: 92,
@@ -97,7 +97,7 @@ const skillsData = [
   {
     title: "Backend & DBs",
     icon: Database,
-    color: "#cc2200",
+    color: "#8B5CF6",
     type: "cube" as const,
     tags: ["Node.js", "Express", "PostgreSQL", "MongoDB"],
     proficiency: 85,
@@ -106,34 +106,12 @@ const skillsData = [
 
 export function Skills() {
   return (
-    <section id="skills" className="relative w-full min-h-screen py-32 overflow-hidden bg-background/50">
-      {/* Levi Background Art */}
-      <motion.div 
-        className="absolute inset-0 z-[-1] pointer-events-none opacity-10"
-        animate={{ 
-          scale: [1, 1.03, 1],
-          y: [0, -10, 0]
-        }}
-        transition={{ 
-          duration: 12, 
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      >
-        <Image 
-          src="/images/levi.png" 
-          alt="Soldier Aesthetic" 
-          fill 
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px]" />
-      </motion.div>
-
+    <section id="skills" className="relative w-full min-h-screen py-32 overflow-hidden bg-background">
       <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="text-center mb-24">
           <span className="font-mono text-sm tracking-widest text-primary uppercase">Technical Arsenal</span>
           <h2 className="font-heading text-4xl md:text-6xl font-bold uppercase mt-2">
-            Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Proficiencies</span>
+            System <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent text-glow">Abilities</span>
           </h2>
         </div>
 

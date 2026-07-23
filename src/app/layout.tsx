@@ -1,27 +1,27 @@
 import type { Metadata } from "next";
-import { Oswald, Montserrat, JetBrains_Mono } from "next/font/google";
+import { Rajdhani, Inter, Share_Tech_Mono } from "next/font/google";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll";
 import { SceneProvider } from "@/components/3d/scene";
 import { CustomCursor } from "@/components/ui/custom-cursor";
 import { Navbar } from "@/components/ui/navbar";
 
-const oswald = Oswald({
+const rajdhani = Rajdhani({
   variable: "--font-heading",
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const montserrat = Montserrat({
+const inter = Inter({
   variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "600", "700"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const shareTechMono = Share_Tech_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -37,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${montserrat.variable} ${oswald.variable} ${jetbrainsMono.variable} antialiased bg-background text-foreground min-h-screen relative`}
+        className={`${inter.variable} ${rajdhani.variable} ${shareTechMono.variable} antialiased bg-background text-foreground min-h-screen relative`}
       >
         <SmoothScrollProvider>
           <CustomCursor />

@@ -57,9 +57,9 @@ export function Contact() {
       <div className="container mx-auto px-6 md:px-12 flex-grow flex flex-col justify-center items-center">
         
         <div className="text-center mb-16">
-          <span className="font-mono text-sm tracking-widest text-primary uppercase">Get In Touch</span>
+          <span className="font-mono text-sm tracking-widest text-primary uppercase">System Comm Link</span>
           <h2 className="font-heading text-4xl md:text-6xl font-bold uppercase mt-2">
-            Contact <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Me</span>
+            Transmit <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent text-glow">Message</span>
           </h2>
           <p className="text-muted-foreground mt-6 max-w-lg mx-auto">
             Interested in working together or have a question? Fill out the form below and I'll get back to you as soon as possible.
@@ -74,8 +74,8 @@ export function Contact() {
           className="w-full max-w-md glass-card p-8 md:p-10 rounded-2xl glow-border relative"
         >
           {/* Decorative Corner Elements */}
-          <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary/50 rounded-tl-2xl pointer-events-none" />
-          <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary/50 rounded-br-2xl pointer-events-none" />
+          <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary rounded-tl-2xl pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary rounded-br-2xl pointer-events-none" />
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
             <div className="space-y-2">
