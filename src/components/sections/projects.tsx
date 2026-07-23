@@ -68,10 +68,10 @@ function ProjectCard({ project, index }: { project: typeof projectsData[0], inde
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 50, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
+      transition={{ duration: 0.8, delay: index * 0.15, type: "spring", stiffness: 100 }}
       style={{ perspective: 2000 }}
       className="h-full"
     >
@@ -85,7 +85,7 @@ function ProjectCard({ project, index }: { project: typeof projectsData[0], inde
         <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/20 via-transparent to-destructive/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
         {/* Holographic scanning line */}
-        <div className="absolute top-0 left-0 w-full h-[2px] bg-primary/50 shadow-[0_0_10px_var(--primary)] z-20 opacity-0 group-hover:opacity-100 -translate-y-full group-hover:animate-scan" />
+        <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_15px_var(--primary)] z-20 opacity-0 group-hover:opacity-100 -translate-y-full group-hover:animate-scan" />
 
         {/* Image Container with 3D translation */}
         <div 
@@ -159,13 +159,20 @@ export function Projects() {
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`font-heading uppercase tracking-widest text-sm px-4 py-2 border-b-2 transition-colors ${
+                className={`relative font-heading uppercase tracking-widest text-sm px-6 py-2 transition-colors ${
                   filter === f 
-                    ? "border-primary text-foreground glow-border" 
-                    : "border-transparent text-muted-foreground hover:text-foreground"
+                    ? "text-foreground" 
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {f === "all" ? "All Projects" : f === "web" ? "Web Apps" : "UI/UX"}
+                {filter === f && (
+                  <motion.div 
+                    layoutId="activeProjectFilter" 
+                    className="absolute inset-0 bg-primary/10 rounded-md border border-primary/30 glow-border" 
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{f === "all" ? "All Projects" : f === "web" ? "Web Apps" : "UI/UX"}</span>
               </button>
             ))}
           </div>

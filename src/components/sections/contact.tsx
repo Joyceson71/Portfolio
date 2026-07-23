@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, CheckCircle2 } from "lucide-react";
+import { Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,16 +11,45 @@ import { Button } from "@/components/ui/button";
 export function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [errors, setErrors] = useState<{name?: string, email?: string, message?: string}>({});
+
+  const validateForm = () => {
+    const newErrors: {name?: string, email?: string, message?: string} = {};
+    if (!formData.name || formData.name.trim().length < 2) {
+      newErrors.name = "Name must be at least 2 characters.";
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email || !emailRegex.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address.";
+    }
+    if (!formData.message || formData.message.trim().length < 10) {
+      newErrors.message = "Message must be at least 10 characters.";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     setIsSubmitting(true);
     // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmitted(true);
+      setFormData({ name: "", email: "", message: "" });
       setTimeout(() => setIsSubmitted(false), 3000);
     }, 1500);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
+    if (errors[id as keyof typeof errors]) {
+      setErrors(prev => ({ ...prev, [id]: undefined }));
+    }
   };
 
   return (
@@ -48,15 +77,17 @@ export function Contact() {
           <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary/50 rounded-tl-2xl pointer-events-none" />
           <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary/50 rounded-br-2xl pointer-events-none" />
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
             <div className="space-y-2">
               <label htmlFor="name" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Name</label>
               <Input 
                 id="name" 
-                required 
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="John Doe" 
-                className="bg-black/20 border-white/10 focus-visible:ring-primary h-12 font-mono text-sm"
+                className={`bg-black/20 border-white/10 focus-visible:ring-primary h-12 font-mono text-sm ${errors.name ? 'border-destructive focus-visible:ring-destructive' : ''}`}
               />
+              {errors.name && <p className="text-destructive text-xs font-mono mt-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.name}</p>}
             </div>
             
             <div className="space-y-2">
@@ -64,20 +95,24 @@ export function Contact() {
               <Input 
                 id="email" 
                 type="email" 
-                required 
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="john@example.com" 
-                className="bg-black/20 border-white/10 focus-visible:ring-primary h-12 font-mono text-sm"
+                className={`bg-black/20 border-white/10 focus-visible:ring-primary h-12 font-mono text-sm ${errors.email ? 'border-destructive focus-visible:ring-destructive' : ''}`}
               />
+              {errors.email && <p className="text-destructive text-xs font-mono mt-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.email}</p>}
             </div>
             
             <div className="space-y-2">
               <label htmlFor="message" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Message</label>
               <Textarea 
                 id="message" 
-                required 
+                value={formData.message}
+                onChange={handleChange}
                 placeholder="Hello..." 
-                className="bg-black/20 border-white/10 focus-visible:ring-primary min-h-[120px] font-mono text-sm resize-none"
+                className={`bg-black/20 border-white/10 focus-visible:ring-primary min-h-[120px] font-mono text-sm resize-none ${errors.message ? 'border-destructive focus-visible:ring-destructive' : ''}`}
               />
+              {errors.message && <p className="text-destructive text-xs font-mono mt-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.message}</p>}
             </div>
 
             <Button 

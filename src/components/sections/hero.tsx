@@ -77,33 +77,70 @@ export function Hero() {
       {/* DOM Layer */}
       <div className="container relative z-10 px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, ease: "easeOut", delay: 0.2 }}
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { 
+              opacity: 1,
+              transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+            }
+          }}
+          className="flex flex-col items-start"
         >
-          <div className="inline-block px-4 py-1 mb-6 border border-primary/30 rounded-full bg-primary/5 text-primary text-sm font-mono tracking-widest">
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, x: -50 },
+              visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
+            }}
+            className="inline-block px-4 py-1 mb-6 border border-primary/30 rounded-full bg-primary/5 text-primary text-sm font-mono tracking-widest"
+          >
             PORTFOLIO 2026
-          </div>
+          </motion.div>
           
-          <h1 className="font-heading text-5xl md:text-7xl lg:text-8xl font-bold uppercase leading-none mb-4">
+          <motion.h1 
+            variants={{
+              hidden: { opacity: 0, y: 30 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+            }}
+            className="font-heading text-5xl md:text-7xl lg:text-8xl font-bold uppercase leading-none mb-4"
+          >
             Joyceson<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow inline-block mt-2">
               Danielraj
             </span>
-          </h1>
+          </motion.h1>
           
-          <div className="font-mono text-xl md:text-2xl text-muted-foreground mb-8">
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, x: -30 },
+              visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
+            }}
+            className="font-mono text-xl md:text-2xl text-muted-foreground mb-8"
+          >
             Frontend Developer <span className="text-primary">|</span> UI/UX Engineer
-          </div>
+          </motion.div>
           
-          <p className="text-lg text-muted-foreground max-w-lg mb-10 leading-relaxed">
+          <motion.p 
+            variants={{
+              hidden: { opacity: 0, opacity: 0 },
+              visible: { opacity: 1, transition: { duration: 1 } }
+            }}
+            className="text-lg text-muted-foreground max-w-lg mb-10 leading-relaxed"
+          >
             I specialize in building exceptional digital experiences. By combining modern web technologies with deep design principles, I craft interfaces that leave a lasting impact.
-          </p>
+          </motion.p>
           
-          <div className="flex flex-wrap gap-4">
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+            }}
+            className="flex flex-wrap gap-4"
+          >
             <a 
               href="#projects"
-              className="group relative px-8 py-4 bg-primary text-primary-foreground font-heading uppercase tracking-widest text-sm overflow-hidden"
+              className="group relative px-8 py-4 bg-primary text-primary-foreground font-heading uppercase tracking-widest text-sm overflow-hidden rounded-md hover:shadow-[0_0_30px_var(--primary)] transition-all duration-300"
             >
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
               <span className="relative flex items-center gap-2">
@@ -113,11 +150,11 @@ export function Hero() {
             
             <a 
               href="#about"
-              className="px-8 py-4 border border-white/20 font-heading uppercase tracking-widest text-sm hover:bg-white/5 hover:border-white/40 transition-colors"
+              className="px-8 py-4 border border-white/20 font-heading uppercase tracking-widest text-sm rounded-md hover:bg-white/5 hover:border-white/40 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all duration-300"
             >
               About Me
             </a>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
 

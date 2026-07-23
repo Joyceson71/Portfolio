@@ -1,9 +1,30 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { View, Float, Box, Cylinder, Sphere } from "@react-three/drei";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView, animate } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+
+function Counter({ from, to, duration = 2 }: { from: number, to: number, duration?: number }) {
+  const [count, setCount] = useState(from);
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true });
+  
+  useEffect(() => {
+    if (inView) {
+      const controls = animate(from, to, {
+        duration,
+        ease: "easeOut",
+        onUpdate(value) {
+          setCount(Math.round(value));
+        }
+      });
+      return () => controls.stop();
+    }
+  }, [from, to, inView, duration]);
+  
+  return <span ref={ref}>{count < 10 && count > 0 ? `0${count}` : count}</span>;
+}
 
 function Workspace3DScene() {
   return (
@@ -85,16 +106,32 @@ export function About() {
             </p>
             
             <div className="grid grid-cols-2 gap-8 pt-8">
-              <div className="p-6 glass-card rounded-lg relative overflow-hidden group">
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="p-6 glass-card rounded-lg relative overflow-hidden group"
+              >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="font-heading text-4xl font-bold text-foreground mb-2">01+</div>
+                <div className="font-heading text-4xl font-bold text-foreground mb-2">
+                  <Counter from={0} to={1} />+
+                </div>
                 <div className="font-mono text-sm text-primary uppercase tracking-wider">Years Experience</div>
-              </div>
-              <div className="p-6 glass-card rounded-lg relative overflow-hidden group">
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="p-6 glass-card rounded-lg relative overflow-hidden group"
+              >
                 <div className="absolute inset-0 bg-gradient-to-br from-destructive/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="font-heading text-4xl font-bold text-foreground mb-2">10+</div>
+                <div className="font-heading text-4xl font-bold text-foreground mb-2">
+                  <Counter from={0} to={10} />+
+                </div>
                 <div className="font-mono text-sm text-destructive uppercase tracking-wider">Projects Completed</div>
-              </div>
+              </motion.div>
             </div>
           </div>
 

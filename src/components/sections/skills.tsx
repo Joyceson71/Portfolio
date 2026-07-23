@@ -122,13 +122,13 @@ export function Skills() {
             return (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
+                transition={{ duration: 0.8, delay: index * 0.15, type: "spring", stiffness: 100 }}
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
-                className="glass-card p-8 rounded-2xl relative overflow-hidden group border border-white/5 hover:border-white/20 transition-all duration-500 flex flex-col h-full"
+                className="glass-card p-8 rounded-2xl relative overflow-hidden group border border-white/5 hover:border-white/20 hover:shadow-[0_0_30px_rgba(255,255,255,0.05)] transition-all duration-500 flex flex-col h-full"
               >
                 {/* Background Glow */}
                 <div 
@@ -158,15 +158,20 @@ export function Skills() {
                     <span>Proficiency</span>
                     <span style={{ color: hovered ? skill.color : undefined }}>{skill.proficiency}%</span>
                   </div>
-                  <div className="w-full h-1.5 bg-black/50 rounded-full overflow-hidden mb-6">
+                  <div className="w-full h-1.5 bg-black/50 rounded-full mb-6 relative">
                     <motion.div 
-                      className="h-full rounded-full"
+                      className="h-full rounded-full relative"
                       style={{ backgroundColor: skill.color }}
                       initial={{ width: 0 }}
                       whileInView={{ width: `${skill.proficiency}%` }}
                       viewport={{ once: true }}
-                      transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 + index * 0.1 }}
-                    />
+                      transition={{ duration: 1.5, ease: "easeOut", delay: 0.4 + index * 0.15 }}
+                    >
+                      <div 
+                        className="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{ boxShadow: `0 0 15px 3px ${skill.color}` }}
+                      />
+                    </motion.div>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
