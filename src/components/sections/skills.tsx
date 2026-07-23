@@ -14,7 +14,7 @@ export function Skills() {
     <section 
       id="skills" 
       ref={sectionRef}
-      className="relative w-full h-[120vh] overflow-hidden bg-obsidian flex flex-col items-center justify-center pointer-events-auto"
+      className="relative w-full py-24 lg:py-32 overflow-hidden bg-obsidian flex flex-col items-center justify-center pointer-events-auto min-h-[60vh]"
     >
       {/* 3D Canvas Background */}
       <div className="absolute inset-0 z-0 pointer-events-auto">
@@ -22,14 +22,14 @@ export function Skills() {
       </div>
 
       <div 
-        className="container mx-auto px-6 md:px-12 relative z-10 pointer-events-none mt-auto pb-24"
+        className="container mx-auto px-6 md:px-12 relative z-10 pointer-events-none mt-auto"
         style={{
           opacity: isVisible ? 1 : 0,
           transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
           transition: 'opacity 1s ease-out, transform 1s ease-out'
         }}
       >
-        <div className="text-center flex flex-col items-center">
+        <div className="text-center flex flex-col items-center bg-smoke/40 backdrop-blur-md p-6 lg:p-8 rounded-[2px] border border-white/5 shadow-2xl max-w-2xl mx-auto">
           <span className="font-cinzel text-sm tracking-[0.3em] text-titan-bronze uppercase shadow-titan">
             Technical Arsenal
           </span>

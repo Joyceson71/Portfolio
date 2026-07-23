@@ -66,7 +66,7 @@ export function Contact() {
     <section 
       id="contact" 
       ref={sectionRef}
-      className="relative w-full min-h-[100dvh] flex flex-col justify-center overflow-hidden bg-obsidian pt-16"
+      className="relative w-full py-24 lg:py-32 flex flex-col justify-center overflow-hidden bg-obsidian"
     >
       {/* 3D Canvas Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -81,10 +81,10 @@ export function Contact() {
           transition: 'opacity 1s ease-out, transform 1s ease-out'
         }}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start max-w-6xl mx-auto">
           
           {/* Left Column - Contact Details */}
-          <div className="pointer-events-auto bg-obsidian/40 p-8 rounded-[2px] backdrop-blur-sm border border-white/5 shadow-2xl">
+          <div className="pointer-events-auto bg-smoke/60 p-8 rounded-[2px] backdrop-blur-md border border-white/10 shadow-2xl">
             <div className="mb-8">
               <span className="font-cinzel text-sm tracking-[0.3em] text-titan-bronze uppercase shadow-titan">
                 Commence Operations
@@ -93,18 +93,18 @@ export function Contact() {
               <h2 className="font-heading text-4xl md:text-5xl font-bold uppercase text-white mb-6 drop-shadow-md">
                 Establish <span className="text-titan-bronze">Comms</span>
               </h2>
-              <p className="text-parchment-dim font-sans font-light leading-relaxed max-w-md">
+              <p className="text-parchment leading-relaxed max-w-md font-sans font-light">
                 Whether you have a question, a project proposal, or just want to say hello, my inbox is open. I'll get back to you as soon as possible.
               </p>
             </div>
 
             <div className="space-y-6">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 flex items-center justify-center border border-border bg-smoke/80 text-titan-bronze backdrop-blur-md">
+                <div className="w-12 h-12 flex items-center justify-center border border-white/10 bg-obsidian/60 text-titan-bronze backdrop-blur-md">
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-parchment-dim drop-shadow-sm">Email</div>
+                  <div className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-titan-bronze drop-shadow-sm">Email</div>
                   <a href="mailto:joycesondanielraj21@gmail.com" className="font-sans text-white hover:text-titan-bronze transition-colors drop-shadow-md">
                     joycesondanielraj21@gmail.com
                   </a>
@@ -112,11 +112,11 @@ export function Contact() {
               </div>
               
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 flex items-center justify-center border border-border bg-smoke/80 text-titan-bronze backdrop-blur-md">
+                <div className="w-12 h-12 flex items-center justify-center border border-white/10 bg-obsidian/60 text-titan-bronze backdrop-blur-md">
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-parchment-dim drop-shadow-sm">Location</div>
+                  <div className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-titan-bronze drop-shadow-sm">Location</div>
                   <div className="font-sans text-white drop-shadow-md">
                     India (IST / UTC+5:30)
                   </div>
@@ -141,7 +141,7 @@ export function Contact() {
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
               <div className="space-y-2">
-                <label htmlFor="name" className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-parchment-dim drop-shadow-sm">Name</label>
+                <label htmlFor="name" className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-titan-bronze drop-shadow-sm">Name</label>
                 <input 
                   id="name" 
                   value={formData.name}
@@ -149,13 +149,13 @@ export function Contact() {
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                   placeholder="Eren Yeager" 
-                  className={`w-full bg-obsidian/80 backdrop-blur-sm border px-4 py-3 font-sans text-white outline-none transition-colors duration-300 ${errors.name ? 'border-blood focus:border-blood' : 'border-border focus:border-titan-bronze shadow-inner'}`}
+                  className={`w-full bg-obsidian/80 backdrop-blur-sm border px-4 py-3 font-sans text-white outline-none transition-colors duration-300 ${errors.name ? 'border-blood focus:border-blood' : 'border-white/10 focus:border-titan-bronze shadow-inner'}`}
                 />
                 {errors.name && <p className="text-blood text-[10px] font-cinzel mt-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.name}</p>}
               </div>
               
               <div className="space-y-2">
-                <label htmlFor="email" className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-parchment-dim drop-shadow-sm">Email</label>
+                <label htmlFor="email" className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-titan-bronze drop-shadow-sm">Email</label>
                 <input 
                   id="email" 
                   type="email" 
@@ -164,13 +164,13 @@ export function Contact() {
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                   placeholder="eren@scout.reg" 
-                  className={`w-full bg-obsidian/80 backdrop-blur-sm border px-4 py-3 font-sans text-white outline-none transition-colors duration-300 ${errors.email ? 'border-blood focus:border-blood' : 'border-border focus:border-titan-bronze shadow-inner'}`}
+                  className={`w-full bg-obsidian/80 backdrop-blur-sm border px-4 py-3 font-sans text-white outline-none transition-colors duration-300 ${errors.email ? 'border-blood focus:border-blood' : 'border-white/10 focus:border-titan-bronze shadow-inner'}`}
                 />
                 {errors.email && <p className="text-blood text-[10px] font-cinzel mt-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.email}</p>}
               </div>
               
               <div className="space-y-2">
-                <label htmlFor="message" className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-parchment-dim drop-shadow-sm">Message</label>
+                <label htmlFor="message" className="font-cinzel text-[10px] uppercase tracking-[0.2em] text-titan-bronze drop-shadow-sm">Message</label>
                 <textarea 
                   id="message" 
                   value={formData.message}
@@ -178,7 +178,7 @@ export function Contact() {
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                   placeholder="Mission details..." 
-                  className={`w-full bg-obsidian/80 backdrop-blur-sm border px-4 py-3 min-h-[120px] font-sans text-white outline-none transition-colors duration-300 resize-none ${errors.message ? 'border-blood focus:border-blood' : 'border-border focus:border-titan-bronze shadow-inner'}`}
+                  className={`w-full bg-obsidian/80 backdrop-blur-sm border px-4 py-3 min-h-[120px] font-sans text-white outline-none transition-colors duration-300 resize-none ${errors.message ? 'border-blood focus:border-blood' : 'border-white/10 focus:border-titan-bronze shadow-inner'}`}
                 />
                 {errors.message && <p className="text-blood text-[10px] font-cinzel mt-1 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{errors.message}</p>}
               </div>
