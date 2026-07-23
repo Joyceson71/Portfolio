@@ -40,14 +40,14 @@ function GlobalEnvironment() {
 
   return (
     <group ref={groupRef}>
-      {/* Immersive Particle Fields */}
-      <Stars radius={50} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
-      <Sparkles count={500} scale={20} size={1} speed={0.2} opacity={0.5} color="#9d00ff" />
-      <Sparkles count={500} scale={25} size={2} speed={0.1} opacity={0.3} color="#ff0033" />
+      {/* Immersive Falling Ash & Embers */}
+      <Stars radius={50} depth={50} count={1500} factor={6} saturation={1} fade speed={2} />
+      <Sparkles count={800} scale={30} size={2} speed={0.4} opacity={0.6} color="#ff3300" />
+      <Sparkles count={500} scale={25} size={3} speed={0.2} opacity={0.4} color="#990000" />
       
-      {/* Floating Geometric Wireframes in the deep background */}
-      {Array.from({ length: 15 }).map((_, i) => (
-        <Float key={i} speed={1 + Math.random()} rotationIntensity={2} floatIntensity={3}>
+      {/* Floating Debris in the deep background */}
+      {Array.from({ length: 20 }).map((_, i) => (
+        <Float key={i} speed={1 + Math.random()} rotationIntensity={3} floatIntensity={3}>
           <mesh 
             position={[
               (Math.random() - 0.5) * 40, 
@@ -55,8 +55,8 @@ function GlobalEnvironment() {
               (Math.random() - 0.5) * 40 - 10
             ]}
           >
-            <icosahedronGeometry args={[Math.random() * 2 + 1, 0]} />
-            <meshBasicMaterial color={i % 2 === 0 ? "#9d00ff" : "#ff0033"} wireframe transparent opacity={0.15} />
+            <octahedronGeometry args={[Math.random() * 1.5 + 0.5, 0]} />
+            <meshBasicMaterial color={i % 2 === 0 ? "#110000" : "#220000"} wireframe={false} transparent opacity={0.6} />
           </mesh>
         </Float>
       ))}
