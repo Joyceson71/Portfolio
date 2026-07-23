@@ -80,7 +80,7 @@ export function About() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section id="about" ref={sectionRef} className="relative w-full min-h-screen py-32 overflow-x-hidden bg-background">
+    <section id="about" ref={sectionRef} className="relative w-full min-h-screen py-20 overflow-x-hidden bg-background flex flex-col justify-center">
       {/* Armored Titan Background Art */}
       <motion.div 
         className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"
@@ -109,17 +109,17 @@ export function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-16"
+          className="mb-8"
         >
           <span className="font-mono text-sm tracking-widest text-primary uppercase">About Me</span>
-          <h2 className="font-heading text-4xl md:text-6xl font-bold uppercase mt-2">
+          <h2 className="font-heading text-4xl md:text-5xl font-bold uppercase mt-2">
             The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Founder</span>
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Text Content */}
-          <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
+          <div className="space-y-4 text-base text-muted-foreground leading-relaxed">
             <p>
               I am a <strong className="text-foreground">Frontend Developer</strong> passionate about creating interactive, accessible, and high-performance web applications. My expertise lies in translating complex designs into seamless digital realities.
             </p>
@@ -127,7 +127,7 @@ export function About() {
               With a strong foundation in modern JavaScript frameworks and a keen eye for UX/UI, I aim to bridge the gap between design and engineering. I believe that exceptional products are born from continuous learning and meticulous attention to detail.
             </p>
             
-            <div className="grid grid-cols-2 gap-8 pt-8">
+            <div className="grid grid-cols-2 gap-4 pt-4">
               <motion.div 
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -158,7 +158,7 @@ export function About() {
           </div>
 
           {/* 3D Workspace */}
-          <div className="relative w-full h-[500px] glass rounded-2xl overflow-hidden glow-border">
+          <div className="relative w-full h-[300px] lg:h-[400px] glass rounded-2xl overflow-hidden glow-border">
             <View className="w-full h-full">
               <Workspace3DScene />
             </View>

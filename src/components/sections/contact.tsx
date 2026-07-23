@@ -54,7 +54,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative w-full min-h-screen pt-32 pb-12 flex flex-col justify-between overflow-x-hidden bg-background">
+    <section id="contact" className="relative w-full min-h-screen pt-24 pb-0 flex flex-col justify-between overflow-x-hidden bg-background">
       {/* Attack Titan Background Art */}
       <motion.div 
         className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"
@@ -79,9 +79,9 @@ export function Contact() {
 
       <div className="container mx-auto px-6 md:px-12 flex-grow flex flex-col justify-center items-center relative z-10">
         
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <span className="font-mono text-sm tracking-widest text-primary uppercase">Get In Touch</span>
-          <h2 className="font-heading text-4xl md:text-6xl font-bold uppercase mt-2">
+          <h2 className="font-heading text-4xl md:text-5xl font-bold uppercase mt-2">
             Contact <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Me</span>
           </h2>
           <p className="text-muted-foreground mt-6 max-w-lg mx-auto">
@@ -94,7 +94,7 @@ export function Contact() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="w-full max-w-md glass-card p-8 md:p-10 rounded-2xl glow-border relative"
+          className="w-full max-w-md glass-card p-6 md:p-8 rounded-2xl glow-border relative"
         >
           {/* Decorative Corner Elements */}
           <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary rounded-tl-2xl pointer-events-none" />
@@ -157,8 +157,8 @@ export function Contact() {
         </motion.div>
       </div>
 
-      <footer className="w-full mt-24 border-t border-white/5 bg-background pt-12 pb-8">
-        <div className="container mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-6">
+      <footer className="w-full mt-12 border-t border-white/5 bg-background/80 pt-6 pb-6">
+        <div className="container mx-auto px-6 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="font-heading font-bold text-2xl uppercase tracking-widest text-muted-foreground">
             JD<span className="text-primary">.</span>
           </div>
