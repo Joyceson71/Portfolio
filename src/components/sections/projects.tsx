@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
@@ -138,13 +138,25 @@ function ProjectCard({ project, index }: { project: typeof projectsData[0], inde
 
 export function Projects() {
   const [filter, setFilter] = useState("all");
+  const containerRef = useRef(null);
 
   const filteredProjects = projectsData.filter((p) => 
     filter === "all" ? true : p.category.includes(filter)
   );
 
   return (
-    <section id="projects" className="relative w-full min-h-screen py-32 overflow-hidden">
+    <section id="projects" ref={containerRef} className="relative w-full min-h-screen py-32 overflow-hidden">
+      {/* Mikasa Background Art */}
+      <div className="absolute inset-0 z-[-1] pointer-events-none opacity-10">
+        <Image 
+          src="/images/mikasa.png" 
+          alt="Soldier Aesthetic" 
+          fill 
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px]" />
+      </div>
+
       <div className="container mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
           <div>

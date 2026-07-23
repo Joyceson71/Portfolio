@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Image from "next/image";
 import { View, Float, Icosahedron, TorusKnot, Sphere, Box } from "@react-three/drei";
 import { motion } from "framer-motion";
 import { Code2, Monitor, Paintbrush, Database } from "lucide-react";
@@ -106,7 +107,18 @@ const skillsData = [
 export function Skills() {
   return (
     <section id="skills" className="relative w-full min-h-screen py-32 overflow-hidden bg-background/50">
-      <div className="container mx-auto px-6 md:px-12">
+      {/* Levi Background Art */}
+      <div className="absolute inset-0 z-[-1] pointer-events-none opacity-10">
+        <Image 
+          src="/images/levi.png" 
+          alt="Soldier Aesthetic" 
+          fill 
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px]" />
+      </div>
+
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
         <div className="text-center mb-24">
           <span className="font-mono text-sm tracking-widest text-primary uppercase">Technical Arsenal</span>
           <h2 className="font-heading text-4xl md:text-6xl font-bold uppercase mt-2">

@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { View, Environment, Float, Sparkles, PerspectiveCamera } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { motion } from "framer-motion";
@@ -82,6 +83,18 @@ export function Hero() {
       ref={containerRef} 
       className="relative w-full h-screen flex items-center justify-center overflow-hidden"
     >
+      {/* Colossal Titan Background Art */}
+      <div className="absolute inset-0 z-[-1] pointer-events-none opacity-30 mix-blend-screen">
+        <Image 
+          src="/images/titan.png" 
+          alt="The Rumbling" 
+          fill 
+          className="object-cover object-center"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+      </div>
+
       {/* 3D View Layer - Covers the whole section */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <View className="w-full h-full">
