@@ -1,164 +1,107 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { View, Float, Box, Cylinder, Sphere } from "@react-three/drei";
-import { motion, useInView, animate } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import Image from "next/image";
+import dynamic from "next/dynamic";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
+
+const AboutScene = dynamic(() => import("@/components/three/AboutScene").then(m => m.AboutScene), { ssr: false });
 
 function Counter({ from, to, duration = 2 }: { from: number, to: number, duration?: number }) {
   const [count, setCount] = useState(from);
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true });
+  const ref = useRef<HTMLDivElement>(null);
+  const isVisible = useIntersectionObserver(ref, { threshold: 0.5, triggerOnce: true });
   
   useEffect(() => {
-    if (inView) {
-      const controls = animate(from, to, {
-        duration,
-        ease: "easeOut",
-        onUpdate(value) {
-          setCount(Math.round(value));
-        }
-      });
-      return () => controls.stop();
-    }
-  }, [from, to, inView, duration]);
-  
-  return <span ref={ref}>{count < 10 && count > 0 ? `0${count}` : count}</span>;
-}
-
-function Workspace3DScene() {
-  return (
-    <>
-      <ambientLight intensity={0.2} />
-      <directionalLight position={[5, 10, 5]} intensity={2} color="#ff3300" />
-      <pointLight position={[-5, 5, -5]} intensity={3} color="#990000" />
+    if (!isVisible) return;
+    
+    let startTimestamp: number;
+    const step = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / (duration * 1000), 1);
       
-      <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-        <group position={[0, -1, 0]}>
-          {/* Desk Base */}
-          <Box args={[6, 0.2, 3]} position={[0, 0, 0]}>
-            <meshStandardMaterial color="#111" metalness={0.8} roughness={0.2} />
-          </Box>
-          
-          {/* Laptop Base */}
-          <Box args={[1.5, 0.05, 1]} position={[-1, 0.125, 0.5]}>
-            <meshStandardMaterial color="#222" metalness={0.9} roughness={0.1} />
-          </Box>
-          {/* Laptop Screen */}
-          <Box args={[1.5, 1, 0.05]} position={[-1, 0.6, 0]} rotation={[-0.2, 0, 0]}>
-            <meshStandardMaterial color="#050505" emissive="#ff3300" emissiveIntensity={0.3} />
-          </Box>
-          
-          {/* Monitor */}
-          <Box args={[2.5, 1.5, 0.1]} position={[1.5, 1, -0.2]} rotation={[0, -0.2, 0]}>
-            <meshStandardMaterial color="#000" emissive="#ff0033" emissiveIntensity={0.1} />
-          </Box>
-          {/* Monitor Stand */}
-          <Cylinder args={[0.1, 0.3, 1]} position={[1.5, 0.5, -0.3]}>
-            <meshStandardMaterial color="#333" metalness={0.8} roughness={0.2} />
-          </Cylinder>
-          
-          {/* Coffee Mug */}
-          <Cylinder args={[0.15, 0.15, 0.3]} position={[-2.2, 0.25, 0.8]}>
-            <meshStandardMaterial color="#f4f4f5" />
-          </Cylinder>
-
-          {/* Glowing Sphere (Hologram) */}
-          <Float speed={4} rotationIntensity={2} floatIntensity={2}>
-            <Sphere args={[0.2, 16, 16]} position={[1.5, 1, 0.5]}>
-              <meshStandardMaterial color="#ff3300" emissive="#ff0000" emissiveIntensity={2.5} wireframe />
-            </Sphere>
-          </Float>
-        </group>
-      </Float>
-    </>
-  );
+      const easeOut = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      setCount(Math.floor(easeOut * (to - from) + from));
+      
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+    
+    window.requestAnimationFrame(step);
+  }, [isVisible, from, to, duration]);
+  
+  return <div ref={ref}>{count < 10 && count > 0 ? `0${count}` : count}</div>;
 }
 
 export function About() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const isVisible = useIntersectionObserver(sectionRef, { threshold: 0.12, triggerOnce: true });
 
   return (
-    <section id="about" ref={sectionRef} className="relative w-full h-[100dvh] pt-24 pb-8 overflow-hidden bg-background flex flex-col justify-center">
-      {/* Armored Titan Background Art */}
-      <motion.div 
-        className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"
-        animate={{ 
-          scale: [1, 1.03, 1],
-          y: [0, -10, 0]
-        }}
-        transition={{ 
-          duration: 12, 
-          repeat: Infinity,
-          ease: "easeInOut"
+    <section 
+      id="about" 
+      ref={sectionRef} 
+      className="relative w-full min-h-[100dvh] overflow-hidden bg-obsidian flex flex-col justify-center"
+    >
+      {/* 3D Canvas Background */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <AboutScene />
+      </div>
+
+      <div 
+        className="container mx-auto px-6 md:px-12 relative z-10 pointer-events-none py-24"
+        style={{
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(30px)',
+          transition: 'opacity 1s ease-out, transform 1s ease-out'
         }}
       >
-        <Image 
-          src="/images/armored.png" 
-          alt="Armored Titan" 
-          fill 
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background/90" />
-      </motion.div>
-
-      <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mb-4"
-        >
-          <span className="font-mono text-sm tracking-widest text-primary uppercase">About Me</span>
-          <h2 className="font-heading text-3xl md:text-5xl font-bold uppercase mt-1">
-            The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Founder</span>
+        <div className="mb-12 pointer-events-auto max-w-fit">
+          <span className="font-cinzel text-sm tracking-[0.3em] text-titan-bronze uppercase shadow-titan">
+            About Me
+          </span>
+          <div className="w-[60px] h-[1px] bg-titan-bronze mt-2 mb-4 shadow-[0_0_10px_rgba(193,127,58,0.8)]" />
+          <h2 className="font-heading text-4xl md:text-5xl font-bold uppercase text-white drop-shadow-md">
+            The Founder
           </h2>
-        </motion.div>
+        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
-          {/* Text Content */}
-          <div className="space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed">
-            <p>
-              I am a <strong className="text-foreground">Frontend Developer</strong> passionate about creating interactive, accessible, and high-performance web applications. My expertise lies in translating complex designs into seamless digital realities. I believe that exceptional products are born from continuous learning and meticulous attention to detail.
-            </p>
-            
-            <div className="grid grid-cols-2 gap-4 pt-4">
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="p-6 glass-card rounded-lg relative overflow-hidden group"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="font-heading text-3xl font-bold text-foreground mb-1">
-                  <Counter from={0} to={1} />+
-                </div>
-                <div className="font-mono text-xs text-primary uppercase tracking-wider">Years Experience</div>
-              </motion.div>
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="p-6 glass-card rounded-lg relative overflow-hidden group border border-destructive/20 hover:border-destructive"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-destructive/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="font-heading text-3xl font-bold text-foreground mb-1">
-                  <Counter from={0} to={10} />+
-                </div>
-                <div className="font-mono text-xs text-destructive uppercase tracking-wider">Projects Completed</div>
-              </motion.div>
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+          {/* Empty spacer to let the 3D emblem show through on the left/center */}
+          <div className="hidden lg:block relative w-full h-full min-h-[400px]">
           </div>
 
-          {/* 3D Workspace */}
-          <div className="relative w-full h-[250px] lg:h-[350px] glass rounded-2xl overflow-hidden glow-border">
-            <View className="w-full h-full">
-              <Workspace3DScene />
-            </View>
+          {/* Text Content */}
+          <div className="space-y-6 pointer-events-auto bg-smoke/40 backdrop-blur-md p-8 border border-white/5 rounded-[2px] shadow-2xl">
+            <div className="space-y-4 text-parchment leading-relaxed font-sans font-light">
+              <p>
+                I am a <strong className="text-white font-medium">Frontend Developer</strong> passionate about creating interactive, accessible, and high-performance web applications. My expertise lies in translating complex designs into seamless digital realities.
+              </p>
+              <p>
+                With a strong foundation in modern JavaScript frameworks and a keen eye for UI/UX, I bridge the gap between design and engineering. Exceptional products are born from continuous learning and meticulous attention to detail.
+              </p>
+            </div>
+            
+            {/* 2x2 Stats Grid */}
+            <div className="grid grid-cols-2 gap-4 pt-6">
+              {[
+                { count: 2, label: "Years Experience", suffix: "+" },
+                { count: 10, label: "Projects Completed", suffix: "+" },
+                { count: 5, label: "Tech Stacks", suffix: "+" },
+                { count: 100, label: "Commitment", suffix: "%" }
+              ].map((stat, i) => (
+                <div 
+                  key={i} 
+                  className="p-6 bg-obsidian/60 border border-border group hover:border-titan-bronze transition-colors duration-300 relative overflow-hidden backdrop-blur-md"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-titan-bronze/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="font-heading text-4xl font-bold text-white mb-2 flex">
+                    <Counter from={0} to={stat.count} />{stat.suffix}
+                  </div>
+                  <div className="font-cinzel text-[10px] text-titan-bronze uppercase tracking-[0.2em]">{stat.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

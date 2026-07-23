@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, FileText } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
@@ -13,24 +12,40 @@ function cn(...inputs: ClassValue[]) {
 }
 
 const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Skills", href: "/skills" },
-  { name: "Projects", href: "/projects" },
-  { name: "Contact", href: "/contact" },
+  { name: "Home", href: "#home" },
+  { name: "About", href: "#about" },
+  { name: "Skills", href: "#skills" },
+  { name: "Projects", href: "#projects" },
+  { name: "Contact", href: "#contact" },
 ];
 
 export function Navbar() {
-  const pathname = usePathname();
+  const [activeSection, setActiveSection] = useState("#home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
+
+      // Determine active section based on scroll position
+      const sections = navLinks.map(link => link.href.substring(1));
+      let current = "#home";
+      for (const section of sections) {
+        const el = document.getElementById(section);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 200 && rect.bottom >= 200) {
+            current = `#${section}`;
+            break;
+          }
+        }
+      }
+      setActiveSection(current);
     };
 
     window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Init
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -45,37 +60,37 @@ export function Navbar() {
         <div className="container mx-auto px-6 md:px-12 flex justify-between items-center">
           {/* Logo */}
           <Link
-            href="/"
-            className="font-heading font-bold text-2xl uppercase tracking-widest text-foreground hover:text-primary transition-colors"
+            href="#home"
+            className="font-heading font-bold text-2xl uppercase tracking-widest text-white hover:text-titan-bronze transition-colors drop-shadow-md"
           >
-            JD<span className="text-primary">.</span>
+            JD<span className="text-titan-bronze drop-shadow-[0_0_10px_rgba(193,127,58,0.8)]">.</span>
           </Link>
 
           {/* Desktop Nav */}
           <nav
             className={cn(
-              "hidden md:flex items-center gap-8 px-8 py-3 rounded-full transition-all duration-500",
-              isScrolled ? "glass" : "bg-transparent"
+              "hidden md:flex items-center gap-8 px-8 py-3 rounded-[2px] transition-all duration-500 border pointer-events-auto",
+              isScrolled ? "bg-obsidian/70 backdrop-blur-md border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)]" : "bg-transparent border-transparent"
             )}
           >
             {navLinks.map((link) => {
-              const isActive = pathname === link.href;
+              const isActive = activeSection === link.href;
               return (
                 <Link
                   key={link.name}
                   href={link.href}
                   className={cn(
-                    "relative font-heading uppercase tracking-widest text-sm transition-colors hover:text-foreground",
+                    "relative font-cinzel font-bold uppercase tracking-widest text-[11px] transition-colors hover:text-white drop-shadow-sm",
                     isActive
-                      ? "text-foreground"
-                      : "text-muted-foreground"
+                      ? "text-white"
+                      : "text-parchment-dim"
                   )}
                 >
                   {link.name}
                   {isActive && (
                     <motion.div
                       layoutId="activeNavIndicator"
-                      className="absolute -bottom-2 left-0 right-0 h-[2px] bg-primary glow-border"
+                      className="absolute -bottom-[14px] left-0 right-0 h-[2px] bg-titan-bronze shadow-[0_0_10px_rgba(193,127,58,0.8)]"
                       initial={false}
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
@@ -86,16 +101,16 @@ export function Navbar() {
           </nav>
 
           {/* Actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 pointer-events-auto">
             <a
               href="/Joyceson-CV.pdf"
               target="_blank"
-              className="hidden md:flex items-center gap-2 font-heading uppercase text-xs tracking-widest px-5 py-2.5 border border-primary text-foreground hover:bg-primary/20 transition-all rounded-sm glow-border"
+              className="hidden md:flex items-center gap-2 font-cinzel font-bold uppercase text-[10px] tracking-widest px-5 py-2.5 border border-titan-bronze text-titan-bronze hover:bg-titan-bronze hover:text-obsidian transition-all rounded-[2px] hover:shadow-[0_0_15px_rgba(193,127,58,0.5)] bg-obsidian/50 backdrop-blur-sm"
             >
-              <FileText className="w-4 h-4" /> Resume
+              <FileText className="w-3 h-3" /> Resume
             </a>
             <button
-              className="md:hidden text-foreground p-2 focus:outline-none"
+              className="md:hidden text-white hover:text-titan-bronze p-2 focus:outline-none transition-colors drop-shadow-md"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X /> : <Menu />}
@@ -112,21 +127,24 @@ export function Navbar() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-xl flex flex-col justify-center items-center"
+            className="fixed inset-0 z-40 bg-obsidian/98 backdrop-blur-xl flex flex-col justify-center items-center"
           >
             <nav className="flex flex-col gap-8 text-center">
               {navLinks.map((link) => {
-                const isActive = pathname === link.href;
+                const isActive = activeSection === link.href;
                 return (
                   <Link
                     key={link.name}
                     href={link.href}
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      setActiveSection(link.href);
+                    }}
                     className={cn(
-                      "font-heading uppercase text-3xl tracking-widest transition-colors",
+                      "font-cinzel font-bold uppercase text-2xl tracking-widest transition-colors",
                       isActive
-                        ? "text-primary text-glow"
-                        : "text-muted-foreground hover:text-foreground"
+                        ? "text-titan-bronze drop-shadow-[0_0_10px_rgba(193,127,58,0.5)]"
+                        : "text-parchment-dim hover:text-white"
                     )}
                   >
                     {link.name}
@@ -136,7 +154,7 @@ export function Navbar() {
               <a
                 href="/Joyceson-CV.pdf"
                 target="_blank"
-                className="mt-8 font-heading uppercase text-xl tracking-widest px-8 py-3 border border-primary text-foreground bg-primary/10 rounded-sm glow-border"
+                className="mt-8 font-cinzel font-bold uppercase text-sm tracking-widest px-8 py-3 border border-titan-bronze text-obsidian bg-titan-bronze rounded-[2px] shadow-[0_0_15px_rgba(193,127,58,0.5)]"
               >
                 Resume
               </a>
