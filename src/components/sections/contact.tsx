@@ -57,9 +57,9 @@ export function Contact() {
       <div className="container mx-auto px-6 md:px-12 flex-grow flex flex-col justify-center items-center">
         
         <div className="text-center mb-16">
-          <span className="font-mono text-sm tracking-widest text-primary uppercase">System Comm Link</span>
+          <span className="font-mono text-sm tracking-widest text-primary uppercase">Get In Touch</span>
           <h2 className="font-heading text-4xl md:text-6xl font-bold uppercase mt-2">
-            Transmit <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent text-glow">Message</span>
+            Contact <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Me</span>
           </h2>
           <p className="text-muted-foreground mt-6 max-w-lg mx-auto">
             Interested in working together or have a question? Fill out the form below and I'll get back to you as soon as possible.
