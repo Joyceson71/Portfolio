@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -53,8 +54,30 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative w-full min-h-screen pt-32 pb-12 flex flex-col justify-between overflow-hidden">
-      <div className="container mx-auto px-6 md:px-12 flex-grow flex flex-col justify-center items-center">
+    <section id="contact" className="relative w-full min-h-screen pt-32 pb-12 flex flex-col justify-between overflow-hidden bg-background/50">
+      {/* Attack Titan Background Art */}
+      <motion.div 
+        className="absolute inset-0 z-[-1] pointer-events-none opacity-10"
+        animate={{ 
+          scale: [1, 1.03, 1],
+          x: [0, -10, 0]
+        }}
+        transition={{ 
+          duration: 15, 
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      >
+        <Image 
+          src="/images/attack_titan.png" 
+          alt="Attack Titan" 
+          fill 
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px]" />
+      </motion.div>
+
+      <div className="container mx-auto px-6 md:px-12 flex-grow flex flex-col justify-center items-center relative z-10">
         
         <div className="text-center mb-16">
           <span className="font-mono text-sm tracking-widest text-primary uppercase">Get In Touch</span>

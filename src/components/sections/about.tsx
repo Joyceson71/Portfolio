@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { View, Float, Box, Cylinder, Sphere } from "@react-three/drei";
 import { motion, useScroll, useTransform, useInView, animate } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 
 function Counter({ from, to, duration = 2 }: { from: number, to: number, duration?: number }) {
   const [count, setCount] = useState(from);
@@ -86,8 +87,30 @@ export function About() {
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
-    <section id="about" ref={sectionRef} className="relative w-full min-h-screen py-32 overflow-hidden">
-      <div className="container mx-auto px-6 md:px-12">
+    <section id="about" ref={sectionRef} className="relative w-full min-h-screen py-32 overflow-hidden bg-background/50">
+      {/* Armored Titan Background Art */}
+      <motion.div 
+        className="absolute inset-0 z-[-1] pointer-events-none opacity-10"
+        animate={{ 
+          scale: [1, 1.03, 1],
+          y: [0, -10, 0]
+        }}
+        transition={{ 
+          duration: 12, 
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      >
+        <Image 
+          src="/images/armored.png" 
+          alt="Armored Titan" 
+          fill 
+          className="object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px]" />
+      </motion.div>
+
+      <div className="container mx-auto px-6 md:px-12 relative z-10">
         <motion.div style={{ opacity, y }} className="mb-16">
           <span className="font-mono text-sm tracking-widest text-primary uppercase">About Me</span>
           <h2 className="font-heading text-4xl md:text-6xl font-bold uppercase mt-2">
