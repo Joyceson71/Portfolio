@@ -1,247 +1,274 @@
 "use client";
 
-import { useRef } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { View, Environment, Float, Sparkles, PerspectiveCamera } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { Suspense, useRef, useEffect, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Float, Sphere, MeshDistortMaterial, PerspectiveCamera } from "@react-three/drei";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import * as THREE from "three";
 
-function CameraShake() {
-  useFrame((state) => {
-    state.camera.position.x = Math.sin(state.clock.elapsedTime * 20) * 0.03;
-    state.camera.position.y = Math.cos(state.clock.elapsedTime * 18) * 0.03;
-  });
-  return null;
-}
+/* ── Crystal Orb Scene (standalone canvas) ── */
+function CrystalOrb() {
+  const mainRef = useRef<THREE.Mesh>(null);
+  const innerRef = useRef<THREE.Mesh>(null);
 
-function MarchingMonoliths() {
-  const groupRef = useRef<THREE.Group>(null);
-  
-  useFrame((state, delta) => {
-    if (groupRef.current) {
-      groupRef.current.children.forEach((mesh: any) => {
-        mesh.position.z += delta * 1.5; // March forward
-        if (mesh.position.z > 5) {
-          mesh.position.z = -30 - (Math.random() * 10); // Reset far back in the fog
-        }
-      });
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    if (mainRef.current) {
+      mainRef.current.rotation.y = t * 0.15;
+      mainRef.current.rotation.z = t * 0.08;
+    }
+    if (innerRef.current) {
+      innerRef.current.rotation.y = -t * 0.3;
+      innerRef.current.rotation.x = t * 0.2;
     }
   });
 
   return (
-    <group ref={groupRef}>
-      {Array.from({ length: 12 }).map((_, i) => (
-        <mesh 
-          key={i}
-          position={[
-            (i - 5.5) * 3, 
-            -2, 
-            -15 - (Math.random() * 20)
-          ]}
-        >
-          <boxGeometry args={[2.5, 30, 2.5]} />
-          <meshStandardMaterial 
-            color="#050101" 
-            roughness={0.9} 
-            metalness={0.1}
-            emissive="#330000"
-            emissiveIntensity={0.5}
-          />
-        </mesh>
-      ))}
-    </group>
-  );
-}
-
-function Hero3DScene() {
-  return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={50} />
-      <CameraShake />
-      
-      <Environment preset="night" />
-      <ambientLight intensity={0.1} />
-      <directionalLight position={[10, 10, 5]} intensity={1.5} color="#ff3300" />
-      <directionalLight position={[-10, -10, -5]} intensity={2} color="#990000" />
-      
-      {/* Apocalyptic Fog */}
-      <fog attach="fog" args={["#1a0000", 5, 30]} />
+      <PerspectiveCamera makeDefault position={[0, 0, 6]} fov={45} />
+      <ambientLight intensity={0.3} />
+      <pointLight position={[5, 5, 5]}   color="#00d4ff" intensity={60} />
+      <pointLight position={[-5, -5, 3]} color="#ff2d78" intensity={40} />
+      <pointLight position={[0, 8, -5]}  color="#b400ff" intensity={30} />
 
-      {/* Falling Ash and Embers */}
-      <Sparkles count={1500} scale={20} size={3} speed={0.8} opacity={0.8} color="#ff4400" />
+      {/* Main orb */}
+      <Float speed={1.8} rotationIntensity={0.6} floatIntensity={1.5}>
+        <Sphere ref={mainRef} args={[1.8, 128, 128]}>
+          <MeshDistortMaterial
+            color="#ffffff"
+            distort={0.45}
+            speed={2.5}
+            metalness={0.1}
+            roughness={0.05}
+            clearcoat={1}
+            clearcoatRoughness={0}
+            transparent
+            opacity={0.92}
+            envMapIntensity={2}
+          />
+        </Sphere>
+      </Float>
 
-      {/* The Wall Titans (Monoliths) */}
-      <MarchingMonoliths />
-      
-      {/* Background Debris */}
-      {Array.from({ length: 15 }).map((_, i) => (
-        <Float key={`debris-${i}`} speed={2 + Math.random()} rotationIntensity={3} floatIntensity={3}>
-          <mesh 
-            position={[
-              (Math.random() - 0.5) * 20, 
-              (Math.random() - 0.5) * 20, 
-              (Math.random() - 0.5) * 15 - 5
-            ]}
-          >
-            <octahedronGeometry args={[Math.random() * 0.8 + 0.2, 0]} />
-            <meshStandardMaterial color="#111" emissive="#440000" roughness={0.8} />
-          </mesh>
+      {/* Inner glowing core */}
+      <Float speed={2.5} rotationIntensity={1.5} floatIntensity={1}>
+        <Sphere ref={innerRef} args={[0.9, 64, 64]}>
+          <MeshDistortMaterial
+            color="#00d4ff"
+            distort={0.55}
+            speed={3}
+            metalness={0}
+            roughness={0}
+            clearcoat={1}
+            clearcoatRoughness={0}
+            transparent
+            opacity={0.7}
+            emissive="#00d4ff"
+            emissiveIntensity={0.4}
+          />
+        </Sphere>
+      </Float>
+
+      {/* Satellite orbs */}
+      {[
+        { pos: [-3, 1.5, 0],  r: 0.55, c: "#ff2d78", d: 0.5, s: 2   },
+        { pos: [3,  -1.5, 1], r: 0.4,  c: "#b400ff", d: 0.4, s: 2.5 },
+        { pos: [-2, -2, -1],  r: 0.3,  c: "#39ff14", d: 0.35, s: 3  },
+      ].map((o, i) => (
+        <Float key={i} speed={o.s} rotationIntensity={2} floatIntensity={2}>
+          <Sphere args={[o.r, 32, 32]} position={o.pos as [number,number,number]}>
+            <MeshDistortMaterial
+              color={o.c}
+              distort={o.d}
+              speed={2}
+              metalness={0.2}
+              roughness={0.1}
+              clearcoat={1}
+              clearcoatRoughness={0}
+              transparent
+              opacity={0.9}
+            />
+          </Sphere>
         </Float>
       ))}
     </>
   );
 }
 
+/* ── Animated character split ── */
+function SplitText({ text, className }: { text: string; className?: string }) {
+  return (
+    <span aria-label={text} className={className}>
+      {text.split("").map((char, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 60, rotateX: -90 }}
+          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          transition={{
+            duration: 0.7,
+            delay: 0.5 + i * 0.04,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          className="inline-block"
+          style={{ transformOrigin: "bottom center" }}
+        >
+          {char === " " ? "\u00A0" : char}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
 export function Hero() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
-    <section 
-      id="home" 
-      ref={containerRef} 
-      className="relative w-full h-screen flex items-center justify-center overflow-hidden"
+    <section
+      id="home"
+      className="relative w-full min-h-screen flex items-center overflow-hidden"
     >
-      {/* Colossal Titan Background Art (Breathing Animation) */}
-      <motion.div 
-        className="absolute inset-0 z-[-1] pointer-events-none opacity-30 mix-blend-screen"
-        animate={{ 
-          scale: [1, 1.05, 1],
-          y: [0, -15, 0]
+      {/* Section ghost number */}
+      <span className="section-num right-[2vw] top-[15vh] select-none pointer-events-none z-0">
+        01
+      </span>
+
+      {/* Standalone 3D Canvas — right half */}
+      {mounted && (
+        <div className="absolute right-0 top-0 w-full md:w-1/2 h-full z-0 pointer-events-none">
+          <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 6], fov: 45 }}>
+            <Suspense fallback={null}>
+              <CrystalOrb />
+            </Suspense>
+          </Canvas>
+        </div>
+      )}
+
+      {/* Diagonal color shard */}
+      <div
+        className="absolute bottom-0 right-0 w-[55%] h-[60%] z-0 pointer-events-none"
+        style={{
+          background: "linear-gradient(135deg, transparent 40%, rgba(0,212,255,0.03) 100%)",
+          clipPath: "polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%)",
         }}
-        transition={{ 
-          duration: 10, 
-          repeat: Infinity,
-          ease: "easeInOut"
+      />
+
+      {/* Horizontal scan line */}
+      <div
+        className="absolute left-0 right-0 h-px z-10 pointer-events-none"
+        style={{
+          top: "40%",
+          background: "linear-gradient(90deg, transparent 0%, rgba(0,212,255,0.15) 30%, rgba(0,212,255,0.4) 50%, rgba(0,212,255,0.15) 70%, transparent 100%)",
         }}
-      >
-        <Image 
-          src="/images/titan.png" 
-          alt="The Rumbling" 
-          fill 
-          className="object-cover object-center"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-      </motion.div>
+      />
 
-      {/* 3D Scrolling Marquee Background */}
-      <div className="absolute w-[160%] -left-[30%] top-[45%] pointer-events-none z-0 opacity-20" style={{ transform: "perspective(1200px) rotateX(25deg) rotateY(-18deg) rotateZ(-5deg)" }}>
-        <motion.div 
-          className="flex whitespace-nowrap"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-        >
-          <span className="font-heading font-black text-[120px] uppercase tracking-widest text-transparent pr-12" style={{ WebkitTextStroke: "2px rgba(255, 51, 0, 0.8)", textShadow: "0 0 40px rgba(255, 51, 0, 0.5)" }}>
-            THE RUMBLING HAS BEGUN • SCOUT REGIMENT • THE RUMBLING HAS BEGUN • SCOUT REGIMENT • 
-          </span>
-          <span className="font-heading font-black text-[120px] uppercase tracking-widest text-transparent pr-12" style={{ WebkitTextStroke: "2px rgba(255, 51, 0, 0.8)", textShadow: "0 0 40px rgba(255, 51, 0, 0.5)" }}>
-            THE RUMBLING HAS BEGUN • SCOUT REGIMENT • THE RUMBLING HAS BEGUN • SCOUT REGIMENT • 
-          </span>
-        </motion.div>
-      </div>
-
-      {/* 3D View Layer - Covers the whole section */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <View className="w-full h-full">
-          <Hero3DScene />
-        </View>
-      </div>
-
-      {/* DOM Layer */}
-      <div className="container relative z-10 px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { 
-              opacity: 1,
-              transition: { staggerChildren: 0.1, delayChildren: 0.2 }
-            }
-          }}
-          className="flex flex-col items-start"
-        >
-          <motion.div 
-            variants={{
-              hidden: { opacity: 0, x: -50 },
-              visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
-            }}
-            className="inline-block px-4 py-1.5 mb-6 border border-primary/40 rounded-full bg-primary/10 text-primary text-xs font-mono tracking-[0.2em] uppercase shadow-[0_0_15px_rgba(255,51,0,0.3)]"
-          >
-            TACTICAL ODM INTERFACE
-          </motion.div>
+      {/* Main content — left half */}
+      <div className="container mx-auto px-8 md:px-16 relative z-10 py-32 md:py-0">
+        <div className="max-w-[640px]">
           
-          <motion.h1 
-            variants={{
-              hidden: { opacity: 0, y: 30 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-            }}
-            className="font-heading text-5xl md:text-7xl lg:text-8xl font-bold uppercase leading-none mb-4"
+          {/* Eyebrow */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex items-center gap-4 mb-10"
           >
-            Joyceson<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent text-glow inline-block mt-2">
-              Danielraj
+            <div className="h-px w-12 bg-[var(--crystal)]" />
+            <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-[var(--crystal)]">
+              Frontend Engineer · 2024
             </span>
-          </motion.h1>
-          
-          <motion.div 
-            variants={{
-              hidden: { opacity: 0, x: -30 },
-              visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
-            }}
-            className="font-mono text-xl md:text-2xl text-muted-foreground mb-8 uppercase tracking-wider"
-          >
-            Frontend Developer <span className="text-primary mx-2">|</span> UI/UX Engineer
           </motion.div>
-          
-          <motion.p 
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { opacity: 1, transition: { duration: 1 } }
-            }}
-            className="text-lg text-muted-foreground max-w-lg mb-10 leading-relaxed font-sans"
+
+          {/* Main headline — character split animation */}
+          <h1 className="font-heading font-black leading-[0.92] tracking-tight mb-8 overflow-hidden"
+              style={{ perspective: "800px" }}>
+            <div className="text-[clamp(3.5rem,8vw,6.5rem)] text-white">
+              <SplitText text="Design." />
+            </div>
+            <div className="text-[clamp(3.5rem,8vw,6.5rem)] text-white">
+              <SplitText text="Engineer." />
+            </div>
+            <div className="text-[clamp(3.5rem,8vw,6.5rem)]" style={{ overflow: "visible" }}>
+              <SplitText
+                text="Deploy."
+                className="text-prism"
+              />
+            </div>
+          </h1>
+
+          {/* Descriptor */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.3 }}
+            className="font-sans text-base md:text-lg text-[var(--muted-foreground)] max-w-md leading-relaxed mb-12"
           >
-            Welcome to the Tactical ODM Interface. I specialize in building exceptional digital experiences, combining modern web technologies with high-performance 3D graphics to craft interfaces that leave a lasting impact.
+            I'm <strong className="text-white font-semibold">Joyceson Danielraj</strong> — building immersive, performant web experiences where design precision meets engineering depth.
           </motion.p>
-          
-          <motion.div 
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-            }}
-            className="flex flex-wrap gap-4"
+
+          {/* CTA row */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.5 }}
+            className="flex flex-wrap items-center gap-4"
           >
-            <Link 
-              href="/projects"
-              className="group relative px-8 py-4 bg-gradient-to-br from-primary to-accent text-white font-heading uppercase tracking-widest text-sm rounded-md shadow-[0_0_30px_rgba(255,51,0,0.3)] hover:shadow-[0_0_40px_rgba(153,0,0,0.5)] transition-all duration-300 hover:scale-105"
+            <Link
+              href="#projects"
+              className="group relative overflow-hidden flex items-center gap-2 px-7 py-4 font-sans font-semibold text-sm text-black rounded-none iridescent-border"
+              style={{ background: "var(--crystal)", color: "var(--void)" }}
             >
-              <span className="relative flex items-center gap-2">
-                View Expeditions <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </span>
+              <span className="relative z-10">Explore Work</span>
+              <ArrowUpRight className="w-4 h-4 relative z-10 group-hover:rotate-45 transition-transform duration-300" />
             </Link>
-            
-            <Link 
-              href="/about"
-              className="px-8 py-4 border border-border bg-card/50 backdrop-blur-sm font-heading uppercase tracking-widest text-sm rounded-md hover:border-primary hover:text-primary transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,51,0,0.2)]"
+
+            <Link
+              href="#contact"
+              className="flex items-center gap-2 px-7 py-4 font-sans font-semibold text-sm border border-white/10 text-white hover:border-[var(--crystal)]/40 hover:text-[var(--crystal)] transition-all duration-300"
             >
-              Founder Profile
+              Get In Touch
             </Link>
           </motion.div>
-        </motion.div>
+
+          {/* Stats row */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1.8 }}
+            className="flex gap-10 mt-16 pt-10 border-t border-white/5"
+          >
+            {[
+              { num: "2+",  label: "Years Exp." },
+              { num: "10+", label: "Projects" },
+              { num: "∞",   label: "Commits" },
+            ].map((s) => (
+              <div key={s.label}>
+                <div className="font-heading font-black text-2xl text-white">{s.num}</div>
+                <div className="font-mono text-[10px] uppercase tracking-widest text-[var(--muted-foreground)] mt-0.5">
+                  {s.label}
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
       </div>
 
       {/* Scroll indicator */}
-      <motion.div 
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-10"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 1, repeat: Infinity, repeatType: "reverse" }}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2 }}
+        className="absolute bottom-8 left-8 flex items-center gap-3 z-10"
       >
-        <span className="font-mono text-xs tracking-[0.2em] uppercase text-primary">Scroll</span>
-        <div className="w-[1px] h-12 bg-gradient-to-b from-primary to-transparent" />
+        <motion.div
+          animate={{ scaleY: [1, 0.3, 1] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          className="w-px h-12 bg-gradient-to-b from-[var(--crystal)] to-transparent"
+        />
+        <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--muted-foreground)]">
+          Scroll
+        </span>
       </motion.div>
     </section>
   );

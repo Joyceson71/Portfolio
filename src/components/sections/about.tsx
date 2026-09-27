@@ -1,164 +1,150 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { View, Float, Box, Cylinder, Sphere } from "@react-three/drei";
-import { motion, useInView, animate } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 
-function Counter({ from, to, duration = 2 }: { from: number, to: number, duration?: number }) {
-  const [count, setCount] = useState(from);
+function Counter({ to }: { to: number }) {
+  const [n, setN] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true });
-  
   useEffect(() => {
-    if (inView) {
-      const controls = animate(from, to, {
-        duration,
-        ease: "easeOut",
-        onUpdate(value) {
-          setCount(Math.round(value));
-        }
-      });
-      return () => controls.stop();
-    }
-  }, [from, to, inView, duration]);
-  
-  return <span ref={ref}>{count < 10 && count > 0 ? `0${count}` : count}</span>;
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      obs.disconnect();
+      let start: number | null = null;
+      const step = (ts: number) => {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / 1400, 1);
+        setN(Math.floor((1 - Math.pow(1 - p, 3)) * to));
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }, { threshold: 0.5 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [to]);
+  return <span ref={ref}>{n}</span>;
 }
 
-function Workspace3DScene() {
-  return (
-    <>
-      <ambientLight intensity={0.2} />
-      <directionalLight position={[5, 10, 5]} intensity={2} color="#ff3300" />
-      <pointLight position={[-5, 5, -5]} intensity={3} color="#990000" />
-      
-      <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-        <group position={[0, -1, 0]}>
-          {/* Desk Base */}
-          <Box args={[6, 0.2, 3]} position={[0, 0, 0]}>
-            <meshStandardMaterial color="#111" metalness={0.8} roughness={0.2} />
-          </Box>
-          
-          {/* Laptop Base */}
-          <Box args={[1.5, 0.05, 1]} position={[-1, 0.125, 0.5]}>
-            <meshStandardMaterial color="#222" metalness={0.9} roughness={0.1} />
-          </Box>
-          {/* Laptop Screen */}
-          <Box args={[1.5, 1, 0.05]} position={[-1, 0.6, 0]} rotation={[-0.2, 0, 0]}>
-            <meshStandardMaterial color="#050505" emissive="#ff3300" emissiveIntensity={0.3} />
-          </Box>
-          
-          {/* Monitor */}
-          <Box args={[2.5, 1.5, 0.1]} position={[1.5, 1, -0.2]} rotation={[0, -0.2, 0]}>
-            <meshStandardMaterial color="#000" emissive="#ff0033" emissiveIntensity={0.1} />
-          </Box>
-          {/* Monitor Stand */}
-          <Cylinder args={[0.1, 0.3, 1]} position={[1.5, 0.5, -0.3]}>
-            <meshStandardMaterial color="#333" metalness={0.8} roughness={0.2} />
-          </Cylinder>
-          
-          {/* Coffee Mug */}
-          <Cylinder args={[0.15, 0.15, 0.3]} position={[-2.2, 0.25, 0.8]}>
-            <meshStandardMaterial color="#f4f4f5" />
-          </Cylinder>
-
-          {/* Glowing Sphere (Hologram) */}
-          <Float speed={4} rotationIntensity={2} floatIntensity={2}>
-            <Sphere args={[0.2, 16, 16]} position={[1.5, 1, 0.5]}>
-              <meshStandardMaterial color="#ff3300" emissive="#ff0000" emissiveIntensity={2.5} wireframe />
-            </Sphere>
-          </Float>
-        </group>
-      </Float>
-    </>
-  );
-}
+const facts = [
+  { label: "Next.js", detail: "App Router · RSC" },
+  { label: "React",   detail: "19 · Concurrent" },
+  { label: "Three.js",detail: "R3F · Drei · Shaders" },
+  { label: "TypeScript", detail: "Strict · Zod" },
+  { label: "Design",  detail: "Figma · Motion" },
+];
 
 export function About() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
   return (
-    <section id="about" ref={sectionRef} className="relative w-full h-[100dvh] pt-24 pb-8 overflow-hidden bg-background flex flex-col justify-center">
-      {/* Armored Titan Background Art */}
-      <motion.div 
-        className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"
-        animate={{ 
-          scale: [1, 1.03, 1],
-          y: [0, -10, 0]
-        }}
-        transition={{ 
-          duration: 12, 
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      >
-        <Image 
-          src="/images/armored.png" 
-          alt="Armored Titan" 
-          fill 
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background/90" />
-      </motion.div>
+    <section id="about" className="relative w-full min-h-screen py-32 md:py-40 overflow-hidden">
+      {/* Ghost number */}
+      <span className="section-num left-[-2vw] top-[10%]">02</span>
 
-      <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+      <div className="container mx-auto px-8 md:px-16 relative z-10">
+        {/* Top label */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mb-4"
+          transition={{ duration: 0.6 }}
+          className="flex items-center gap-4 mb-16"
         >
-          <span className="font-mono text-sm tracking-widest text-primary uppercase">About Me</span>
-          <h2 className="font-heading text-3xl md:text-5xl font-bold uppercase mt-1">
-            The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Founder</span>
-          </h2>
+          <div className="h-px w-12 bg-[var(--crystal)]" />
+          <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-[var(--crystal)]">
+            About
+          </span>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center">
-          {/* Text Content */}
-          <div className="space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed">
-            <p>
-              I am a <strong className="text-foreground">Frontend Developer</strong> passionate about creating interactive, accessible, and high-performance web applications. My expertise lies in translating complex designs into seamless digital realities. I believe that exceptional products are born from continuous learning and meticulous attention to detail.
-            </p>
-            
-            <div className="grid grid-cols-2 gap-4 pt-4">
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="p-6 glass-card rounded-lg relative overflow-hidden group"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="font-heading text-3xl font-bold text-foreground mb-1">
-                  <Counter from={0} to={1} />+
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-16 lg:gap-24 items-start">
+          {/* Text column */}
+          <div>
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="font-heading font-black text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.0] tracking-tight text-white mb-10"
+            >
+              I engineer interfaces<br />
+              <span className="text-prism">that breathe.</span>
+            </motion.h2>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              className="space-y-5 font-sans text-base leading-relaxed text-[var(--muted-foreground)] max-w-xl"
+            >
+              <p>
+                As a <strong className="text-white">Frontend Engineer</strong>, I obsess over the gap between what's designed and what's built — and I close it completely. Every component is deliberate, every animation purposeful.
+              </p>
+              <p>
+                My stack is sharp: Next.js 16, React 19, TypeScript strict mode, Three.js for 3D, and Framer Motion for fluid animation systems. I think in design systems and ship production-grade code.
+              </p>
+            </motion.div>
+
+            {/* Tech stack list */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="mt-10 border-t border-white/5"
+            >
+              {facts.map((f, i) => (
+                <div
+                  key={f.label}
+                  className="flex items-center justify-between py-4 border-b border-white/5 group"
+                >
+                  <div className="flex items-center gap-4">
+                    <span className="font-mono text-[10px] text-[var(--muted-foreground)] w-6">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-heading font-bold text-white group-hover:text-[var(--crystal)] transition-colors">{f.label}</span>
+                  </div>
+                  <span className="font-mono text-[11px] text-[var(--muted-foreground)]">{f.detail}</span>
                 </div>
-                <div className="font-mono text-xs text-primary uppercase tracking-wider">Years Experience</div>
-              </motion.div>
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="p-6 glass-card rounded-lg relative overflow-hidden group border border-destructive/20 hover:border-destructive"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-destructive/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="font-heading text-3xl font-bold text-foreground mb-1">
-                  <Counter from={0} to={10} />+
-                </div>
-                <div className="font-mono text-xs text-destructive uppercase tracking-wider">Projects Completed</div>
-              </motion.div>
-            </div>
+              ))}
+            </motion.div>
+
+            <motion.a
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5 }}
+              href="#contact"
+              className="inline-flex items-center gap-2 mt-10 font-mono text-xs tracking-widest uppercase text-[var(--crystal)] hover:text-white transition-colors group"
+            >
+              Start a project
+              <ArrowUpRight className="w-4 h-4 group-hover:rotate-45 transition-transform duration-300" />
+            </motion.a>
           </div>
 
-          {/* 3D Workspace */}
-          <div className="relative w-full h-[250px] lg:h-[350px] glass rounded-2xl overflow-hidden glow-border">
-            <View className="w-full h-full">
-              <Workspace3DScene />
-            </View>
+          {/* Stats column */}
+          <div className="space-y-4">
+            {[
+              { val: 2,  suffix: "+", label: "Years of experience" },
+              { val: 10, suffix: "+", label: "Projects shipped" },
+              { val: 3,  suffix: "k+", label: "GitHub commits" },
+            ].map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: i * 0.15 }}
+                className="crystal-card p-8"
+              >
+                <div className="font-heading font-black text-5xl text-white mb-2">
+                  <Counter to={s.val} />
+                  <span style={{ color: "var(--crystal)" }}>{s.suffix}</span>
+                </div>
+                <div className="font-mono text-[11px] uppercase tracking-widest text-[var(--muted-foreground)]">
+                  {s.label}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>

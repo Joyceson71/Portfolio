@@ -1,77 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const cursorDot  = useRef<HTMLDivElement>(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springX = useSpring(mouseX, { stiffness: 200, damping: 30 });
+  const springY = useSpring(mouseY, { stiffness: 200, damping: 30 });
 
   useEffect(() => {
-    const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
-    };
-
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (
-        target.tagName.toLowerCase() === "a" ||
-        target.tagName.toLowerCase() === "button" ||
-        target.closest("a") ||
-        target.closest("button") ||
-        target.classList.contains("interactive")
-      ) {
-        setIsHovering(true);
-      } else {
-        setIsHovering(false);
+    const move = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+      if (cursorDot.current) {
+        cursorDot.current.style.left = `${e.clientX}px`;
+        cursorDot.current.style.top  = `${e.clientY}px`;
       }
     };
-
-    const handleMouseLeave = () => {
-      setIsVisible(false);
-    };
-
-    window.addEventListener("mousemove", updateMousePosition);
-    window.addEventListener("mouseover", handleMouseOver);
-    document.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      window.removeEventListener("mousemove", updateMousePosition);
-      window.removeEventListener("mouseover", handleMouseOver);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, [isVisible]);
-
-  // Don't render cursor on mobile/touch devices
-  if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
-    return null;
-  }
+    window.addEventListener("mousemove", move);
+    return () => window.removeEventListener("mousemove", move);
+  }, [mouseX, mouseY]);
 
   return (
     <>
-      {/* Inner Dot */}
+      <div ref={cursorDot} className="cursor-dot" />
       <motion.div
-        className="fixed top-0 left-0 w-3 h-3 bg-primary rounded-full pointer-events-none z-[10000] mix-blend-screen shadow-[0_0_10px_var(--primary)]"
-        animate={{
-          x: mousePosition.x - 6,
-          y: mousePosition.y - 6,
-          scale: isHovering ? 1.5 : 1,
-          opacity: isVisible ? 1 : 0,
-        }}
-        transition={{ type: "spring", mass: 0.1, stiffness: 800, damping: 30 }}
-      />
-      {/* Outer Ring */}
-      <motion.div
-        className="fixed top-0 left-0 w-8 h-8 border border-primary/50 rounded-full pointer-events-none z-[9999]"
-        animate={{
-          x: mousePosition.x - 16,
-          y: mousePosition.y - 16,
-          scale: isHovering ? 1.8 : 1,
-          opacity: isVisible ? (isHovering ? 0 : 0.8) : 0,
-        }}
-        transition={{ type: "spring", mass: 0.2, stiffness: 400, damping: 28 }}
+        className="cursor-ring"
+        style={{ left: springX, top: springY }}
       />
     </>
   );

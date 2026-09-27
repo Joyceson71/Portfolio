@@ -1,217 +1,176 @@
 "use client";
 
-import { useRef, useState } from "react";
-import Image from "next/image";
-import { View, Float, Icosahedron, TorusKnot, Sphere, Box } from "@react-three/drei";
-import { motion } from "framer-motion";
-import { Code2, Monitor, Paintbrush, Database } from "lucide-react";
+import { useRef, useEffect, useState } from "react";
+import { motion, useInView } from "framer-motion";
 
-import { useFrame } from "@react-three/fiber";
-import * as THREE from "three";
+const skills = [
+  {
+    category: "Frontend",
+    items: [
+      { name: "React / Next.js",  level: 95, color: "#00d4ff" },
+      { name: "TypeScript",       level: 90, color: "#00d4ff" },
+      { name: "Tailwind CSS",     level: 93, color: "#00d4ff" },
+    ],
+  },
+  {
+    category: "3D & Motion",
+    items: [
+      { name: "Three.js / R3F",   level: 80, color: "#ff2d78" },
+      { name: "Framer Motion",    level: 88, color: "#ff2d78" },
+      { name: "GSAP",             level: 75, color: "#ff2d78" },
+    ],
+  },
+  {
+    category: "Backend",
+    items: [
+      { name: "Node.js / Express",level: 82, color: "#b400ff" },
+      { name: "PostgreSQL",       level: 78, color: "#b400ff" },
+      { name: "Prisma",           level: 80, color: "#b400ff" },
+    ],
+  },
+  {
+    category: "Tools",
+    items: [
+      { name: "Git / GitHub",     level: 92, color: "#39ff14" },
+      { name: "Docker",           level: 65, color: "#39ff14" },
+      { name: "Figma",            level: 85, color: "#39ff14" },
+    ],
+  },
+];
 
-type SkillModelProps = {
-  hovered: boolean;
-  color: string;
-  type: "cube" | "sphere" | "torus" | "icosahedron";
-};
+function Bar({ level, color }: { level: number; color: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [w, setW] = useState(0);
+  const inView = useInView(ref, { once: true });
 
-function Skill3DModel({ hovered, color, type }: SkillModelProps) {
-  const meshRef = useRef<any>(null);
-  const groupRef = useRef<THREE.Group>(null);
-  const targetScale = hovered ? 1.2 : 1;
-
-  useFrame((state, delta) => {
-    if (groupRef.current) {
-      groupRef.current.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 8 * delta);
-    }
-  });
-
-  const material = (
-    <meshStandardMaterial 
-      color={color} 
-      emissive={color}
-      emissiveIntensity={hovered ? 0.8 : 0.2}
-      metalness={0.8}
-      roughness={0.2}
-      wireframe={hovered}
-    />
-  );
+  useEffect(() => {
+    if (!inView) return;
+    let start: number | null = null;
+    const step = (ts: number) => {
+      if (!start) start = ts;
+      const p = Math.min((ts - start) / 1200, 1);
+      setW((1 - Math.pow(1 - p, 3)) * level);
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [inView, level]);
 
   return (
-    <>
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[2, 5, 2]} intensity={1} />
-      <Float speed={hovered ? 4 : 2} rotationIntensity={hovered ? 2 : 1} floatIntensity={1}>
-        <group ref={groupRef}>
-          {type === "cube" && (
-            <Box ref={meshRef} args={[1.5, 1.5, 1.5]}>
-              {material}
-            </Box>
-          )}
-          {type === "sphere" && (
-            <Sphere ref={meshRef} args={[1, 32, 32]}>
-              {material}
-            </Sphere>
-          )}
-          {type === "torus" && (
-            <TorusKnot ref={meshRef} args={[0.7, 0.2, 100, 16]}>
-              {material}
-            </TorusKnot>
-          )}
-          {type === "icosahedron" && (
-            <Icosahedron ref={meshRef} args={[1, 0]}>
-              {material}
-            </Icosahedron>
-          )}
-        </group>
-      </Float>
-    </>
+    <div ref={ref} className="w-full h-px bg-white/5 relative">
+      <div
+        className="absolute top-0 left-0 h-full transition-none"
+        style={{
+          width: `${w}%`,
+          background: `linear-gradient(90deg, ${color}88, ${color})`,
+          boxShadow: `0 0 8px ${color}80`,
+        }}
+      />
+      {/* Animated tip dot */}
+      <div
+        className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full transition-none"
+        style={{
+          left: `${w}%`,
+          transform: `translateX(-50%) translateY(-50%)`,
+          background: color,
+          boxShadow: `0 0 10px ${color}`,
+          opacity: inView ? 1 : 0,
+        }}
+      />
+    </div>
   );
 }
 
-const skillsData = [
-  {
-    title: "React & Next.js",
-    icon: Monitor,
-    color: "#ff3300",
-    type: "torus" as const,
-    tags: ["Hooks", "Redux", "Context", "SSR", "App Router"],
-    proficiency: 95,
-  },
-  {
-    title: "JavaScript / TS",
-    icon: Code2,
-    color: "#990000",
-    type: "icosahedron" as const,
-    tags: ["ES6+", "TypeScript", "DOM", "Async"],
-    proficiency: 90,
-  },
-  {
-    title: "CSS & Animations",
-    icon: Paintbrush,
-    color: "#ffaa00",
-    type: "sphere" as const,
-    tags: ["GSAP", "Tailwind", "Framer Motion", "Three.js"],
-    proficiency: 92,
-  },
-  {
-    title: "Backend & DBs",
-    icon: Database,
-    color: "#cc2200",
-    type: "cube" as const,
-    tags: ["Node.js", "Express", "PostgreSQL", "MongoDB"],
-    proficiency: 85,
-  }
-];
-
 export function Skills() {
   return (
-    <section id="skills" className="relative w-full min-h-screen py-32 overflow-x-hidden bg-background">
-      {/* Levi Background Art */}
-      <motion.div 
-        className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"
-        animate={{ 
-          scale: [1, 1.03, 1],
-          y: [0, -10, 0]
-        }}
-        transition={{ 
-          duration: 12, 
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      >
-        <Image 
-          src="/images/levi.png" 
-          alt="Soldier Aesthetic" 
-          fill 
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background/90" />
-      </motion.div>
+    <section id="skills" className="relative w-full min-h-screen py-32 md:py-40 overflow-hidden">
+      {/* Ghost number */}
+      <span className="section-num right-[-2vw] top-[10%]">03</span>
 
-      <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <div className="text-center mb-24">
-          <span className="font-mono text-sm tracking-widest text-primary uppercase">Technical Arsenal</span>
-          <h2 className="font-heading text-4xl md:text-6xl font-bold uppercase mt-2">
-            Core <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Proficiencies</span>
-          </h2>
+      <div className="container mx-auto px-8 md:px-16 relative z-10">
+        {/* Label */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex items-center gap-4 mb-16"
+        >
+          <div className="h-px w-12 bg-[var(--prism)]" style={{ background: "var(--prism)" }} />
+          <span className="font-mono text-[11px] tracking-[0.25em] uppercase" style={{ color: "var(--prism)" }}>
+            Technical Skills
+          </span>
+        </motion.div>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="font-heading font-black text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.0] tracking-tight text-white mb-20"
+        >
+          Precision<br />
+          <span className="text-prism">toolset.</span>
+        </motion.h2>
+
+        {/* Skills grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-14">
+          {skills.map((group, gi) => (
+            <motion.div
+              key={group.category}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: gi * 0.1 }}
+            >
+              <div className="flex items-center gap-4 mb-8">
+                <span className="font-mono text-[10px] tracking-widest uppercase text-[var(--muted-foreground)]">
+                  {String(gi + 1).padStart(2, "0")}
+                </span>
+                <h3 className="font-heading font-bold text-white text-lg">{group.category}</h3>
+              </div>
+
+              <div className="space-y-6">
+                {group.items.map((item, ii) => (
+                  <motion.div
+                    key={item.name}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: gi * 0.1 + ii * 0.08 }}
+                  >
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="font-sans font-medium text-sm text-white/80">{item.name}</span>
+                      <span className="font-mono text-[11px]" style={{ color: item.color }}>
+                        {item.level}%
+                      </span>
+                    </div>
+                    <Bar level={item.level} color={item.color} />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {skillsData.map((skill, index) => {
-            const [hovered, setHovered] = useState(false);
-            const Icon = skill.icon;
-
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.8, delay: index * 0.15, type: "spring", stiffness: 100 }}
-                onMouseEnter={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
-                className="glass-card p-8 rounded-2xl relative overflow-hidden group border border-white/5 hover:border-white/20 hover:shadow-[0_0_30px_rgba(255,255,255,0.05)] transition-all duration-500 flex flex-col h-full"
-              >
-                {/* Background Glow */}
-                <div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-700 pointer-events-none"
-                  style={{ background: `radial-gradient(circle at center, ${skill.color}, transparent 70%)` }}
-                />
-
-                <div className="flex items-center gap-4 mb-6 relative z-10">
-                  <div 
-                    className="w-12 h-12 flex items-center justify-center rounded-xl bg-background border border-white/10 transition-colors duration-300"
-                    style={{ borderColor: hovered ? skill.color : undefined }}
-                  >
-                    <Icon className="w-6 h-6 text-foreground" style={{ color: hovered ? skill.color : undefined }} />
-                  </div>
-                  <h3 className="font-heading text-2xl font-bold text-foreground">{skill.title}</h3>
-                </div>
-
-                {/* 3D View integration inside the card */}
-                <div className="w-full h-48 mb-6 relative z-10 rounded-xl overflow-hidden bg-black/20 border border-white/5">
-                  <View className="w-full h-full">
-                    <Skill3DModel hovered={hovered} color={skill.color} type={skill.type} />
-                  </View>
-                </div>
-
-                <div className="mt-auto relative z-10">
-                  <div className="flex justify-between items-center mb-2 font-mono text-xs uppercase tracking-wider text-muted-foreground">
-                    <span>Proficiency</span>
-                    <span style={{ color: hovered ? skill.color : undefined }}>{skill.proficiency}%</span>
-                  </div>
-                  <div className="w-full h-1.5 bg-black/50 rounded-full mb-6 relative">
-                    <motion.div 
-                      className="h-full rounded-full relative"
-                      style={{ backgroundColor: skill.color }}
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${skill.proficiency}%` }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1.5, ease: "easeOut", delay: 0.4 + index * 0.15 }}
-                    >
-                      <div 
-                        className="absolute right-0 top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        style={{ boxShadow: `0 0 15px 3px ${skill.color}` }}
-                      />
-                    </motion.div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {skill.tags.map((tag, i) => (
-                      <span 
-                        key={i} 
-                        className="font-mono text-xs px-3 py-1 bg-white/5 border border-white/10 rounded-full text-muted-foreground transition-colors"
-                        style={{ borderColor: hovered ? `${skill.color}40` : undefined, color: hovered ? '#fff' : undefined }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
+        {/* Horizontal marquee of tech */}
+        <div className="mt-24 pt-12 border-t border-white/5 overflow-hidden">
+          <motion.div
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="flex gap-12 whitespace-nowrap"
+          >
+            {[
+              "React", "Next.js", "TypeScript", "Three.js", "Framer Motion",
+              "Tailwind", "Node.js", "PostgreSQL", "Prisma", "GSAP", "Docker",
+              "React", "Next.js", "TypeScript", "Three.js", "Framer Motion",
+              "Tailwind", "Node.js", "PostgreSQL", "Prisma", "GSAP", "Docker",
+            ].map((t, i) => (
+              <span key={i} className="font-heading font-black text-2xl uppercase"
+                style={{ color: i % 3 === 0 ? "rgba(0,212,255,0.15)" : i % 3 === 1 ? "rgba(255,45,120,0.15)" : "rgba(180,0,255,0.15)" }}>
+                {t}
+              </span>
+            ))}
+          </motion.div>
         </div>
       </div>
     </section>

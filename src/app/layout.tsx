@@ -1,32 +1,33 @@
 import type { Metadata } from "next";
-import { Rajdhani, Inter, Share_Tech_Mono } from "next/font/google";
+import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll";
 import { SceneProvider } from "@/components/3d/scene";
 import { Navbar } from "@/components/ui/navbar";
-import { AudioToggle } from "@/components/ui/audio-toggle";
+import { CustomCursor } from "@/components/ui/custom-cursor";
 
-const rajdhani = Rajdhani({
+const syne = Syne({
   variable: "--font-heading",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const inter = Inter({
+const dmSans = DM_Sans({
   variable: "--font-sans",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
 });
 
-const shareTechMono = Share_Tech_Mono({
+const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
-  title: "Joyceson · Premium 3D Interactive Portfolio",
-  description: "Futuristic interactive portfolio showcasing full-stack development and 3D experiences.",
+  title: "Joyceson Danielraj — Frontend Engineer",
+  description:
+    "Portfolio of Joyceson Danielraj. Building high-performance, visually-rich web experiences at the edge of design and engineering.",
 };
 
 export default function RootLayout({
@@ -37,15 +38,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} ${rajdhani.variable} ${shareTechMono.variable} antialiased bg-background text-foreground min-h-screen relative custom-cursor-active`}
+        className={`${dmSans.variable} ${syne.variable} ${jetbrainsMono.variable} antialiased min-h-screen bg-background text-foreground`}
       >
         <SmoothScrollProvider>
+          <CustomCursor />
           <Navbar />
-          <AudioToggle />
-          <div className="relative z-10 w-full h-full flex flex-col">
+          <div className="relative z-10 w-full flex flex-col">
             {children}
           </div>
-          {/* Global R3F Canvas */}
           <SceneProvider />
         </SmoothScrollProvider>
       </body>

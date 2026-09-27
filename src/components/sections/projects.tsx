@@ -1,133 +1,136 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useState } from "react";
+import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import Image from "next/image";
 
-const projectsData = [
+const projects = [
   {
     id: 1,
-    title: "Kings LMS (Smart Attendance)",
+    idx: "01",
+    title: "Kings LMS",
     category: "web",
-    desc: "A smart attendance project and digital learning platform integrating virtual classrooms, assignment tracking, and student analytics.",
+    desc: "A digital learning platform with virtual classrooms, smart attendance, assignment tracking, and student analytics dashboard.",
     tech: ["Next.js", "TypeScript", "PostgreSQL", "Prisma"],
     image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=600&auto=format&fit=crop",
+    color: "#00d4ff",
     demo: "https://kings-lms.vercel.app/",
-    github: "https://github.com/Joyceson71/kings-lms"
+    github: "https://github.com/Joyceson71/kings-lms",
   },
   {
     id: 2,
+    idx: "02",
     title: "Quiz Arena",
     category: "web",
-    desc: "A full-stack, highly interactive quiz application with real-time scoring, leaderboards, and comprehensive admin dashboard.",
+    desc: "Real-time quiz platform with live scoring, global leaderboards, and a full admin management dashboard.",
     tech: ["React", "Node.js", "MongoDB", "Tailwind"],
     image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?q=80&w=600&auto=format&fit=crop",
+    color: "#ff2d78",
     demo: "https://quizarena71.vercel.app/",
-    github: "https://github.com/Joyceson71/Quiz-app"
+    github: "https://github.com/Joyceson71/Quiz-app",
   },
   {
     id: 3,
+    idx: "03",
     title: "SmartBiz",
-    category: "web",
-    desc: "A modern business management platform designed for efficiency and growth with a sleek, responsive user interface.",
+    category: "ui",
+    desc: "Modern business management platform with analytics, invoicing, and a sleek responsive dashboard interface.",
     tech: ["React", "Next.js", "Tailwind", "TypeScript"],
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=600&auto=format&fit=crop",
+    color: "#b400ff",
     demo: "https://smart-biz-inky.vercel.app/",
-    github: "https://github.com/Joyceson71/smart_biz"
-  }
+    github: "https://github.com/Joyceson71/smart_biz",
+  },
 ];
 
-function ProjectCard({ project, index }: { project: typeof projectsData[0], index: number }) {
+function ProjectCard({ p, index }: { p: typeof projects[0]; index: number }) {
+  const mouseX = useMotionValue(200);
+  const mouseY = useMotionValue(200);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const rX = useTransform(useSpring(y, { stiffness: 300, damping: 30 }), [-0.5, 0.5], ["8deg", "-8deg"]);
+  const rY = useTransform(useSpring(x, { stiffness: 300, damping: 30 }), [-0.5, 0.5], ["-8deg", "8deg"]);
 
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["17.5deg", "-17.5deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-17.5deg", "17.5deg"]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    mouseX.set(e.clientX - r.left);
+    mouseY.set(e.clientY - r.top);
+    x.set((e.clientX - r.left) / r.width - 0.5);
+    y.set((e.clientY - r.top) / r.height - 0.5);
   };
+  const onLeave = () => { x.set(0); y.set(0); };
 
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
+  const spotlight = useMotionTemplate`radial-gradient(500px circle at ${mouseX}px ${mouseY}px, ${p.color}18, transparent 70%)`;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50, scale: 0.95 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.8, delay: index * 0.15, type: "spring", stiffness: 100 }}
-      style={{ perspective: 2000 }}
-      className="h-full"
+      initial={{ opacity: 0, y: 60 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.8, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
+      style={{ perspective: 1600 }}
     >
       <motion.div
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="glass-card relative h-full flex flex-col rounded-2xl overflow-hidden group cursor-pointer border border-white/5"
+        onMouseMove={onMove}
+        onMouseLeave={onLeave}
+        style={{ rotateX: rX, rotateY: rY, transformStyle: "preserve-3d" }}
+        className="crystal-card relative overflow-hidden group cursor-pointer"
       >
-        {/* Animated Glow Effect */}
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/20 via-transparent to-destructive/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        {/* Spotlight */}
+        <motion.div className="absolute inset-0 z-0 pointer-events-none" style={{ background: spotlight }} />
         
-        {/* Holographic scanning line */}
-        <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_15px_var(--primary)] z-20 opacity-0 group-hover:opacity-100 -translate-y-full group-hover:animate-scan" />
+        {/* Index badge */}
+        <div className="absolute top-5 left-5 z-20 font-mono text-[10px] tracking-widest uppercase opacity-40" style={{ color: p.color }}>
+          {p.idx}
+        </div>
 
-        {/* Image Container with 3D translation */}
-        <div 
-          className="relative w-full h-64 overflow-hidden z-10 p-4 pb-0"
-          style={{ transform: "translateZ(30px)" }}
-        >
-          <div className="relative w-full h-full rounded-xl overflow-hidden grayscale group-hover:grayscale-0 transition-all duration-700 border border-white/10">
-            <Image 
-              src={project.image}
-              alt={project.title}
-              fill
-              className="object-cover scale-105 group-hover:scale-100 transition-transform duration-700"
-            />
-          </div>
+        {/* Image */}
+        <div className="relative w-full h-52 overflow-hidden" style={{ transform: "translateZ(20px)" }}>
+          <Image
+            src={p.image}
+            alt={p.title}
+            fill
+            className="object-cover scale-105 group-hover:scale-100 transition-transform duration-700 grayscale group-hover:grayscale-0"
+          />
+          {/* Color wash */}
+          <div
+            className="absolute inset-0 opacity-20 group-hover:opacity-40 transition-opacity duration-500"
+            style={{ background: `linear-gradient(135deg, ${p.color}40, transparent)` }}
+          />
+          {/* Top border glow */}
+          <div className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{ background: `linear-gradient(90deg, transparent, ${p.color}, transparent)` }}
+          />
         </div>
 
         {/* Content */}
-        <div 
-          className="p-6 flex flex-col flex-grow z-10"
-          style={{ transform: "translateZ(50px)" }}
-        >
-          <h3 className="font-heading text-2xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-            {project.title}
+        <div className="p-7 relative z-10" style={{ transform: "translateZ(30px)" }}>
+          <h3 className="font-heading font-black text-xl text-white mb-3 group-hover:text-[var(--crystal)] transition-colors duration-300">
+            {p.title}
           </h3>
-          <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-grow">
-            {project.desc}
+          <p className="font-sans text-sm leading-relaxed text-[var(--muted-foreground)] mb-6">
+            {p.desc}
           </p>
 
-          <div className="flex flex-wrap gap-2 mb-6">
-            {project.tech.map((t, i) => (
-              <span key={i} className="font-mono text-[10px] uppercase tracking-wider px-2 py-1 bg-white/5 border border-white/10 rounded-sm text-primary">
+          <div className="flex flex-wrap gap-2 mb-7">
+            {p.tech.map((t) => (
+              <span key={t} className="font-mono text-[10px] tracking-wider uppercase px-3 py-1 border border-white/8 text-[var(--muted-foreground)]"
+                style={{ borderColor: `${p.color}25`, color: p.color }}>
                 {t}
               </span>
             ))}
           </div>
 
-          <div className="flex gap-4 mt-auto">
-            <a href={project.demo} className="flex items-center gap-2 font-heading uppercase text-xs tracking-widest text-foreground hover:text-primary transition-colors">
-              <ExternalLink className="w-4 h-4" /> Live
+          <div className="flex gap-5 pt-4 border-t border-white/5">
+            <a href={p.demo} target="_blank" rel="noreferrer"
+              className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-widest text-white hover:text-[var(--crystal)] transition-colors group/link">
+              <ExternalLink className="w-3.5 h-3.5" /> Live
             </a>
-            <a href={project.github} className="flex items-center gap-2 font-heading uppercase text-xs tracking-widest text-foreground hover:text-primary transition-colors">
-              <FaGithub className="w-4 h-4" /> Source
+            <a href={p.github} target="_blank" rel="noreferrer"
+              className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-widest text-[var(--muted-foreground)] hover:text-white transition-colors">
+              <FaGithub className="w-3.5 h-3.5" /> Source
             </a>
           </div>
         </div>
@@ -137,73 +140,65 @@ function ProjectCard({ project, index }: { project: typeof projectsData[0], inde
 }
 
 export function Projects() {
-  const [filter, setFilter] = useState("all");
-  const containerRef = useRef(null);
-
-  const filteredProjects = projectsData.filter((p) => 
-    filter === "all" ? true : p.category.includes(filter)
-  );
+  const [filter, setFilter] = useState<"all"|"web"|"ui">("all");
+  const filtered = projects.filter(p => filter === "all" || p.category === filter);
 
   return (
-    <section id="projects" ref={containerRef} className="relative w-full min-h-screen py-32 overflow-x-hidden bg-background">
-      {/* Mikasa Background Art */}
-      <motion.div 
-        className="absolute inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen"
-        animate={{ 
-          scale: [1, 1.03, 1],
-          x: [0, 10, 0]
-        }}
-        transition={{ 
-          duration: 15, 
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      >
-        <Image 
-          src="/images/mikasa.png" 
-          alt="Soldier Aesthetic" 
-          fill 
-          className="object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background/90" />
-      </motion.div>
+    <section id="projects" className="relative w-full min-h-screen py-32 md:py-40 overflow-hidden">
+      <span className="section-num left-[-2vw] bottom-[5%]">04</span>
 
-      <div className="container mx-auto px-6 md:px-12 relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
-          <div>
-            <span className="font-mono text-sm tracking-widest text-primary uppercase">Portfolio</span>
-            <h2 className="font-heading text-4xl md:text-6xl font-bold uppercase mt-2">
-              Selected <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-destructive text-glow">Works</span>
-            </h2>
-          </div>
+      <div className="container mx-auto px-8 md:px-16 relative z-10">
+        {/* Label */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className="flex items-center gap-4 mb-16"
+        >
+          <div className="h-px w-12" style={{ background: "var(--plasma)" }} />
+          <span className="font-mono text-[11px] tracking-[0.25em] uppercase" style={{ color: "var(--plasma)" }}>
+            Selected Work
+          </span>
+        </motion.div>
 
-          <div className="flex flex-wrap gap-4">
-            {["all", "web", "ui"].map((f) => (
+        {/* Header row */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-heading font-black text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.0] tracking-tight text-white"
+          >
+            Work that<br />
+            <span className="text-prism">ships.</span>
+          </motion.h2>
+
+          {/* Filter pills */}
+          <div className="flex gap-2 border border-white/5 p-1">
+            {(["all", "web", "ui"] as const).map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`relative font-heading uppercase tracking-widest text-sm px-6 py-2 transition-colors ${
-                  filter === f 
-                    ? "text-foreground" 
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
+                className="relative font-mono text-[10px] uppercase tracking-widest px-5 py-2.5 transition-all duration-200"
+                style={{ color: filter === f ? "var(--void)" : "var(--muted-foreground)" }}
               >
                 {filter === f && (
-                  <motion.div 
-                    layoutId="activeProjectFilter" 
-                    className="absolute inset-0 bg-primary/10 rounded-md border border-primary/30 glow-border" 
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  <motion.div
+                    layoutId="filterBg"
+                    className="absolute inset-0"
+                    style={{ background: "var(--crystal)" }}
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
-                <span className="relative z-10">{f === "all" ? "All Projects" : f === "web" ? "Web Apps" : "UI/UX"}</span>
+                <span className="relative z-10">{f === "all" ? "All" : f === "web" ? "Web" : "UI/UX"}</span>
               </button>
             ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredProjects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map((p, i) => (
+            <ProjectCard key={p.id} p={p} index={i} />
           ))}
         </div>
       </div>
