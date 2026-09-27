@@ -7,33 +7,33 @@ const skills = [
   {
     category: "Frontend",
     items: [
-      { name: "React / Next.js",  level: 95, color: "#00d4ff" },
-      { name: "TypeScript",       level: 90, color: "#00d4ff" },
-      { name: "Tailwind CSS",     level: 93, color: "#00d4ff" },
+      { name: "React / Next.js",  level: 95, color: "#818cf8" },
+      { name: "TypeScript",       level: 90, color: "#818cf8" },
+      { name: "Tailwind CSS",     level: 93, color: "#818cf8" },
     ],
   },
   {
     category: "3D & Motion",
     items: [
-      { name: "Three.js / R3F",   level: 80, color: "#ff2d78" },
-      { name: "Framer Motion",    level: 88, color: "#ff2d78" },
-      { name: "GSAP",             level: 75, color: "#ff2d78" },
+      { name: "Three.js / R3F",   level: 80, color: "#fbbf24" },
+      { name: "Framer Motion",    level: 88, color: "#fbbf24" },
+      { name: "GSAP",             level: 75, color: "#fbbf24" },
     ],
   },
   {
     category: "Backend",
     items: [
-      { name: "Node.js / Express",level: 82, color: "#b400ff" },
-      { name: "PostgreSQL",       level: 78, color: "#b400ff" },
-      { name: "Prisma",           level: 80, color: "#b400ff" },
+      { name: "Node.js / Express",level: 82, color: "#fb7185" },
+      { name: "PostgreSQL",       level: 78, color: "#fb7185" },
+      { name: "Prisma",           level: 80, color: "#fb7185" },
     ],
   },
   {
     category: "Tools",
     items: [
-      { name: "Git / GitHub",     level: 92, color: "#39ff14" },
-      { name: "Docker",           level: 65, color: "#39ff14" },
-      { name: "Figma",            level: 85, color: "#39ff14" },
+      { name: "Git / GitHub",     level: 92, color: "#22d3ee" },
+      { name: "Docker",           level: 65, color: "#22d3ee" },
+      { name: "Figma",            level: 85, color: "#22d3ee" },
     ],
   },
 ];
@@ -56,13 +56,13 @@ function Bar({ level, color }: { level: number; color: string }) {
   }, [inView, level]);
 
   return (
-    <div ref={ref} className="w-full h-px bg-white/5 relative">
+    <div ref={ref} className="w-full h-px bg-border relative">
       <div
         className="absolute top-0 left-0 h-full transition-none"
         style={{
           width: `${w}%`,
-          background: `linear-gradient(90deg, ${color}88, ${color})`,
-          boxShadow: `0 0 8px ${color}80`,
+          background: `linear-gradient(90deg, ${color}40, ${color})`,
+          boxShadow: `0 0 8px ${color}60`,
         }}
       />
       {/* Animated tip dot */}
@@ -84,7 +84,7 @@ export function Skills() {
   return (
     <section id="skills" className="relative w-full min-h-screen py-32 md:py-40 overflow-hidden">
       {/* Ghost number */}
-      <span className="section-num right-[-2vw] top-[10%]">03</span>
+      <span className="ax-num right-[-2vw] top-[10%]">03</span>
 
       <div className="container mx-auto px-8 md:px-16 relative z-10">
         {/* Label */}
@@ -93,12 +93,9 @@ export function Skills() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="flex items-center gap-4 mb-16"
+          className="ax-label mb-16"
         >
-          <div className="h-px w-12 bg-[var(--prism)]" style={{ background: "var(--prism)" }} />
-          <span className="font-mono text-[11px] tracking-[0.25em] uppercase" style={{ color: "var(--prism)" }}>
-            Technical Skills
-          </span>
+          Technical Skills
         </motion.div>
 
         <motion.h2
@@ -106,10 +103,10 @@ export function Skills() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="font-heading font-black text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.0] tracking-tight text-white mb-20"
+          className="font-heading font-black text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.0] tracking-tight text-foreground mb-20"
         >
           Precision<br />
-          <span className="text-prism">toolset.</span>
+          <span className="text-brand-2">toolset.</span>
         </motion.h2>
 
         {/* Skills grid */}
@@ -123,10 +120,10 @@ export function Skills() {
               transition={{ duration: 0.7, delay: gi * 0.1 }}
             >
               <div className="flex items-center gap-4 mb-8">
-                <span className="font-mono text-[10px] tracking-widest uppercase text-[var(--muted-foreground)]">
+                <span className="font-mono text-[10px] tracking-widest uppercase text-muted-foreground">
                   {String(gi + 1).padStart(2, "0")}
                 </span>
-                <h3 className="font-heading font-bold text-white text-lg">{group.category}</h3>
+                <h3 className="font-heading font-bold text-foreground text-lg">{group.category}</h3>
               </div>
 
               <div className="space-y-6">
@@ -139,7 +136,7 @@ export function Skills() {
                     transition={{ delay: gi * 0.1 + ii * 0.08 }}
                   >
                     <div className="flex justify-between items-center mb-3">
-                      <span className="font-sans font-medium text-sm text-white/80">{item.name}</span>
+                      <span className="font-sans font-medium text-sm text-foreground/80">{item.name}</span>
                       <span className="font-mono text-[11px]" style={{ color: item.color }}>
                         {item.level}%
                       </span>
@@ -153,7 +150,7 @@ export function Skills() {
         </div>
 
         {/* Horizontal marquee of tech */}
-        <div className="mt-24 pt-12 border-t border-white/5 overflow-hidden">
+        <div className="mt-24 pt-12 border-t border-border overflow-hidden">
           <motion.div
             animate={{ x: ["0%", "-50%"] }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -166,7 +163,7 @@ export function Skills() {
               "Tailwind", "Node.js", "PostgreSQL", "Prisma", "GSAP", "Docker",
             ].map((t, i) => (
               <span key={i} className="font-heading font-black text-2xl uppercase"
-                style={{ color: i % 3 === 0 ? "rgba(0,212,255,0.15)" : i % 3 === 1 ? "rgba(255,45,120,0.15)" : "rgba(180,0,255,0.15)" }}>
+                style={{ color: i % 3 === 0 ? "rgba(129,140,248,0.2)" : i % 3 === 1 ? "rgba(251,191,36,0.2)" : "rgba(251,113,133,0.2)" }}>
                 {t}
               </span>
             ))}

@@ -38,15 +38,15 @@ export function Navbar() {
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
         style={{
-          background: scrolled ? "rgba(5,5,8,0.8)" : "transparent",
+          background: scrolled ? "rgba(8, 8, 15, 0.85)" : "transparent",
           backdropFilter: scrolled ? "blur(20px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.05)" : "1px solid transparent",
+          borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
         }}
       >
         <div className="flex items-center justify-between px-8 md:px-16 h-[70px]">
           {/* Logo */}
-          <Link href="/" className="font-heading font-black text-xl tracking-tight text-white hover:text-[var(--crystal)] transition-colors">
-            JD<span style={{ color: "var(--crystal)" }}>_</span>
+          <Link href="/" className="font-heading font-black text-xl tracking-tight text-foreground hover:text-primary transition-colors">
+            JD<span className="text-primary">_</span>
           </Link>
 
           {/* Desktop nav */}
@@ -58,14 +58,13 @@ export function Navbar() {
                   key={l.name}
                   href={l.href}
                   className="relative font-mono text-[11px] uppercase tracking-[0.2em] transition-colors duration-200"
-                  style={{ color: isActive ? "var(--crystal)" : "var(--muted-foreground)" }}
+                  style={{ color: isActive ? "var(--primary)" : "var(--muted-foreground)" }}
                 >
                   {l.name}
                   {isActive && (
                     <motion.div
                       layoutId="navActive"
-                      className="absolute -bottom-1 left-0 right-0 h-px"
-                      style={{ background: "var(--crystal)" }}
+                      className="absolute -bottom-1 left-0 right-0 h-px bg-primary"
                     />
                   )}
                 </Link>
@@ -77,12 +76,12 @@ export function Navbar() {
             <a
               href="/Joyceson-CV.pdf"
               target="_blank"
-              className="hidden md:inline-flex font-mono text-[11px] tracking-[0.2em] uppercase px-5 py-2.5 border border-white/10 text-white hover:border-[var(--crystal)] hover:text-[var(--crystal)] transition-all duration-300"
+              className="hidden md:inline-flex font-mono text-[11px] tracking-[0.2em] uppercase px-5 py-2.5 border border-border text-foreground hover:border-primary hover:text-primary transition-all duration-300"
             >
               Resume
             </a>
             <button
-              className="md:hidden text-white p-1 focus:outline-none"
+              className="md:hidden text-foreground p-1 focus:outline-none"
               onClick={() => setOpen(!open)}
               aria-label="Menu"
             >
@@ -100,7 +99,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             className="fixed inset-0 z-40 flex flex-col items-center justify-center"
-            style={{ background: "rgba(5,5,8,0.97)", backdropFilter: "blur(30px)" }}
+            style={{ background: "rgba(8, 8, 15, 0.98)", backdropFilter: "blur(30px)" }}
           >
             <nav className="flex flex-col items-center gap-8">
               {navLinks.map((l, i) => (
@@ -113,7 +112,7 @@ export function Navbar() {
                   <Link
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className="font-heading font-black text-5xl text-white hover:text-[var(--crystal)] transition-colors"
+                    className="font-heading font-black text-5xl text-foreground hover:text-primary transition-colors"
                   >
                     {l.name}
                   </Link>

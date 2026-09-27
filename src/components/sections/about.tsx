@@ -40,7 +40,7 @@ export function About() {
   return (
     <section id="about" className="relative w-full min-h-screen py-32 md:py-40 overflow-hidden">
       {/* Ghost number */}
-      <span className="section-num left-[-2vw] top-[10%]">02</span>
+      <span className="ax-num left-[-2vw] top-[10%]">02</span>
 
       <div className="container mx-auto px-8 md:px-16 relative z-10">
         {/* Top label */}
@@ -49,12 +49,9 @@ export function About() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="flex items-center gap-4 mb-16"
+          className="ax-label mb-16"
         >
-          <div className="h-px w-12 bg-[var(--crystal)]" />
-          <span className="font-mono text-[11px] tracking-[0.25em] uppercase text-[var(--crystal)]">
-            About
-          </span>
+          About
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-16 lg:gap-24 items-start">
@@ -65,10 +62,10 @@ export function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="font-heading font-black text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.0] tracking-tight text-white mb-10"
+              className="font-heading font-black text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.0] tracking-tight text-foreground mb-10"
             >
               I engineer interfaces<br />
-              <span className="text-prism">that breathe.</span>
+              <span className="text-brand">that breathe.</span>
             </motion.h2>
 
             <motion.div
@@ -76,10 +73,10 @@ export function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.15 }}
-              className="space-y-5 font-sans text-base leading-relaxed text-[var(--muted-foreground)] max-w-xl"
+              className="space-y-5 font-sans text-base leading-relaxed text-muted-foreground max-w-xl"
             >
               <p>
-                As a <strong className="text-white">Frontend Engineer</strong>, I obsess over the gap between what's designed and what's built — and I close it completely. Every component is deliberate, every animation purposeful.
+                As a <strong className="text-foreground">Frontend Engineer</strong>, I obsess over the gap between what's designed and what's built — and I close it completely. Every component is deliberate, every animation purposeful.
               </p>
               <p>
                 My stack is sharp: Next.js 16, React 19, TypeScript strict mode, Three.js for 3D, and Framer Motion for fluid animation systems. I think in design systems and ship production-grade code.
@@ -92,18 +89,18 @@ export function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="mt-10 border-t border-white/5"
+              className="mt-10 border-t border-border"
             >
               {facts.map((f, i) => (
                 <div
                   key={f.label}
-                  className="flex items-center justify-between py-4 border-b border-white/5 group"
+                  className="flex items-center justify-between py-4 border-b border-border group"
                 >
                   <div className="flex items-center gap-4">
-                    <span className="font-mono text-[10px] text-[var(--muted-foreground)] w-6">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="font-heading font-bold text-white group-hover:text-[var(--crystal)] transition-colors">{f.label}</span>
+                    <span className="font-mono text-[10px] text-muted-foreground w-6">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-heading font-bold text-foreground group-hover:text-primary transition-colors">{f.label}</span>
                   </div>
-                  <span className="font-mono text-[11px] text-[var(--muted-foreground)]">{f.detail}</span>
+                  <span className="font-mono text-[11px] text-muted-foreground">{f.detail}</span>
                 </div>
               ))}
             </motion.div>
@@ -114,7 +111,7 @@ export function About() {
               viewport={{ once: true }}
               transition={{ delay: 0.5 }}
               href="#contact"
-              className="inline-flex items-center gap-2 mt-10 font-mono text-xs tracking-widest uppercase text-[var(--crystal)] hover:text-white transition-colors group"
+              className="inline-flex items-center gap-2 mt-10 font-mono text-xs tracking-widest uppercase text-primary hover:text-foreground transition-colors group"
             >
               Start a project
               <ArrowUpRight className="w-4 h-4 group-hover:rotate-45 transition-transform duration-300" />
@@ -134,13 +131,13 @@ export function About() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: i * 0.15 }}
-                className="crystal-card p-8"
+                className="ax-card p-8 rounded-lg"
               >
-                <div className="font-heading font-black text-5xl text-white mb-2">
+                <div className="font-heading font-black text-5xl text-foreground mb-2">
                   <Counter to={s.val} />
-                  <span style={{ color: "var(--crystal)" }}>{s.suffix}</span>
+                  <span className="text-primary">{s.suffix}</span>
                 </div>
-                <div className="font-mono text-[11px] uppercase tracking-widest text-[var(--muted-foreground)]">
+                <div className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
                   {s.label}
                 </div>
               </motion.div>

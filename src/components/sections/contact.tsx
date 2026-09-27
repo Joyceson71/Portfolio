@@ -11,14 +11,13 @@ function Toast({ msg, type, onClose }: { msg: string; type: "success" | "error";
       initial={{ opacity: 0, x: 60 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 60 }}
-      className="fixed bottom-8 right-8 z-[200] flex items-center gap-3 px-5 py-3.5 border font-mono text-sm"
+      className="fixed bottom-8 right-8 z-[200] flex items-center gap-3 px-5 py-3.5 border font-mono text-sm bg-card"
       style={{
-        background: "var(--surface)",
-        borderColor: type === "success" ? "var(--crystal)" : "var(--prism)",
-        color: type === "success" ? "var(--crystal)" : "var(--prism)",
+        borderColor: type === "success" ? "var(--primary)" : "var(--destructive)",
+        color: type === "success" ? "var(--primary)" : "var(--destructive)",
         boxShadow: type === "success"
-          ? "0 0 30px rgba(0,212,255,0.2)"
-          : "0 0 30px rgba(255,45,120,0.2)",
+          ? "0 0 30px rgba(129,140,248,0.2)"
+          : "0 0 30px rgba(251,113,133,0.2)",
       }}
     >
       {type === "success" ? <CheckCircle2 className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
@@ -38,7 +37,7 @@ export function Contact() {
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const spotlight = useMotionTemplate`radial-gradient(600px circle at ${mouseX}px ${mouseY}px, rgba(0,212,255,0.06), transparent 70%)`;
+  const spotlight = useMotionTemplate`radial-gradient(600px circle at ${mouseX}px ${mouseY}px, rgba(129,140,248,0.08), transparent 70%)`;
 
   const validate = () => {
     const e: Record<string, string> = {};
@@ -79,11 +78,6 @@ export function Contact() {
     if (errors[e.target.id]) setErrors(prev => ({ ...prev, [e.target.id]: "" }));
   };
 
-  const fieldCls = (field: string) =>
-    `w-full bg-transparent border-b py-3 font-sans text-sm text-white placeholder:text-[var(--muted-foreground)] outline-none focus:border-[var(--crystal)] transition-colors duration-300 ${
-      errors[field] ? "border-[var(--prism)]" : "border-white/10"
-    }`;
-
   return (
     <>
       <AnimatePresence>
@@ -92,31 +86,28 @@ export function Contact() {
 
       <section id="contact" className="relative w-full min-h-screen flex flex-col overflow-hidden">
         {/* Ghost number */}
-        <span className="section-num right-[-2vw] bottom-[5%]">05</span>
+        <span className="ax-num right-[-2vw] bottom-[5%]">05</span>
 
         <div className="flex-grow grid grid-cols-1 lg:grid-cols-2 relative z-10">
           {/* Left — info panel */}
-          <div className="flex flex-col justify-center px-8 md:px-16 py-32 border-r border-white/5">
+          <div className="flex flex-col justify-center px-8 md:px-16 py-32 border-r border-border">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="flex items-center gap-4 mb-16"
+              className="ax-label mb-16"
             >
-              <div className="h-px w-12" style={{ background: "var(--signal)" }} />
-              <span className="font-mono text-[11px] tracking-[0.25em] uppercase" style={{ color: "var(--signal)" }}>
-                Contact
-              </span>
+              Contact
             </motion.div>
 
             <motion.h2
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="font-heading font-black text-[clamp(2.5rem,5vw,4rem)] leading-[1.0] tracking-tight text-white mb-8"
+              className="font-heading font-black text-[clamp(2.5rem,5vw,4rem)] leading-[1.0] tracking-tight text-foreground mb-8"
             >
               Let's build<br />
-              <span className="text-prism">something.</span>
+              <span className="text-brand">something.</span>
             </motion.h2>
 
             <motion.p
@@ -124,7 +115,7 @@ export function Contact() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="font-sans text-base text-[var(--muted-foreground)] max-w-sm leading-relaxed mb-16"
+              className="font-sans text-base text-muted-foreground max-w-sm leading-relaxed mb-16"
             >
               Open to freelance projects, full-time roles, and collaborations. If you have an interesting challenge, let's talk.
             </motion.p>
@@ -142,7 +133,7 @@ export function Contact() {
                   target="_blank"
                   rel="noreferrer"
                   title={label}
-                  className="flex items-center justify-center w-10 h-10 border border-white/10 text-[var(--muted-foreground)] hover:border-[var(--crystal)] hover:text-[var(--crystal)] transition-all duration-300"
+                  className="flex items-center justify-center w-10 h-10 border border-border text-muted-foreground hover:border-primary hover:text-primary transition-all duration-300"
                 >
                   <Icon className="w-4 h-4" />
                 </a>
@@ -171,7 +162,7 @@ export function Contact() {
                 { id: "email",   label: "Email",   type: "email", placeholder: "john@example.com"  },
               ].map((f) => (
                 <div key={f.id} className="space-y-1">
-                  <label htmlFor={f.id} className="font-mono text-[10px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>
+                  <label htmlFor={f.id} className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                     {f.label}
                   </label>
                   <input
@@ -180,10 +171,10 @@ export function Contact() {
                     value={form[f.id as keyof typeof form]}
                     onChange={onChange}
                     placeholder={f.placeholder}
-                    className={fieldCls(f.id)}
+                    className={`ax-input ${errors[f.id] ? "error" : ""}`}
                   />
                   {errors[f.id] && (
-                    <p className="flex items-center gap-1 font-mono text-[10px] mt-1" style={{ color: "var(--prism)" }}>
+                    <p className="flex items-center gap-1 font-mono text-[10px] mt-1 text-destructive">
                       <AlertCircle className="w-3 h-3" /> {errors[f.id]}
                     </p>
                   )}
@@ -191,7 +182,7 @@ export function Contact() {
               ))}
 
               <div className="space-y-1">
-                <label htmlFor="message" className="font-mono text-[10px] uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>
+                <label htmlFor="message" className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                   Message
                 </label>
                 <textarea
@@ -200,10 +191,10 @@ export function Contact() {
                   onChange={onChange}
                   placeholder="Tell me about your project..."
                   rows={4}
-                  className={`${fieldCls("message")} resize-none`}
+                  className={`ax-input resize-none ${errors.message ? "error" : ""}`}
                 />
                 {errors.message && (
-                  <p className="flex items-center gap-1 font-mono text-[10px] mt-1" style={{ color: "var(--prism)" }}>
+                  <p className="flex items-center gap-1 font-mono text-[10px] mt-1 text-destructive">
                     <AlertCircle className="w-3 h-3" /> {errors.message}
                   </p>
                 )}
@@ -214,19 +205,20 @@ export function Contact() {
                 disabled={submitting}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="relative w-full py-4 font-mono text-xs uppercase tracking-[0.2em] text-black font-semibold flex items-center justify-center gap-3 overflow-hidden group"
-                style={{ background: "var(--crystal)" }}
+                className="ax-btn w-full justify-center group"
               >
                 {submitting ? (
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ repeat: Infinity, duration: 0.7, ease: "linear" }}
-                    className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full"
+                    className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
                   />
                 ) : (
                   <>
-                    Send Message
-                    <Send className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                    <span className="relative z-10 flex items-center gap-2">
+                      Send Message
+                      <Send className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                    </span>
                   </>
                 )}
               </motion.button>
@@ -235,14 +227,14 @@ export function Contact() {
         </div>
 
         {/* Footer */}
-        <footer className="border-t border-white/5 py-6 px-8 md:px-16 flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
-          <span className="font-heading font-black text-lg text-white tracking-tight">
-            JD<span style={{ color: "var(--crystal)" }}>_</span>
+        <footer className="border-t border-border py-6 px-8 md:px-16 flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
+          <span className="font-heading font-black text-lg text-foreground tracking-tight">
+            JD<span className="text-primary">_</span>
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--muted-foreground)]">
+          <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
             © 2024 Joyceson Danielraj · Built with Next.js 16
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: "var(--crystal)" }}>
+          <span className="font-mono text-[10px] uppercase tracking-widest text-primary">
             Available for work
           </span>
         </footer>
