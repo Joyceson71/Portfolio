@@ -1,148 +1,107 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 
-function Counter({ to }: { to: number }) {
-  const [n, setN] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting) return;
-      obs.disconnect();
-      let start: number | null = null;
-      const step = (ts: number) => {
-        if (!start) start = ts;
-        const p = Math.min((ts - start) / 1400, 1);
-        setN(Math.floor((1 - Math.pow(1 - p, 3)) * to));
-        if (p < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    }, { threshold: 0.5 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [to]);
-  return <span ref={ref}>{n}</span>;
-}
-
-const facts = [
-  { label: "Next.js", detail: "App Router · RSC" },
-  { label: "React",   detail: "19 · Concurrent" },
-  { label: "Three.js",detail: "R3F · Drei · Shaders" },
-  { label: "TypeScript", detail: "Strict · Zod" },
-  { label: "Design",  detail: "Figma · Motion" },
+const tech = [
+  "Next.js 16", "React 19", "TypeScript", 
+  "Tailwind CSS", "Three.js", "Framer Motion", 
+  "Node.js", "PostgreSQL"
 ];
 
 export function About() {
   return (
-    <section id="about" className="relative w-full min-h-screen py-32 md:py-40 overflow-hidden">
-      {/* Ghost number */}
-      <span className="ax-num left-[-2vw] top-[10%]">02</span>
-
-      <div className="container mx-auto px-8 md:px-16 relative z-10">
-        {/* Top label */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="ax-label mb-16"
-        >
-          About
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-16 lg:gap-24 items-start">
-          {/* Text column */}
-          <div>
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
+    <section id="about" className="relative w-full py-24 md:py-32 flex justify-center">
+      <div className="container mx-auto px-6 max-w-6xl">
+        
+        <div className="flex flex-col md:flex-row gap-12 lg:gap-20">
+          
+          {/* Left Column - Text */}
+          <div className="flex-1">
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="font-heading font-black text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.0] tracking-tight text-foreground mb-10"
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="text-3xl md:text-5xl font-bold tracking-tight mb-6"
             >
-              I engineer interfaces<br />
-              <span className="text-brand">that breathe.</span>
+              Crafting <span className="text-gradient">interfaces</span><br />
+              with <span className="text-gradient-blue">purpose.</span>
             </motion.h2>
 
-            <motion.div
+            <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.15 }}
-              className="space-y-5 font-sans text-base leading-relaxed text-muted-foreground max-w-xl"
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="space-y-6 text-lg text-muted-foreground leading-relaxed max-w-xl"
             >
               <p>
-                As a <strong className="text-foreground">Frontend Engineer</strong>, I obsess over the gap between what's designed and what's built — and I close it completely. Every component is deliberate, every animation purposeful.
+                As a <strong className="text-foreground font-medium">Frontend Engineer</strong>, my focus is on bridging the gap between exceptional design and robust engineering. Every pixel is intentional, every animation serves a purpose.
               </p>
               <p>
-                My stack is sharp: Next.js 16, React 19, TypeScript strict mode, Three.js for 3D, and Framer Motion for fluid animation systems. I think in design systems and ship production-grade code.
+                I build scalable web applications using the latest web technologies, specializing in the React ecosystem. My goal is to create seamless, intuitive, and performant user experiences.
               </p>
             </motion.div>
 
-            {/* Tech stack list */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="mt-10 border-t border-border"
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-10"
             >
-              {facts.map((f, i) => (
-                <div
-                  key={f.label}
-                  className="flex items-center justify-between py-4 border-b border-border group"
-                >
-                  <div className="flex items-center gap-4">
-                    <span className="font-mono text-[10px] text-muted-foreground w-6">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="font-heading font-bold text-foreground group-hover:text-primary transition-colors">{f.label}</span>
-                  </div>
-                  <span className="font-mono text-[11px] text-muted-foreground">{f.detail}</span>
-                </div>
-              ))}
+              <Link href="#contact" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:opacity-80 transition-opacity">
+                Let's collaborate <ArrowUpRight className="w-4 h-4" />
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Right Column - Stats / Cards */}
+          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="glass-panel p-8 flex flex-col justify-between"
+            >
+              <h3 className="text-5xl font-bold mb-2">2+</h3>
+              <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Years Experience</p>
             </motion.div>
 
-            <motion.a
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5 }}
-              href="#contact"
-              className="inline-flex items-center gap-2 mt-10 font-mono text-xs tracking-widest uppercase text-primary hover:text-foreground transition-colors group"
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="glass-panel p-8 flex flex-col justify-between"
             >
-              Start a project
-              <ArrowUpRight className="w-4 h-4 group-hover:rotate-45 transition-transform duration-300" />
-            </motion.a>
-          </div>
+              <h3 className="text-5xl font-bold mb-2">10+</h3>
+              <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Projects Shipped</p>
+            </motion.div>
 
-          {/* Stats column */}
-          <div className="space-y-4">
-            {[
-              { val: 2,  suffix: "+", label: "Years of experience" },
-              { val: 10, suffix: "+", label: "Projects shipped" },
-              { val: 3,  suffix: "k+", label: "GitHub commits" },
-            ].map((s, i) => (
-              <motion.div
-                key={s.label}
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, delay: i * 0.15 }}
-                className="ax-card p-8 rounded-lg"
-              >
-                <div className="font-heading font-black text-5xl text-foreground mb-2">
-                  <Counter to={s.val} />
-                  <span className="text-primary">{s.suffix}</span>
-                </div>
-                <div className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
-                  {s.label}
-                </div>
-              </motion.div>
-            ))}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="glass-panel p-8 col-span-1 sm:col-span-2"
+            >
+              <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-6">Core Stack</p>
+              <div className="flex flex-wrap gap-2">
+                {tech.map((t) => (
+                  <span key={t} className="px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-sm font-medium text-white/90">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+
           </div>
+          
         </div>
       </div>
     </section>

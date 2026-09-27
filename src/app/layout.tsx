@@ -1,56 +1,35 @@
 import type { Metadata } from "next";
-import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { Navbar } from "@/components/ui/navbar";
 import { SmoothScrollProvider } from "@/components/providers/smooth-scroll";
 import { SceneProvider } from "@/components/3d/scene";
-import { Navbar } from "@/components/ui/navbar";
 
-const syne = Syne({
-  variable: "--font-heading",
-  subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
-});
-
-const dmSans = DM_Sans({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-});
-
-const jetbrains = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-});
+// Inter is highly recommended for Apple-like clean UI
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "Joyceson Danielraj — Frontend Engineer",
-  description:
-    "Portfolio of Joyceson Danielraj. Building high-performance, visually-rich web experiences where design and engineering meet.",
-  openGraph: {
-    title: "Joyceson Danielraj — Frontend Engineer",
-    description: "Building immersive, performant web experiences.",
-    type: "website",
-  },
+  description: "Portfolio of Joyceson Danielraj, building premium web experiences.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en" className="dark">
-      <body
-        className={`${dmSans.variable} ${syne.variable} ${jetbrains.variable}`}
-        style={{ fontFamily: "var(--font-sans, sans-serif)" }}
-      >
+      <body className={`${inter.variable} font-sans antialiased`}>
         <SmoothScrollProvider>
-          {/* Global Architectural Grid Lines */}
-          <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03]">
-            <div className="absolute left-[10%] top-0 bottom-0 w-px bg-foreground" />
-            <div className="absolute left-[50%] top-0 bottom-0 w-px bg-foreground" />
-            <div className="absolute left-[90%] top-0 bottom-0 w-px bg-foreground" />
+          {/* Ambient Background Orbs */}
+          <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+            <div className="blur-orb-1 top-[-10%] left-[-10%]" />
+            <div className="blur-orb-2 bottom-[-10%] right-[-10%]" />
           </div>
 
           <Navbar />
-          <main className="relative z-10 w-full">
+          <main className="relative z-10 w-full flex flex-col items-center">
             {children}
           </main>
           <SceneProvider />

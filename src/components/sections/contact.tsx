@@ -1,29 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence, useMotionValue, useMotionTemplate } from "framer-motion";
-import { Send, CheckCircle2, AlertCircle, X } from "lucide-react";
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import { Send, CheckCircle2, AlertCircle, X, Github, Linkedin, Twitter } from "lucide-react";
 
 function Toast({ msg, type, onClose }: { msg: string; type: "success" | "error"; onClose: () => void }) {
   return (
     <motion.div
-      initial={{ opacity: 0, x: 60 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 60 }}
-      className="fixed bottom-8 right-8 z-[200] flex items-center gap-3 px-5 py-3.5 border font-mono text-sm bg-card"
-      style={{
-        borderColor: type === "success" ? "var(--primary)" : "var(--destructive)",
-        color: type === "success" ? "var(--primary)" : "var(--destructive)",
-        boxShadow: type === "success"
-          ? "0 0 30px rgba(129,140,248,0.2)"
-          : "0 0 30px rgba(251,113,133,0.2)",
-      }}
+      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[200] flex items-center gap-3 px-6 py-4 rounded-full glass-panel shadow-2xl"
     >
-      {type === "success" ? <CheckCircle2 className="w-4 h-4" /> : <AlertCircle className="w-4 h-4" />}
-      <span className="text-xs tracking-wide">{msg}</span>
+      {type === "success" ? <CheckCircle2 className="w-5 h-5 text-primary" /> : <AlertCircle className="w-5 h-5 text-red-500" />}
+      <span className="text-sm font-medium">{msg}</span>
       <button onClick={onClose} className="ml-2 opacity-50 hover:opacity-100 transition-opacity">
-        <X className="w-3 h-3" />
+        <X className="w-4 h-4" />
       </button>
     </motion.div>
   );
@@ -35,15 +27,11 @@ export function Contact() {
   const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState<{ msg: string; type: "success" | "error" } | null>(null);
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const spotlight = useMotionTemplate`radial-gradient(600px circle at ${mouseX}px ${mouseY}px, rgba(129,140,248,0.08), transparent 70%)`;
-
   const validate = () => {
     const e: Record<string, string> = {};
-    if (!form.name || form.name.trim().length < 2) e.name = "Name too short";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Invalid email";
-    if (!form.message || form.message.trim().length < 10) e.message = "Message too short";
+    if (!form.name || form.name.trim().length < 2) e.name = "Name is required";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = "Valid email is required";
+    if (!form.message || form.message.trim().length < 10) e.message = "Message must be at least 10 characters";
     setErrors(e);
     return !Object.keys(e).length;
   };
@@ -60,7 +48,7 @@ export function Contact() {
       });
       if (res.ok) {
         setForm({ name: "", email: "", message: "" });
-        setToast({ msg: "Message sent! I'll reply soon.", type: "success" });
+        setToast({ msg: "Message sent successfully.", type: "success" });
       } else {
         const d = await res.json();
         setToast({ msg: d.error ?? "Something went wrong.", type: "error" });
@@ -84,159 +72,114 @@ export function Contact() {
         {toast && <Toast msg={toast.msg} type={toast.type} onClose={() => setToast(null)} />}
       </AnimatePresence>
 
-      <section id="contact" className="relative w-full min-h-screen flex flex-col overflow-hidden">
-        {/* Ghost number */}
-        <span className="ax-num right-[-2vw] bottom-[5%]">05</span>
-
-        <div className="flex-grow grid grid-cols-1 lg:grid-cols-2 relative z-10">
-          {/* Left — info panel */}
-          <div className="flex flex-col justify-center px-8 md:px-16 py-32 border-r border-border">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="ax-label mb-16"
-            >
-              Contact
-            </motion.div>
-
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="font-heading font-black text-[clamp(2.5rem,5vw,4rem)] leading-[1.0] tracking-tight text-foreground mb-8"
-            >
-              Let's build<br />
-              <span className="text-brand">something.</span>
-            </motion.h2>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="font-sans text-base text-muted-foreground max-w-sm leading-relaxed mb-16"
-            >
-              Open to freelance projects, full-time roles, and collaborations. If you have an interesting challenge, let's talk.
-            </motion.p>
-
-            {/* Social links */}
-            <div className="flex gap-6">
-              {[
-                { icon: FaGithub,  href: "https://github.com/Joyceson71",                label: "GitHub"   },
-                { icon: FaLinkedin, href: "https://linkedin.com/in/joyceson-danielraj", label: "LinkedIn" },
-                { icon: FaTwitter,  href: "#",                                           label: "Twitter"  },
-              ].map(({ icon: Icon, href, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                  title={label}
-                  className="flex items-center justify-center w-10 h-10 border border-border text-muted-foreground hover:border-primary hover:text-primary transition-all duration-300"
-                >
-                  <Icon className="w-4 h-4" />
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* Right — form panel */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+      <section id="contact" className="relative w-full py-24 md:py-32 flex flex-col justify-center items-center">
+        
+        <div className="container mx-auto px-6 max-w-4xl relative z-10 text-center mb-16">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            onMouseMove={(e) => {
-              const r = e.currentTarget.getBoundingClientRect();
-              mouseX.set(e.clientX - r.left);
-              mouseY.set(e.clientY - r.top);
-            }}
-            className="relative flex items-center justify-center px-8 md:px-16 py-32 overflow-hidden"
+            className="text-3xl md:text-5xl font-bold tracking-tight mb-4"
           >
-            <motion.div className="absolute inset-0 pointer-events-none" style={{ background: spotlight }} />
+            Let's <span className="text-gradient">Connect.</span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-lg text-muted-foreground"
+          >
+            Have a project in mind? Let's build something incredible together.
+          </motion.p>
+        </div>
 
-            <form onSubmit={submit} className="w-full max-w-md space-y-10 relative z-10" noValidate>
-              {[
-                { id: "name",    label: "Name",    type: "text",  placeholder: "John Doe"          },
-                { id: "email",   label: "Email",   type: "email", placeholder: "john@example.com"  },
-              ].map((f) => (
-                <div key={f.id} className="space-y-1">
-                  <label htmlFor={f.id} className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                    {f.label}
-                  </label>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="container mx-auto px-6 max-w-2xl relative z-10"
+        >
+          <div className="glass-panel p-8 md:p-12">
+            <form onSubmit={submit} className="space-y-6" noValidate>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label htmlFor="name" className="text-sm font-medium text-white/80">Name</label>
                   <input
-                    id={f.id}
-                    type={f.type}
-                    value={form[f.id as keyof typeof form]}
+                    id="name"
+                    type="text"
+                    value={form.name}
                     onChange={onChange}
-                    placeholder={f.placeholder}
-                    className={`ax-input ${errors[f.id] ? "error" : ""}`}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-white/30"
+                    placeholder="Jane Doe"
                   />
-                  {errors[f.id] && (
-                    <p className="flex items-center gap-1 font-mono text-[10px] mt-1 text-destructive">
-                      <AlertCircle className="w-3 h-3" /> {errors[f.id]}
-                    </p>
-                  )}
+                  {errors.name && <p className="text-xs text-red-400 mt-1">{errors.name}</p>}
                 </div>
-              ))}
+                
+                <div className="space-y-2">
+                  <label htmlFor="email" className="text-sm font-medium text-white/80">Email</label>
+                  <input
+                    id="email"
+                    type="email"
+                    value={form.email}
+                    onChange={onChange}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-white/30"
+                    placeholder="jane@example.com"
+                  />
+                  {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
+                </div>
+              </div>
 
-              <div className="space-y-1">
-                <label htmlFor="message" className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Message
-                </label>
+              <div className="space-y-2">
+                <label htmlFor="message" className="text-sm font-medium text-white/80">Message</label>
                 <textarea
                   id="message"
                   value={form.message}
                   onChange={onChange}
-                  placeholder="Tell me about your project..."
-                  rows={4}
-                  className={`ax-input resize-none ${errors.message ? "error" : ""}`}
+                  rows={5}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-white/30 resize-none"
+                  placeholder="How can I help you?"
                 />
-                {errors.message && (
-                  <p className="flex items-center gap-1 font-mono text-[10px] mt-1 text-destructive">
-                    <AlertCircle className="w-3 h-3" /> {errors.message}
-                  </p>
-                )}
+                {errors.message && <p className="text-xs text-red-400 mt-1">{errors.message}</p>}
               </div>
 
-              <motion.button
+              <button
                 type="submit"
                 disabled={submitting}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="ax-btn w-full justify-center group"
+                className="btn-primary w-full mt-4 flex items-center justify-center gap-2 py-4 text-base"
               >
                 {submitting ? (
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ repeat: Infinity, duration: 0.7, ease: "linear" }}
-                    className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
-                  />
+                  <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full" />
                 ) : (
-                  <>
-                    <span className="relative z-10 flex items-center gap-2">
-                      Send Message
-                      <Send className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-                    </span>
-                  </>
+                  <>Send Message <Send className="w-4 h-4" /></>
                 )}
-              </motion.button>
+              </button>
             </form>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
 
         {/* Footer */}
-        <footer className="border-t border-border py-6 px-8 md:px-16 flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
-          <span className="font-heading font-black text-lg text-foreground tracking-tight">
-            JD<span className="text-primary">_</span>
-          </span>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-            © 2024 Joyceson Danielraj · Built with Next.js 16
-          </span>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-primary">
-            Available for work
-          </span>
+        <footer className="w-full mt-32 border-t border-white/10 relative z-10 py-12">
+          <div className="container mx-auto px-6 max-w-6xl flex flex-col md:flex-row justify-between items-center gap-6">
+            <div className="flex flex-col items-center md:items-start">
+              <span className="text-xl font-bold tracking-tight mb-2">Joyceson<span className="text-primary">.</span></span>
+              <span className="text-sm text-muted-foreground">© 2024. All rights reserved.</span>
+            </div>
+            
+            <div className="flex gap-4">
+              {[
+                { icon: Github, href: "https://github.com/Joyceson71" },
+                { icon: Linkedin, href: "https://linkedin.com/in/joyceson-danielraj" },
+                { icon: Twitter, href: "#" },
+              ].map((social, idx) => (
+                <a key={idx} href={social.href} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-muted-foreground hover:bg-white/10 hover:text-foreground transition-all">
+                  <social.icon className="w-4 h-4" />
+                </a>
+              ))}
+            </div>
+          </div>
         </footer>
       </section>
     </>
