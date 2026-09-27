@@ -3,23 +3,32 @@
 import { Suspense, useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Sphere, MeshDistortMaterial, PerspectiveCamera } from "@react-three/drei";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import * as THREE from "three";
 
-/* ── Axiom Orb Scene (standalone canvas) ── */
-function AxiomOrb() {
+/* ── Axiom Orb Scene ── */
+function AxiomOrb({ mouseX, mouseY }: { mouseX: any, mouseY: any }) {
   const mainRef = useRef<THREE.Mesh>(null);
   const innerRef = useRef<THREE.Mesh>(null);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
+    
+    // Parallax effect based on mouse
+    const targetX = (mouseX.get() / window.innerWidth - 0.5) * 3;
+    const targetY = -(mouseY.get() / window.innerHeight - 0.5) * 3;
+
     if (mainRef.current) {
+      mainRef.current.position.x += (targetX - mainRef.current.position.x) * 0.05;
+      mainRef.current.position.y += (targetY - mainRef.current.position.y) * 0.05;
       mainRef.current.rotation.y = t * 0.15;
       mainRef.current.rotation.z = t * 0.08;
     }
     if (innerRef.current) {
+      innerRef.current.position.x += (targetX - innerRef.current.position.x) * 0.05;
+      innerRef.current.position.y += (targetY - innerRef.current.position.y) * 0.05;
       innerRef.current.rotation.y = -t * 0.3;
       innerRef.current.rotation.x = t * 0.2;
     }
@@ -27,220 +36,177 @@ function AxiomOrb() {
 
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 0, 6]} fov={45} />
-      <ambientLight intensity={0.4} />
-      <pointLight position={[5, 5, 5]}   color="#818cf8" intensity={50} /> {/* Indigo */}
-      <pointLight position={[-5, -5, 3]} color="#fbbf24" intensity={35} /> {/* Amber */}
-      <pointLight position={[0, 8, -5]}  color="#fb7185" intensity={25} /> {/* Rose */}
+      <PerspectiveCamera makeDefault position={[0, 0, 8]} fov={45} />
+      <ambientLight intensity={1.5} />
+      <pointLight position={[5, 5, 5]}   color="#818cf8" intensity={80} />
+      <pointLight position={[-5, -5, 3]} color="#fbbf24" intensity={60} />
+      <pointLight position={[0, 8, -5]}  color="#fb7185" intensity={50} />
 
-      {/* Main orb */}
       <Float speed={1.5} rotationIntensity={0.5} floatIntensity={1.2}>
-        <Sphere ref={mainRef} args={[1.8, 128, 128]}>
+        <Sphere ref={mainRef} args={[2.2, 128, 128]}>
           <MeshDistortMaterial
-            color="#08080f"
+            color="#2a2a40"
             distort={0.4}
             speed={2}
-            metalness={0.8}
-            roughness={0.1}
+            metalness={0.6}
+            roughness={0.15}
             clearcoat={1}
             clearcoatRoughness={0}
-            envMapIntensity={2}
           />
         </Sphere>
       </Float>
 
-      {/* Inner glowing core */}
       <Float speed={2.5} rotationIntensity={1.5} floatIntensity={1}>
-        <Sphere ref={innerRef} args={[0.9, 64, 64]}>
+        <Sphere ref={innerRef} args={[1.1, 64, 64]}>
           <MeshDistortMaterial
             color="#818cf8"
             distort={0.6}
             speed={3}
-            metalness={0}
-            roughness={0}
+            metalness={0.2}
+            roughness={0.1}
             clearcoat={1}
             clearcoatRoughness={0}
             transparent
-            opacity={0.8}
+            opacity={0.9}
             emissive="#818cf8"
-            emissiveIntensity={0.5}
+            emissiveIntensity={0.6}
           />
         </Sphere>
       </Float>
-
-      {/* Satellite orbs */}
-      {[
-        { pos: [-3, 1.5, 0],  r: 0.55, c: "#fbbf24", d: 0.5, s: 2   },
-        { pos: [3,  -1.5, 1], r: 0.4,  c: "#fb7185", d: 0.4, s: 2.5 },
-        { pos: [-2, -2, -1],  r: 0.3,  c: "#818cf8", d: 0.35, s: 3  },
-      ].map((o, i) => (
-        <Float key={i} speed={o.s} rotationIntensity={2} floatIntensity={2}>
-          <Sphere args={[o.r, 32, 32]} position={o.pos as [number,number,number]}>
-            <MeshDistortMaterial
-              color={o.c}
-              distort={o.d}
-              speed={2}
-              metalness={0.4}
-              roughness={0.2}
-              clearcoat={1}
-              clearcoatRoughness={0}
-              transparent
-              opacity={0.8}
-            />
-          </Sphere>
-        </Float>
-      ))}
     </>
   );
 }
 
-/* ── Animated character split ── */
-function SplitText({ text, className }: { text: string; className?: string }) {
+/* ── Glitch Text Component ── */
+function GlitchText({ text, delay = 0 }: { text: string; delay?: number }) {
+  const letters = Array.from(text);
+  
+  const container = {
+    hidden: { opacity: 0 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      transition: { staggerChildren: 0.04, delayChildren: delay * 0.2 }
+    })
+  };
+
+  const child = {
+    visible: { opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)", transition: { type: "spring" as const, damping: 12, stiffness: 100 } },
+    hidden: { opacity: 0, y: 50, rotateX: -90, filter: "blur(10px)" }
+  };
+
   return (
-    <span aria-label={text} className={className}>
-      {text.split("").map((char, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 60, rotateX: -90 }}
-          animate={{ opacity: 1, y: 0, rotateX: 0 }}
-          transition={{
-            duration: 0.7,
-            delay: 0.5 + i * 0.04,
-            ease: [0.16, 1, 0.3, 1],
-          }}
-          className="inline-block"
-          style={{ transformOrigin: "bottom center" }}
-        >
+    <motion.span variants={container} initial="hidden" animate="visible" className="inline-flex whitespace-nowrap" style={{ perspective: "800px" }}>
+      {letters.map((char, index) => (
+        <motion.span key={index} variants={child as any} className="inline-block origin-bottom">
           {char === " " ? "\u00A0" : char}
         </motion.span>
       ))}
-    </span>
+    </motion.span>
   );
 }
 
 export function Hero() {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const { scrollY } = useScroll();
+  const y1 = useTransform(scrollY, [0, 1000], [0, 300]);
+  const y2 = useTransform(scrollY, [0, 1000], [0, -150]);
+  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
+  
+  const mouseX = useMotionValue(typeof window !== 'undefined' ? window.innerWidth / 2 : 0);
+  const mouseY = useMotionValue(typeof window !== 'undefined' ? window.innerHeight / 2 : 0);
+
+  useEffect(() => {
+    setMounted(true);
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
 
   return (
-    <section
-      id="home"
-      className="relative w-full min-h-screen flex items-center overflow-hidden"
-    >
-      {/* Section ghost number */}
-      <span className="ax-num right-[2vw] top-[15vh]">
-        01
-      </span>
-
-      {/* Standalone 3D Canvas — right half */}
+    <section id="home" className="relative w-full min-h-screen bg-background overflow-hidden flex items-center">
+      
+      {/* 3D Canvas Background */}
       {mounted && (
-        <div className="absolute right-0 top-0 w-full md:w-1/2 h-full z-0 pointer-events-none">
-          <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 6], fov: 45 }}>
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-80 mix-blend-screen">
+          <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 8], fov: 45 }}>
             <Suspense fallback={null}>
-              <AxiomOrb />
+              <AxiomOrb mouseX={mouseX} mouseY={mouseY} />
             </Suspense>
           </Canvas>
         </div>
       )}
 
-      {/* Main content — left half */}
-      <div className="container mx-auto px-8 md:px-16 relative z-10 py-32 md:py-0">
-        <div className="max-w-[640px]">
+      <div className="container mx-auto px-6 md:px-12 relative z-10 w-full">
+        
+        {/* Top-Right Decorative Element */}
+        <motion.div 
+          className="absolute right-6 top-[15vh] hidden md:flex flex-col items-end gap-2 text-right"
+          style={{ y: y2 }}
+        >
+          <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-primary border border-primary px-3 py-1">
+            Status: Active
+          </span>
+          <span className="font-mono text-[10px] tracking-widest text-muted-foreground uppercase">
+            Coord: {mounted ? "34.0522° N, 118.2437° W" : "LOADING..."}
+          </span>
+        </motion.div>
+
+        {/* Main Content Area */}
+        <div className="flex flex-col md:flex-row justify-between items-end mt-20">
           
-          {/* Eyebrow */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="ax-label mb-10"
-          >
-            Frontend Engineer · 2024
-          </motion.div>
-
-          {/* Main headline — character split animation */}
-          <h1 className="font-heading font-black leading-[0.92] tracking-tight mb-8 overflow-hidden"
-              style={{ perspective: "800px" }}>
-            <div className="text-[clamp(3.5rem,8vw,6.5rem)] text-foreground">
-              <SplitText text="Design." />
-            </div>
-            <div className="text-[clamp(3.5rem,8vw,6.5rem)] text-foreground">
-              <SplitText text="Engineer." />
-            </div>
-            <div className="text-[clamp(3.5rem,8vw,6.5rem)]" style={{ overflow: "visible" }}>
-              <SplitText
-                text="Deploy."
-                className="text-brand"
-              />
-            </div>
-          </h1>
-
-          {/* Descriptor */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.3 }}
-            className="font-sans text-base md:text-lg text-muted-foreground max-w-md leading-relaxed mb-12"
-          >
-            I'm <strong className="text-foreground font-semibold">Joyceson Danielraj</strong> — building immersive, performant web experiences where design precision meets engineering depth.
-          </motion.p>
-
-          {/* CTA row */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.5 }}
-            className="flex flex-wrap items-center gap-4"
-          >
-            <Link href="#projects" className="ax-btn group">
-              <span className="relative z-10 flex items-center gap-2">
-                Explore Work
-                <ArrowUpRight className="w-4 h-4 group-hover:rotate-45 transition-transform duration-300" />
+          <motion.div style={{ y: y1, opacity }} className="max-w-[800px] flex-1">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-[2px] bg-primary" />
+              <span className="font-mono text-xs tracking-[0.25em] uppercase text-primary font-semibold">
+                Frontend Engineer
               </span>
-            </Link>
+            </div>
 
-            <Link href="#contact" className="ax-btn-ghost group">
-              Get In Touch
-            </Link>
-          </motion.div>
+            <h1 className="font-heading font-black leading-[0.85] tracking-tighter uppercase select-none mb-10 flex flex-col">
+              <span className="text-[clamp(3.5rem,9vw,8rem)] text-foreground block overflow-hidden">
+                <GlitchText text="Immersive" delay={0.5} />
+              </span>
+              <span className="text-[clamp(3.5rem,9vw,8rem)] text-brand block overflow-hidden" style={{ marginLeft: "clamp(2rem, 5vw, 6rem)"}}>
+                <GlitchText text="Digital" delay={1.5} />
+              </span>
+              <span className="text-[clamp(3.5rem,9vw,8rem)] text-foreground block overflow-hidden text-outline">
+                <GlitchText text="Realities" delay={2.5} />
+              </span>
+            </h1>
 
-          {/* Stats row */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.8 }}
-            className="flex gap-10 mt-16 pt-10 border-t border-border"
-          >
-            {[
-              { num: "2+",  label: "Years Exp." },
-              { num: "10+", label: "Projects" },
-              { num: "∞",   label: "Commits" },
-            ].map((s) => (
-              <div key={s.label}>
-                <div className="font-heading font-black text-2xl text-foreground">{s.num}</div>
-                <div className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mt-0.5">
-                  {s.label}
-                </div>
+            <div className="flex flex-col md:flex-row items-start gap-8 md:gap-16">
+              <p className="font-sans text-base md:text-lg text-muted-foreground max-w-sm leading-relaxed border-l-2 border-border pl-6">
+                Joyceson Danielraj crafts interactive web experiences where architectural design precision meets highly scalable engineering depth.
+              </p>
+
+              <div className="flex flex-col gap-4">
+                <Link href="#projects" className="ax-btn group text-center inline-flex justify-center w-48">
+                  <span className="relative z-10 flex items-center gap-2">
+                    View Systems <ArrowDownRight className="w-4 h-4 group-hover:rotate-[-45deg] transition-transform duration-300" />
+                  </span>
+                </Link>
+                <Link href="#contact" className="font-mono text-xs tracking-widest text-muted-foreground hover:text-foreground uppercase transition-colors inline-flex items-center gap-2 px-2">
+                  Initialize Contact <ArrowUpRight className="w-3 h-3" />
+                </Link>
               </div>
-            ))}
+            </div>
           </motion.div>
+          
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-8 left-8 flex items-center gap-3 z-10"
+      {/* Vertical Title Indicator */}
+      <motion.div 
+        className="absolute left-6 bottom-12 flex flex-col items-center gap-4 hidden md:flex"
+        style={{ opacity }}
       >
-        <motion.div
-          animate={{ scaleY: [1, 0.3, 1] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="w-px h-12 bg-gradient-to-b from-primary to-transparent"
-        />
-        <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-muted-foreground">
-          Scroll
+        <span className="font-mono text-[10px] tracking-[0.4em] text-muted-foreground uppercase" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>
+          Portfolio.2024
         </span>
+        <div className="w-px h-16 bg-gradient-to-t from-primary to-transparent" />
       </motion.div>
     </section>
   );

@@ -135,6 +135,11 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  
+  .text-outline {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--fg);
+  }
 
   /* ── Cards ── */
   .ax-card {

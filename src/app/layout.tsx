@@ -42,6 +42,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         style={{ fontFamily: "var(--font-sans, sans-serif)" }}
       >
         <SmoothScrollProvider>
+          {/* Global Architectural Grid Lines */}
+          <div className="fixed inset-0 z-0 pointer-events-none opacity-[0.03]">
+            <div className="absolute left-[10%] top-0 bottom-0 w-px bg-foreground" />
+            <div className="absolute left-[50%] top-0 bottom-0 w-px bg-foreground" />
+            <div className="absolute left-[90%] top-0 bottom-0 w-px bg-foreground" />
+          </div>
+
           <Navbar />
           <main className="relative z-10 w-full">
             {children}
