@@ -1,107 +1,139 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { Shield, Terminal, Bug, Key, Server, Eye } from "lucide-react";
 import Link from "next/link";
 
-const tech = [
-  "Next.js 16", "React 19", "TypeScript", 
-  "Tailwind CSS", "Three.js", "Framer Motion", 
-  "Node.js", "PostgreSQL"
+const expertise = [
+  { icon: Shield, label: "Web App Pentesting" },
+  { icon: Bug,    label: "Vulnerability Research" },
+  { icon: Key,    label: "Privilege Escalation" },
+  { icon: Server, label: "Network Security" },
+  { icon: Eye,    label: "OSINT" },
+  { icon: Terminal, label: "CTF / Red Team" },
 ];
+
+const certs = ["CEH", "CompTIA Security+", "TryHackMe Top 1%", "HackTheBox Pro"];
+
 
 export function About() {
   return (
     <section id="about" className="relative w-full py-24 md:py-32 flex justify-center">
       <div className="container mx-auto px-6 max-w-6xl">
-        
-        <div className="flex flex-col md:flex-row gap-12 lg:gap-20">
-          
-          {/* Left Column - Text */}
-          <div className="flex-1">
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="text-3xl md:text-5xl font-bold tracking-tight mb-6"
-            >
-              Crafting <span className="text-gradient">interfaces</span><br />
-              with <span className="text-gradient-blue">purpose.</span>
-            </motion.h2>
 
-            <motion.div 
+        {/* Section header */}
+        <div className="mb-16">
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-xs text-green-600 tracking-[0.3em] uppercase mb-3"
+          >
+            $ cat about.txt
+          </motion.p>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="text-3xl md:text-5xl font-bold tracking-tight mb-4"
+          >
+            <span className="text-gradient">Ethical Hacker.</span>
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1, duration: 0.8 }}
+            className="text-sm text-green-700 max-w-xl leading-relaxed"
+          >
+            <span className="text-green-500/50">// </span>
+            Offensive security specialist. I think like an attacker to defend like a pro.
+          </motion.p>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-12 lg:gap-20">
+
+          {/* Left — Bio */}
+          <div className="flex-1">
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-6 text-lg text-muted-foreground leading-relaxed max-w-xl"
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="glass-panel p-8 mb-6"
             >
-              <p>
-                As a <strong className="text-foreground font-medium">Frontend Engineer</strong>, my focus is on bridging the gap between exceptional design and robust engineering. Every pixel is intentional, every animation serves a purpose.
+              <p className="text-xs text-green-600 mb-3 font-mono">/* bio */</p>
+              <p className="text-sm text-green-200/70 leading-relaxed mb-4">
+                I&apos;m <strong className="text-green-400">Joyceson Danielraj</strong>, an ethical hacker and
+                security researcher passionate about breaking things (legally) to understand how
+                they work — and how to defend them.
               </p>
-              <p>
-                I build scalable web applications using the latest web technologies, specializing in the React ecosystem. My goal is to create seamless, intuitive, and performant user experiences.
+              <p className="text-sm text-green-200/70 leading-relaxed">
+                I specialize in web application penetration testing, network reconnaissance,
+                and vulnerability disclosure. I actively participate in CTF competitions,
+                bug bounty programs, and responsible disclosure.
               </p>
             </motion.div>
+
+            {/* Certifications */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="glass-panel p-6"
+            >
+              <p className="text-xs text-green-600 mb-4 font-mono">$ ls certifications/</p>
+              <div className="flex flex-wrap gap-2">
+                {certs.map((c) => (
+                  <span key={c} className="hack-badge">{c}</span>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right — Expertise grid */}
+          <div className="flex-1">
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-xs text-green-600 tracking-[0.2em] uppercase mb-4 font-mono"
+            >
+              $ ls expertise/
+            </motion.p>
+            <div className="grid grid-cols-2 gap-4">
+              {expertise.map((item, i) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08, duration: 0.6 }}
+                  className="glass-panel p-5 flex items-start gap-3 group"
+                >
+                  <item.icon
+                    className="w-5 h-5 text-green-400 mt-0.5 shrink-0 group-hover:drop-shadow-[0_0_8px_rgba(0,255,65,0.8)] transition-all"
+                    style={{ filter: "drop-shadow(0 0 4px rgba(0,255,65,0.4))" }}
+                  />
+                  <span className="text-sm text-green-300/80 font-mono">{item.label}</span>
+                </motion.div>
+              ))}
+            </div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-10"
+              viewport={{ once: true }}
+              transition={{ delay: 0.5 }}
+              className="mt-8"
             >
-              <Link href="#contact" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:opacity-80 transition-opacity">
-                Let's collaborate <ArrowUpRight className="w-4 h-4" />
+              <Link href="#contact" className="inline-flex items-center gap-2 text-sm font-mono text-green-500 hover:text-green-400 transition-colors">
+                <span className="text-green-700">$</span> ./initiate_contact.sh<span className="cursor-blink" />
               </Link>
             </motion.div>
           </div>
-
-          {/* Right Column - Stats / Cards */}
-          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="glass-panel p-8 flex flex-col justify-between"
-            >
-              <h3 className="text-5xl font-bold mb-2">2+</h3>
-              <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Years Experience</p>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="glass-panel p-8 flex flex-col justify-between"
-            >
-              <h3 className="text-5xl font-bold mb-2">10+</h3>
-              <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Projects Shipped</p>
-            </motion.div>
-
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="glass-panel p-8 col-span-1 sm:col-span-2"
-            >
-              <p className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-6">Core Stack</p>
-              <div className="flex flex-wrap gap-2">
-                {tech.map((t) => (
-                  <span key={t} className="px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-sm font-medium text-white/90">
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-
-          </div>
-          
         </div>
       </div>
     </section>

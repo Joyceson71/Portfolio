@@ -74,23 +74,32 @@ export function Contact() {
 
       <section id="contact" className="relative w-full py-24 md:py-32 flex flex-col justify-center items-center">
         
-        <div className="container mx-auto px-6 max-w-4xl relative z-10 text-center mb-16">
+        <div className="container mx-auto px-6 max-w-4xl relative z-10 mb-16">
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-xs text-green-600 tracking-[0.3em] uppercase mb-3"
+          >
+            $ ./initiate_contact.sh
+          </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-3xl md:text-5xl font-bold tracking-tight mb-4"
           >
-            Let's <span className="text-gradient">Connect.</span>
+            <span className="text-gradient">Establish</span> <span className="text-gradient-blue">Connection.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-muted-foreground"
+            className="text-sm text-green-700"
           >
-            Have a project in mind? Let's build something incredible together.
+            <span className="text-green-500/50">// </span>
+            Secure channel available. No logs. No traces. Just results.
           </motion.p>
         </div>
 
@@ -102,58 +111,62 @@ export function Contact() {
           className="container mx-auto px-6 max-w-2xl relative z-10"
         >
           <div className="glass-panel p-8 md:p-12">
+            <p className="text-xs text-green-600 font-mono mb-6">/* Send encrypted message */</p>
             <form onSubmit={submit} className="space-y-6" noValidate>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label htmlFor="name" className="text-sm font-medium text-white/80">Name</label>
+                  <label htmlFor="name" className="text-xs font-mono text-green-600 uppercase tracking-wider">$ enter name:</label>
                   <input
                     id="name"
                     type="text"
                     value={form.name}
                     onChange={onChange}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-white/30"
-                    placeholder="Jane Doe"
+                    className="w-full bg-green-950/20 border border-green-900/50 rounded-none px-4 py-3 text-sm font-mono text-green-300 focus:outline-none focus:border-green-500 transition-colors placeholder:text-green-900"
+                    placeholder="your_name"
+                    style={{ caretColor: "#00ff41" }}
                   />
-                  {errors.name && <p className="text-xs text-red-400 mt-1">{errors.name}</p>}
+                  {errors.name && <p className="text-xs text-red-500 font-mono mt-1">[ERR] {errors.name}</p>}
                 </div>
                 
                 <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium text-white/80">Email</label>
+                  <label htmlFor="email" className="text-xs font-mono text-green-600 uppercase tracking-wider">$ enter email:</label>
                   <input
                     id="email"
                     type="email"
                     value={form.email}
                     onChange={onChange}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-white/30"
-                    placeholder="jane@example.com"
+                    className="w-full bg-green-950/20 border border-green-900/50 rounded-none px-4 py-3 text-sm font-mono text-green-300 focus:outline-none focus:border-green-500 transition-colors placeholder:text-green-900"
+                    placeholder="user@domain.tld"
+                    style={{ caretColor: "#00ff41" }}
                   />
-                  {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
+                  {errors.email && <p className="text-xs text-red-500 font-mono mt-1">[ERR] {errors.email}</p>}
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="message" className="text-sm font-medium text-white/80">Message</label>
+                <label htmlFor="message" className="text-xs font-mono text-green-600 uppercase tracking-wider">$ enter message:</label>
                 <textarea
                   id="message"
                   value={form.message}
                   onChange={onChange}
                   rows={5}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors placeholder:text-white/30 resize-none"
-                  placeholder="How can I help you?"
+                  className="w-full bg-green-950/20 border border-green-900/50 rounded-none px-4 py-3 text-sm font-mono text-green-300 focus:outline-none focus:border-green-500 transition-colors placeholder:text-green-900 resize-none"
+                  placeholder="describe your mission..."
+                  style={{ caretColor: "#00ff41" }}
                 />
-                {errors.message && <p className="text-xs text-red-400 mt-1">{errors.message}</p>}
+                {errors.message && <p className="text-xs text-red-500 font-mono mt-1">[ERR] {errors.message}</p>}
               </div>
 
               <button
                 type="submit"
                 disabled={submitting}
-                className="btn-primary w-full mt-4 flex items-center justify-center gap-2 py-4 text-base"
+                className="btn-primary w-full mt-4 flex items-center justify-center gap-2 py-4"
               >
                 {submitting ? (
-                  <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full" />
+                  <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} className="w-4 h-4 border border-green-400/30 border-t-green-400 rounded-full" />
                 ) : (
-                  <>Send Message <Send className="w-4 h-4" /></>
+                  <><Send className="w-4 h-4" /> ./send_message.sh</>  
                 )}
               </button>
             </form>
@@ -161,11 +174,11 @@ export function Contact() {
         </motion.div>
 
         {/* Footer */}
-        <footer className="w-full mt-32 border-t border-white/10 relative z-10 py-12">
+        <footer className="w-full mt-32 border-t border-green-900/30 relative z-10 py-12">
           <div className="container mx-auto px-6 max-w-6xl flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex flex-col items-center md:items-start">
-              <span className="text-xl font-bold tracking-tight mb-2">Joyceson<span className="text-primary">.</span></span>
-              <span className="text-sm text-muted-foreground">© 2024. All rights reserved.</span>
+              <span className="text-sm font-mono font-bold mb-1" style={{ color: "#00ff41", textShadow: "0 0 8px rgba(0,255,65,0.5)" }}>root@j0yceson~#</span>
+              <span className="text-xs font-mono text-green-800">// © 2024. All rights reserved. Stay ethical.</span>
             </div>
             
             <div className="flex gap-4">

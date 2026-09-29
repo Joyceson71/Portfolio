@@ -8,15 +8,15 @@ import { Suspense } from "react";
 function AmbientBlobs() {
   return (
     <>
-      <ambientLight intensity={0.2} />
-      <pointLight position={[10, 10, 10]}  color="#00d4ff" intensity={30} />
-      <pointLight position={[-10, -10, 5]} color="#ff2d78" intensity={20} />
-      <pointLight position={[0, 10, -10]}  color="#b400ff" intensity={15} />
+      <ambientLight intensity={0.1} />
+      <pointLight position={[10, 10, 10]}  color="#00ff41" intensity={20} />
+      <pointLight position={[-10, -10, 5]} color="#00cc33" intensity={15} />
+      <pointLight position={[0, 10, -10]}  color="#00ff88" intensity={10} />
 
       {[
-        { pos: [4, 3, -8],   color: "#00d4ff", scale: 3.5, speed: 1.2 },
-        { pos: [-5, -2, -6], color: "#ff2d78", scale: 2.8, speed: 1.8 },
-        { pos: [0, -4, -10], color: "#b400ff", scale: 4,   speed: 0.9 },
+        { pos: [4, 3, -8],   color: "#00ff41", scale: 3.5, speed: 1.2 },
+        { pos: [-5, -2, -6], color: "#00cc33", scale: 2.8, speed: 1.8 },
+        { pos: [0, -4, -10], color: "#003300", scale: 4,   speed: 0.9 },
       ].map((b, i) => (
         <Float key={i} speed={b.speed} rotationIntensity={0.5} floatIntensity={2}>
           <Sphere args={[b.scale, 32, 32]} position={b.pos as [number,number,number]}>
