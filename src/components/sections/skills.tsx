@@ -60,19 +60,19 @@ const tools = [
 
 function SkillBar({ name, pct, color, delay }: { name: string; pct: number; color: string; delay: number }) {
   return (
-    <div className="space-y-1.5">
-      <div className="flex justify-between items-center text-xs font-medium">
-        <span className="text-slate-300">{name}</span>
-        <span className="text-slate-500">{pct}%</span>
+    <div className="space-y-1">
+      <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-gray-300">
+        <span>{name}</span>
+        <span style={{ color }}>{pct}%</span>
       </div>
-      <div className="relative h-2 bg-slate-800 rounded-full overflow-hidden">
+      <div className="relative h-[2px] bg-white/10 w-full overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           whileInView={{ width: `${pct}%` }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, delay, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute top-0 left-0 h-full rounded-full"
-          style={{ background: color }}
+          className="absolute top-0 left-0 h-full"
+          style={{ background: color, boxShadow: `0 0 10px ${color}` }}
         />
       </div>
     </div>
@@ -81,43 +81,35 @@ function SkillBar({ name, pct, color, delay }: { name: string; pct: number; colo
 
 export function Skills() {
   return (
-    <div className="w-full h-full flex flex-col gap-8 text-slate-200">
+    <div className="w-full h-full flex flex-col gap-4 font-mono text-gray-300">
+      
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="mb-2"
-      >
-        <h2 className="text-3xl font-bold tracking-tight mb-2 text-white">
-          Skill Matrix
-        </h2>
-        <p className="text-sm text-slate-400">
-          Arsenal of tools, techniques, and technologies.
-        </p>
-      </motion.div>
+      <div className="border-b border-[var(--color-border)] pb-2 mb-2">
+        <h3 className="text-xl font-bold tracking-tight text-[var(--cyber-cyan)] uppercase">
+          Neural Uplink_
+        </h3>
+      </div>
 
       {/* Skill bars grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {categories.map((cat, gi) => (
-          <motion.div
+          <div
             key={cat.name}
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: gi * 0.1 }}
-            className="bg-slate-900/40 border border-white/10 rounded-xl overflow-hidden"
+            className="border border-[var(--color-border)] bg-black/40 p-4 relative"
           >
-            <div className="bg-white/5 px-4 py-3 border-b border-white/5 flex items-center gap-3">
+            <div className="absolute top-0 right-0 p-1 text-[8px] bg-[var(--cyber-cyan)]/10 text-[var(--cyber-cyan)]">SEC_BLOCK_{gi}</div>
+            
+            <div className="flex items-center gap-2 mb-4">
               <span
-                className="text-xs font-bold px-2 py-0.5 rounded-md"
-                style={{ backgroundColor: cat.color.replace('0.7', '0.2'), color: cat.color.replace('0.7', '1') }}
+                className="text-[10px] font-bold px-1.5 py-0.5 border"
+                style={{ borderColor: cat.color.replace('0.7', '0.5'), color: cat.color.replace('0.7', '1') }}
               >
                 {cat.prefix}
               </span>
-              <span className="text-sm font-semibold text-white">{cat.name}</span>
+              <span className="text-xs font-bold text-white uppercase tracking-widest">{cat.name}</span>
             </div>
-            <div className="p-5 space-y-5">
+            
+            <div className="space-y-4">
               {cat.skills.map((skill, si) => (
                 <SkillBar
                   key={skill.name}
@@ -128,37 +120,26 @@ export function Skills() {
                 />
               ))}
             </div>
-          </motion.div>
+          </div>
         ))}
       </div>
 
       {/* Tools arsenal */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="bg-slate-900/40 border border-white/10 rounded-xl overflow-hidden mt-2"
-      >
-        <div className="bg-white/5 px-4 py-3 border-b border-white/5">
-          <span className="text-sm font-semibold text-white">Tools & Utilities</span>
+      <div className="border border-[var(--color-border)] bg-black/40 p-4 relative mt-2">
+        <div className="absolute top-0 right-0 p-1 text-[8px] bg-[var(--cyber-yellow)]/10 text-[var(--cyber-yellow)]">TOOLS_ARRAY</div>
+        <div className="text-[10px] font-bold text-[var(--cyber-yellow)] uppercase tracking-widest mb-3">[ Utilities & Frameworks ]</div>
+        
+        <div className="flex flex-wrap gap-2">
+          {tools.map((tool, i) => (
+            <span
+              key={tool}
+              className="px-2 py-1 bg-[var(--cyber-cyan)]/5 border border-[var(--color-border)] text-[9px] uppercase tracking-wider hover:bg-[var(--cyber-cyan)]/20 transition-colors cursor-default"
+            >
+              {tool}
+            </span>
+          ))}
         </div>
-        <div className="p-5">
-          <div className="flex flex-wrap gap-2">
-            {tools.map((tool, i) => (
-              <motion.span
-                key={tool}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.02 }}
-                className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs text-slate-300 hover:bg-white/10 hover:text-white transition-colors cursor-default"
-              >
-                {tool}
-              </motion.span>
-            ))}
-          </div>
-        </div>
-      </motion.div>
+      </div>
     </div>
   );
 }

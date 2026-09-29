@@ -67,84 +67,81 @@ export function Contact() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col p-4 text-slate-200">
+    <div className="w-full h-full flex flex-col font-mono text-gray-300">
       <AnimatePresence>
         {toast && <Toast msg={toast.msg} type={toast.type} onClose={() => setToast(null)} />}
       </AnimatePresence>
       
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold tracking-tight mb-2 text-white">
-          Get in Touch
-        </h2>
-        <p className="text-sm text-slate-400">
-          Have a project in mind? Let&apos;s build something incredible together.
-        </p>
+      <div className="border-b border-[var(--color-border)] pb-2 mb-4">
+        <h3 className="text-xl font-bold tracking-tight text-[var(--cyber-cyan)] uppercase">
+          Comm_Link_
+        </h3>
       </div>
 
-      <div className="max-w-md mx-auto w-full">
+      <div className="max-w-md mx-auto w-full mt-4">
         <form onSubmit={submit} className="space-y-4" noValidate>
           
-          <div className="space-y-1.5">
-            <label htmlFor="name" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Name</label>
+          <div className="space-y-1">
+            <label htmlFor="name" className="text-[10px] font-bold text-[var(--cyber-pink)] uppercase tracking-widest">[ Identify ]</label>
             <input
               id="name"
               type="text"
               value={form.name}
               onChange={onChange}
-              className="w-full bg-slate-900/40 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition-colors placeholder:text-slate-600"
-              placeholder="Jane Doe"
+              className="w-full bg-black/50 border border-[var(--color-border)] px-4 py-2 text-xs text-[var(--cyber-cyan)] focus:outline-none focus:border-[var(--cyber-cyan)] focus:bg-[var(--cyber-cyan)]/10 transition-colors placeholder:text-gray-700 font-mono"
+              placeholder="GUEST_USER"
             />
-            {errors.name && <p className="text-xs text-red-400 mt-1">{errors.name}</p>}
+            {errors.name && <p className="text-[10px] text-red-500 mt-1">{errors.name}</p>}
           </div>
           
-          <div className="space-y-1.5">
-            <label htmlFor="email" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Email</label>
+          <div className="space-y-1">
+            <label htmlFor="email" className="text-[10px] font-bold text-[var(--cyber-pink)] uppercase tracking-widest">[ Ping_Address ]</label>
             <input
               id="email"
               type="email"
               value={form.email}
               onChange={onChange}
-              className="w-full bg-slate-900/40 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition-colors placeholder:text-slate-600"
-              placeholder="jane@example.com"
+              className="w-full bg-black/50 border border-[var(--color-border)] px-4 py-2 text-xs text-[var(--cyber-cyan)] focus:outline-none focus:border-[var(--cyber-cyan)] focus:bg-[var(--cyber-cyan)]/10 transition-colors placeholder:text-gray-700 font-mono"
+              placeholder="user@node.local"
             />
-            {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
+            {errors.email && <p className="text-[10px] text-red-500 mt-1">{errors.email}</p>}
           </div>
 
-          <div className="space-y-1.5">
-            <label htmlFor="message" className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Message</label>
+          <div className="space-y-1">
+            <label htmlFor="message" className="text-[10px] font-bold text-[var(--cyber-pink)] uppercase tracking-widest">[ Payload ]</label>
             <textarea
               id="message"
               value={form.message}
               onChange={onChange}
               rows={4}
-              className="w-full bg-slate-900/40 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500 transition-colors placeholder:text-slate-600 resize-none"
-              placeholder="How can I help you?"
+              className="w-full bg-black/50 border border-[var(--color-border)] px-4 py-2 text-xs text-[var(--cyber-cyan)] focus:outline-none focus:border-[var(--cyber-cyan)] focus:bg-[var(--cyber-cyan)]/10 transition-colors placeholder:text-gray-700 font-mono resize-none"
+              placeholder="Enter data sequence..."
             />
-            {errors.message && <p className="text-xs text-red-400 mt-1">{errors.message}</p>}
+            {errors.message && <p className="text-[10px] text-red-500 mt-1">{errors.message}</p>}
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full mt-4 flex items-center justify-center gap-2 py-3 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium transition-colors"
+            className="cyber-btn w-full mt-4 text-xs"
           >
             {submitting ? (
-              <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full" />
+              <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} className="w-4 h-4 border border-[var(--cyber-cyan)]/30 border-t-[var(--cyber-cyan)] rounded-full" />
             ) : (
-              <>Send Message <Send className="w-4 h-4" /></>  
+              <>Transmit_Data</>  
             )}
           </button>
         </form>
 
-        <div className="mt-8 flex justify-center gap-6">
-          <a href="https://github.com/Joyceson71" target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white transition-colors">
-            <Github className="w-5 h-5" />
+        <div className="mt-8 flex justify-center gap-4">
+          <a href="https://github.com/Joyceson71" target="_blank" rel="noreferrer" className="w-8 h-8 flex items-center justify-center bg-[var(--cyber-cyan)]/10 border border-[var(--color-border)] text-[var(--cyber-cyan)] hover:bg-[var(--cyber-cyan)] hover:text-black transition-colors">
+            <Github className="w-4 h-4" />
           </a>
-          <a href="#" className="text-slate-400 hover:text-white transition-colors">
-            <Twitter className="w-5 h-5" />
+          <a href="#" className="w-8 h-8 flex items-center justify-center bg-[var(--cyber-cyan)]/10 border border-[var(--color-border)] text-[var(--cyber-cyan)] hover:bg-[var(--cyber-cyan)] hover:text-black transition-colors">
+            <Twitter className="w-4 h-4" />
           </a>
-          <a href="#" className="text-slate-400 hover:text-white transition-colors">
-            <Linkedin className="w-5 h-5" />
+          <a href="#" className="w-8 h-8 flex items-center justify-center bg-[var(--cyber-cyan)]/10 border border-[var(--color-border)] text-[var(--cyber-cyan)] hover:bg-[var(--cyber-cyan)] hover:text-black transition-colors">
+            <Linkedin className="w-4 h-4" />
           </a>
         </div>
       </div>

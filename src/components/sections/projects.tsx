@@ -80,81 +80,70 @@ export function Projects() {
   const active = projects.find((p) => p.id === activeId);
 
   return (
-    <div className="w-full h-full flex flex-col text-slate-200">
+    <div className="w-full h-full flex flex-col font-mono text-[var(--fg)]">
       {/* Header */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        className="mb-6"
-      >
-        <h2 className="text-3xl font-bold tracking-tight mb-2 text-white">
-          Security Projects
-        </h2>
-        <p className="text-sm text-slate-400">
-          Tools built for the offensive and defensive security community.
-        </p>
-      </motion.div>
+      <div className="border-b border-[var(--color-border)] pb-2 mb-4">
+        <h3 className="text-xl font-bold tracking-tight text-[var(--cyber-yellow)] uppercase">
+          Op_History_
+        </h3>
+      </div>
 
       {/* Project list + detail panel layout */}
       <div className="flex-1 flex flex-col lg:flex-row gap-4 overflow-hidden">
         {/* Left: project list */}
-        <div className="lg:w-1/3 flex flex-col gap-3 overflow-y-auto pr-2">
+        <div className="lg:w-1/3 flex flex-col gap-2 overflow-y-auto pr-2 custom-scrollbar">
           {projects.map((p, i) => (
-            <motion.button
+            <button
               key={p.id}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.1 }}
               onClick={() => setActiveId(p.id)}
-              className={`w-full text-left p-4 rounded-xl transition-all border ${
+              className={`w-full text-left p-3 transition-all border ${
                 activeId === p.id 
-                  ? "bg-blue-500/10 border-blue-500/30 shadow-[0_0_15px_rgba(59,130,246,0.1)]" 
-                  : "bg-slate-900/40 border-white/5 hover:bg-white/5 hover:border-white/10"
+                  ? "bg-[var(--cyber-yellow)]/10 border-[var(--cyber-yellow)] shadow-[inset_0_0_10px_rgba(252,238,10,0.2)]" 
+                  : "bg-black/40 border-[var(--color-border)] hover:bg-[var(--cyber-yellow)]/5 hover:border-[var(--cyber-yellow)]/50"
               }`}
             >
               <div className="flex items-start justify-between mb-2">
-                <div className="flex gap-2 flex-wrap">
+                <div className="flex gap-1 flex-wrap">
                   {p.tags.map((t) => (
                     <span
                       key={t}
-                      className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-white/10 text-slate-300"
+                      className="text-[8px] uppercase tracking-widest px-1 py-0.5 bg-[var(--cyber-cyan)]/20 text-[var(--cyber-cyan)]"
                     >
                       {t.replace('[', '').replace(']', '')}
                     </span>
                   ))}
                 </div>
                 <span
-                  className="text-[10px] font-bold px-1.5 py-0.5 rounded"
-                  style={{ backgroundColor: SEVERITY_COLOR[p.severity].replace('0.8', '0.2'), color: SEVERITY_COLOR[p.severity].replace('0.8', '1') }}
+                  className="text-[8px] font-bold px-1.5 py-0.5"
+                  style={{ backgroundColor: SEVERITY_COLOR[p.severity].replace('0.8', '0.2'), color: SEVERITY_COLOR[p.severity].replace('0.8', '1'), border: `1px solid ${SEVERITY_COLOR[p.severity]}` }}
                 >
                   {p.severity}
                 </span>
               </div>
 
               <h3
-                className={`text-base font-bold mb-1 transition-colors ${
-                  activeId === p.id ? "text-blue-400" : "text-slate-200"
+                className={`text-sm font-bold uppercase tracking-wider mb-1 transition-colors ${
+                  activeId === p.id ? "text-[var(--cyber-yellow)]" : "text-white"
                 }`}
               >
                 {p.title}
               </h3>
-              <p className="text-xs text-slate-400 mb-3 line-clamp-2 leading-relaxed">{p.desc}</p>
+              <p className="text-[10px] text-gray-500 mb-2 line-clamp-2 leading-relaxed">{p.desc}</p>
 
               <div className="flex items-center justify-between">
-                <div className="flex gap-1.5 flex-wrap">
+                <div className="flex gap-1 flex-wrap">
                   {p.tech.slice(0, 2).map((t) => (
-                    <span key={t} className="text-[10px] bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded">{t}</span>
+                    <span key={t} className="text-[8px] uppercase tracking-wider border border-[var(--color-border)] text-gray-400 px-1 py-0.5">{t}</span>
                   ))}
                   {p.tech.length > 2 && (
-                    <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">+{p.tech.length - 2}</span>
+                    <span className="text-[8px] uppercase tracking-wider border border-[var(--color-border)] text-gray-400 px-1 py-0.5">+{p.tech.length - 2}</span>
                   )}
                 </div>
                 <ChevronRight
-                  className={`w-4 h-4 transition-transform ${activeId === p.id ? "translate-x-1 text-blue-400" : "text-slate-600"}`}
+                  className={`w-4 h-4 transition-transform ${activeId === p.id ? "translate-x-1 text-[var(--cyber-yellow)]" : "text-gray-600"}`}
                 />
               </div>
-            </motion.button>
+            </button>
           ))}
         </div>
 
@@ -164,76 +153,80 @@ export function Projects() {
             {active && (
               <motion.div
                 key={active.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
                 transition={{ duration: 0.2 }}
-                className="bg-slate-900/40 border border-white/10 rounded-xl h-full flex flex-col overflow-hidden"
+                className="bg-black/60 border border-[var(--cyber-yellow)] h-full flex flex-col relative overflow-hidden"
               >
+                <div className="absolute top-0 right-0 bg-[var(--cyber-yellow)] text-black text-[8px] font-bold px-2 py-0.5 uppercase tracking-widest z-10">
+                  {active.slug}.dat
+                </div>
+
                 {/* Image Header */}
-                <div className="relative h-48 sm:h-56 shrink-0">
+                <div className="relative h-48 sm:h-56 shrink-0 border-b border-[var(--cyber-yellow)]">
                   <Image
                     src={active.image}
                     alt={active.title}
                     fill
-                    className="object-cover"
-                    style={{ filter: "brightness(0.5)" }}
+                    className="object-cover opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent pointer-events-none" />
                   
                   <div className="absolute bottom-4 left-6">
-                    <h3 className="text-3xl font-bold text-white mb-1">
+                    <h3 className="text-2xl font-bold text-white mb-1 uppercase tracking-wider text-shadow-sm shadow-[var(--cyber-yellow)]">
                       {active.title}
                     </h3>
-                    <p className="text-sm font-medium text-blue-400">{active.category}</p>
+                    <p className="text-[10px] font-bold text-[var(--cyber-yellow)] uppercase tracking-widest">[{active.category}]</p>
                   </div>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-6">
+                <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
                   {/* Finding list */}
-                  <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">
-                    Key Features & Findings
+                  <h4 className="text-[10px] font-bold text-[var(--cyber-pink)] uppercase tracking-widest mb-4">
+                    [ Tactical_Overview ]
                   </h4>
-                  <div className="space-y-3 mb-8">
+                  <div className="space-y-3 mb-8 border-l border-[var(--color-border)] pl-3">
                     {active.longDesc.map((line, i) => (
-                      <div key={i} className="flex gap-3 text-sm text-slate-300">
-                        <span className="text-blue-500 font-bold mt-0.5 shrink-0">•</span>
+                      <div key={i} className="flex gap-3 text-[11px] text-gray-300">
+                        <span className="text-[var(--cyber-cyan)] font-bold mt-0.5 shrink-0">{'>'}</span>
                         <span>{line}</span>
                       </div>
                     ))}
                   </div>
 
                   {/* Tech stack */}
-                  <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">
-                    Tech Stack & Tools
+                  <h4 className="text-[10px] font-bold text-[var(--cyber-pink)] uppercase tracking-widest mb-4">
+                    [ Subroutines ]
                   </h4>
                   <div className="flex flex-wrap gap-2 mb-8">
                     {active.tech.map((t) => (
-                      <span key={t} className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs font-medium text-slate-200">
+                      <span key={t} className="px-2 py-1 bg-[var(--cyber-yellow)]/10 border border-[var(--cyber-yellow)]/30 text-[9px] uppercase tracking-wider text-[var(--cyber-yellow)]">
                         {t}
                       </span>
                     ))}
                   </div>
 
                   {/* Links */}
-                  <div className="flex gap-4 pt-4 border-t border-white/10 mt-auto">
+                  <div className="flex gap-4 pt-4 border-t border-[var(--color-border)] mt-auto">
                     <a
                       href={active.demo}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center gap-2 text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors bg-blue-500/10 px-4 py-2 rounded-lg"
+                      className="cyber-btn text-[10px]"
                     >
-                      <ExternalLink className="w-4 h-4" />
-                      Live Demo
+                      <ExternalLink className="w-3 h-3 mr-2" />
+                      Execute_Demo
                     </a>
                     <a
                       href={active.github}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center gap-2 text-sm font-medium text-slate-300 hover:text-white transition-colors bg-white/5 px-4 py-2 rounded-lg"
+                      className="cyber-btn text-[10px]"
+                      style={{ borderColor: 'var(--cyber-pink)', color: 'var(--cyber-pink)' }}
                     >
-                      <Github className="w-4 h-4" />
-                      Source Code
+                      <Github className="w-3 h-3 mr-2" />
+                      View_Source
                     </a>
                   </div>
                 </div>

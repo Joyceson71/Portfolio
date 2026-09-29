@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "Joyceson Danielraj — Portfolio OS",
-  description: "Interactive Desktop Portfolio of Joyceson Danielraj",
+  title: "Joyceson Danielraj — HUD",
+  description: "Cyberpunk Security Portfolio",
 };
 
 export default function RootLayout({
@@ -14,7 +15,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} font-sans antialiased overflow-hidden m-0 p-0`}>
+      <body className={`${inter.variable} ${mono.variable} font-sans antialiased bg-black min-h-screen relative`}>
+        <div className="crt-overlay" />
+        <div className="scanline" />
+        <div className="hud-line v left-8" />
+        <div className="hud-line v right-8" />
         {children}
       </body>
     </html>
