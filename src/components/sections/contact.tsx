@@ -77,7 +77,7 @@ export function Contact() {
           Get in Touch
         </h2>
         <p className="text-sm text-slate-400">
-          Have a project in mind? Let's build something incredible together.
+          Have a project in mind? Let&apos;s build something incredible together.
         </p>
       </div>
 
