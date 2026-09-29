@@ -67,13 +67,10 @@ export function Contact() {
   };
 
   return (
-    <>
+    <div className="w-full h-full flex flex-col p-4 text-slate-200">
       <AnimatePresence>
         {toast && <Toast msg={toast.msg} type={toast.type} onClose={() => setToast(null)} />}
       </AnimatePresence>
-
-  return (
-    <div className="w-full h-full flex flex-col p-4 text-slate-200">
       
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold tracking-tight mb-2 text-white">
@@ -150,7 +147,6 @@ export function Contact() {
             <Linkedin className="w-5 h-5" />
           </a>
         </div>
-      </div>
-    </>
+    </div>
   );
 }
