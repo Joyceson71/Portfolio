@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import { Sidebar } from "@/components/ui/sidebar";
-import { SmoothScrollProvider } from "@/components/providers/smooth-scroll";
-import { MatrixRain } from "@/components/ui/matrix-rain";
-import { AudioToggle } from "@/components/ui/audio-toggle";
 
-const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "Joyceson Danielraj — Ethical Hacker & Security Researcher",
-  description:
-    "Portfolio of Joyceson Danielraj — Ethical Hacker, Penetration Tester & Security Researcher. Finding vulnerabilities to make the web safer.",
+  title: "Joyceson Danielraj — Portfolio OS",
+  description: "Interactive Desktop Portfolio of Joyceson Danielraj",
 };
 
 export default function RootLayout({
@@ -19,27 +14,8 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${jetbrainsMono.variable} font-mono antialiased`}>
-        <SmoothScrollProvider>
-          {/* Fixed background layers */}
-          <div className="fixed inset-0 z-0 pointer-events-none grid-bg" />
-          <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-            <div className="blur-orb-1 top-[-10%] right-[10%]" />
-            <div className="blur-orb-2 bottom-[-5%] left-[5%]" />
-          </div>
-          <MatrixRain />
-
-          {/* Sidebar nav */}
-          <Sidebar />
-
-          {/* Main content — offset by sidebar */}
-          <main className="relative z-10 md:ml-56 min-h-screen flex flex-col">
-            {children}
-          </main>
-
-          {/* Audio */}
-          <AudioToggle />
-        </SmoothScrollProvider>
+      <body className={`${inter.variable} font-sans antialiased overflow-hidden m-0 p-0`}>
+        {children}
       </body>
     </html>
   );

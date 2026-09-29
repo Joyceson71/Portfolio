@@ -60,30 +60,19 @@ const tools = [
 
 function SkillBar({ name, pct, color, delay }: { name: string; pct: number; color: string; delay: number }) {
   return (
-    <div className="space-y-1">
-      <div className="flex justify-between items-center text-[10px] font-mono">
-        <span className="text-green-600">{name}</span>
-        <span className="text-green-900">{pct}%</span>
+    <div className="space-y-1.5">
+      <div className="flex justify-between items-center text-xs font-medium">
+        <span className="text-slate-300">{name}</span>
+        <span className="text-slate-500">{pct}%</span>
       </div>
-      <div className="relative h-px bg-green-900/30">
+      <div className="relative h-2 bg-slate-800 rounded-full overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           whileInView={{ width: `${pct}%` }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, delay, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute top-0 left-0 h-full"
-          style={{
-            background: `linear-gradient(90deg, ${color}, ${color.replace("0.7", "0.4")})`,
-            boxShadow: `0 0 6px ${color}`,
-          }}
-        />
-        <motion.div
-          initial={{ left: 0 }}
-          whileInView={{ left: `${pct}%` }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.2, delay, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute top-[-3px] w-1.5 h-1.5 rounded-full"
-          style={{ transform: "translateX(-50%)", background: color, boxShadow: `0 0 8px ${color}` }}
+          className="absolute top-0 left-0 h-full rounded-full"
+          style={{ background: color }}
         />
       </div>
     </div>
@@ -92,54 +81,49 @@ function SkillBar({ name, pct, color, delay }: { name: string; pct: number; colo
 
 export function Skills() {
   return (
-    <section id="skills" className="relative w-full py-20 md:py-32 px-6 md:px-12">
+    <div className="w-full h-full flex flex-col gap-8 text-slate-200">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        className="mb-16"
+        className="mb-2"
       >
-        <div className="section-prompt">cat skills.log</div>
-        <h2 className="text-4xl md:text-6xl font-bold font-mono tracking-tight mb-3">
-          <span className="text-gradient">SKILL</span>{" "}
-          <span className="text-green-900">MATRIX</span>
+        <h2 className="text-3xl font-bold tracking-tight mb-2 text-white">
+          Skill Matrix
         </h2>
-        <p className="text-xs font-mono text-green-800">
-          <span className="text-green-900">// </span>Arsenal of tools, techniques, and technologies.
+        <p className="text-sm text-slate-400">
+          Arsenal of tools, techniques, and technologies.
         </p>
       </motion.div>
 
       {/* Skill bars grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {categories.map((cat, gi) => (
           <motion.div
             key={cat.name}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: gi * 0.1 }}
-            className="term-window"
+            className="bg-slate-900/40 border border-white/10 rounded-xl overflow-hidden"
           >
-            <div className="term-titlebar" data-title={`${cat.prefix} ${cat.name}`}>
-              <span className="term-dot term-dot-red" />
-              <span className="term-dot term-dot-yellow" />
-              <span className="term-dot term-dot-green" />
+            <div className="bg-white/5 px-4 py-3 border-b border-white/5 flex items-center gap-3">
               <span
-                className="ml-3 text-[10px] font-mono font-bold tracking-widest"
-                style={{ color: cat.color }}
+                className="text-xs font-bold px-2 py-0.5 rounded-md"
+                style={{ backgroundColor: cat.color.replace('0.7', '0.2'), color: cat.color.replace('0.7', '1') }}
               >
                 {cat.prefix}
               </span>
-              <span className="ml-2 text-[10px] font-mono text-green-800">{cat.name}</span>
+              <span className="text-sm font-semibold text-white">{cat.name}</span>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-5 space-y-5">
               {cat.skills.map((skill, si) => (
                 <SkillBar
                   key={skill.name}
                   name={skill.name}
                   pct={skill.pct}
-                  color={cat.color}
+                  color={cat.color.replace('0.7', '1')}
                   delay={gi * 0.1 + si * 0.08}
                 />
               ))}
@@ -150,27 +134,24 @@ export function Skills() {
 
       {/* Tools arsenal */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="term-window"
+        className="bg-slate-900/40 border border-white/10 rounded-xl overflow-hidden mt-2"
       >
-        <div className="term-titlebar" data-title="tools —arsenal">
-          <span className="term-dot term-dot-red" />
-          <span className="term-dot term-dot-yellow" />
-          <span className="term-dot term-dot-green" />
-          <span className="ml-3 text-[10px] font-mono text-green-800">$ ls /usr/local/tools/</span>
+        <div className="bg-white/5 px-4 py-3 border-b border-white/5">
+          <span className="text-sm font-semibold text-white">Tools & Utilities</span>
         </div>
-        <div className="p-6">
+        <div className="p-5">
           <div className="flex flex-wrap gap-2">
             {tools.map((tool, i) => (
               <motion.span
                 key={tool}
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.03 }}
-                className="hack-badge cursor-default hover:border-green-500/50 hover:text-green-400 transition-colors"
+                transition={{ delay: i * 0.02 }}
+                className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs text-slate-300 hover:bg-white/10 hover:text-white transition-colors cursor-default"
               >
                 {tool}
               </motion.span>
@@ -178,6 +159,6 @@ export function Skills() {
           </div>
         </div>
       </motion.div>
-    </section>
+    </div>
   );
 }
