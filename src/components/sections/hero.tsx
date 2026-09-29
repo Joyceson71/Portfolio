@@ -1,174 +1,285 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { Shield, Terminal, Wifi, Lock } from "lucide-react";
+import { Terminal, Shield, ChevronDown } from "lucide-react";
 
-const BOOT_LINES = [
-  "[  0.000000] Booting secure OS kernel...",
-  "[  0.082341] Loading intrusion detection modules...",
-  "[  0.193521] Network interfaces: eth0 OK, lo OK",
-  "[  0.421034] Firewall rules initialized [ OK ]",
-  "[  0.609112] Mounting encrypted volumes [ OK ]",
-  "[  0.811500] Establishing TOR circuit...",
-  "[  1.003421] User: joyceson@0xh4ck — authentication passed",
-  "[  1.200000] System ready. Welcome, operator.",
+/* ── Typewriter lines ── */
+const TERMINAL_LINES = [
+  { delay: 0,    text: "Initializing secure environment..." },
+  { delay: 600,  text: "Loading exploit modules [OK]" },
+  { delay: 1100, text: "Network recon: passive mode [ACTIVE]" },
+  { delay: 1600, text: "Connecting to TOR exit node [OK]" },
+  { delay: 2000, text: "Authentication: joyceson@0xh4ck [OK]" },
+  { delay: 2400, text: "" },
+  { delay: 2500, text: "> whoami" },
+  { delay: 3000, text: "  joyceson — ethical hacker / security researcher" },
+  { delay: 3300, text: "" },
+  { delay: 3400, text: "> cat mission.txt" },
+  { delay: 3800, text: "  Break things legally. Fix them permanently." },
+  { delay: 4100, text: "  Turning vulnerabilities into victories." },
+  { delay: 4400, text: "" },
+  { delay: 4500, text: "> status --check" },
 ];
 
-const STATS = [
-  { icon: Shield, label: "CVEs Found",    value: "12+" },
-  { icon: Lock,   label: "Certs",         value: "CEH" },
-  { icon: Wifi,   label: "Pentests",      value: "30+" },
-  { icon: Terminal, label: "CTF Solves",  value: "80+" },
+const STATUS_ITEMS = [
+  { key: "USER",       value: "joyceson@0xh4ck" },
+  { key: "ROLE",       value: "Ethical Hacker / Pentester" },
+  { key: "OS",         value: "Kali Linux 2026.1 x86_64" },
+  { key: "UPTIME",     value: "2+ years" },
+  { key: "CVEs",       value: "12 discovered" },
+  { key: "CTF_RANK",   value: "Top 1% TryHackMe" },
+  { key: "BUG_BOUNTY", value: "30+ targets pentested" },
+  { key: "STATUS",     value: "AVAILABLE FOR HIRE" },
 ];
 
-export function Hero() {
-  const [bootDone, setBootDone] = useState(false);
-  const [visibleLines, setVisibleLines] = useState<number>(0);
-  const [mounted, setMounted] = useState(false);
+function TypewriterTerminal() {
+  const [lines, setLines] = useState<string[]>([]);
+  const [currentTyping, setCurrentTyping] = useState("");
+  const [phase, setPhase] = useState(0);
+  const [done, setDone] = useState(false);
+  const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setMounted(true);
-    let i = 0;
-    const interval = setInterval(() => {
-      i++;
-      setVisibleLines(i);
-      if (i >= BOOT_LINES.length) {
-        clearInterval(interval);
-        setTimeout(() => setBootDone(true), 600);
+    if (phase >= TERMINAL_LINES.length) {
+      setDone(true);
+      return;
+    }
+    const { delay, text } = TERMINAL_LINES[phase];
+    const timer = setTimeout(() => {
+      if (!text) {
+        setLines((prev) => [...prev, ""]);
+        setPhase((p) => p + 1);
+        return;
       }
-    }, 200);
-    return () => clearInterval(interval);
+      // Type character by character
+      let i = 0;
+      setCurrentTyping("");
+      const charTimer = setInterval(() => {
+        i++;
+        setCurrentTyping(text.slice(0, i));
+        if (i >= text.length) {
+          clearInterval(charTimer);
+          setLines((prev) => [...prev, text]);
+          setCurrentTyping("");
+          setPhase((p) => p + 1);
+        }
+      }, 28);
+      return () => clearInterval(charTimer);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [phase]);
+
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [lines, currentTyping]);
+
+  return (
+    <div className="term-window h-full flex flex-col scan-sweep">
+      <div className="term-titlebar" data-title="terminal — bash">
+        <span className="term-dot term-dot-red" />
+        <span className="term-dot term-dot-yellow" />
+        <span className="term-dot term-dot-green" />
+        <span className="ml-3 text-[10px] font-mono text-green-800">joyceson@0xh4ck: ~</span>
+      </div>
+      <div className="flex-1 p-5 overflow-y-auto text-xs font-mono leading-relaxed">
+        {lines.map((line, i) => (
+          <div
+            key={i}
+            className={`${
+              line.startsWith(">")
+                ? "text-green-400"
+                : line.startsWith("  ")
+                ? "text-green-600"
+                : "text-green-800"
+            }`}
+          >
+            {line || "\u00a0"}
+          </div>
+        ))}
+        {currentTyping && (
+          <div className="text-green-400">
+            {currentTyping}
+            <span className="animate-pulse">█</span>
+          </div>
+        )}
+        {done && (
+          <div className="mt-1">
+            <div className="text-green-400">
+              {">"} <span className="cursor-blink" />
+            </div>
+          </div>
+        )}
+        <div ref={endRef} />
+      </div>
+    </div>
+  );
+}
+
+function StatusPanel() {
+  const [revealed, setRevealed] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setRevealed((r) => {
+        if (r >= STATUS_ITEMS.length) { clearInterval(id); return r; }
+        return r + 1;
+      });
+    }, 350);
+    return () => clearInterval(id);
   }, []);
 
   return (
-    <section id="home" className="relative w-full min-h-[100svh] flex flex-col items-center justify-center pt-24 pb-12 overflow-hidden">
+    <div className="term-window h-full flex flex-col">
+      <div className="term-titlebar" data-title="neofetch — profile">
+        <span className="term-dot term-dot-red" />
+        <span className="term-dot term-dot-yellow" />
+        <span className="term-dot term-dot-green" />
+        <span className="ml-3 text-[10px] font-mono text-green-800">system info</span>
+      </div>
+      <div className="flex-1 p-5">
+        {/* ASCII logo */}
+        <pre className="text-[9px] leading-tight mb-5 select-none" style={{ color: "rgba(0,255,65,0.25)", textShadow: "0 0 6px rgba(0,255,65,0.2)" }}>
+{`  ██╗ ██████╗ ██╗   ██╗
+  ██║██╔═══██╗╚██╗ ██╔╝
+  ██║██║   ██║ ╚████╔╝ 
+ ██╔╝██║   ██║ ██╔██╗  
+ ██║ ╚██████╔╝██╔╝ ██╗ 
+ ╚═╝  ╚═════╝ ╚═╝  ╚═╝`}
+        </pre>
+        {/* System stats */}
+        <div className="space-y-2">
+          {STATUS_ITEMS.slice(0, revealed).map((item, i) => (
+            <motion.div
+              key={item.key}
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex gap-2 text-xs font-mono"
+            >
+              <span className="text-green-700 w-24 shrink-0">{item.key}</span>
+              <span className="text-green-800">:</span>
+              <span
+                className={item.key === "STATUS" ? "text-green-400 font-bold" : "text-green-500"}
+                style={item.key === "STATUS" ? { textShadow: "0 0 8px rgba(0,255,65,0.6)" } : {}}
+              >
+                {item.value}
+              </span>
+            </motion.div>
+          ))}
+        </div>
 
-      {/* Boot screen */}
-      <AnimatePresence>
-        {!bootDone && mounted && (
-          <motion.div
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
-            className="fixed inset-0 z-[200] bg-[#030a03] flex flex-col justify-center px-8 md:px-24 font-mono"
-          >
-            <div className="max-w-3xl space-y-1">
-              {BOOT_LINES.slice(0, visibleLines).map((line, i) => (
-                <motion.p
-                  key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="text-xs md:text-sm text-green-400/80"
-                  style={{ textShadow: "0 0 6px rgba(0,255,65,0.5)" }}
-                >
-                  {line}
-                </motion.p>
-              ))}
-              <span className="inline-block w-2 h-4 bg-green-400 animate-pulse ml-1" />
-            </div>
+        {/* Glow bar separator */}
+        {revealed >= STATUS_ITEMS.length && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6">
+            <div className="glow-bar w-full mb-4" />
+            <p className="text-[10px] font-mono text-green-800 leading-relaxed">
+              Certified Ethical Hacker (CEH) · CompTIA Security+<br />
+              TryHackMe Top 1% · HackTheBox Pro Hacker<br />
+              OWASP Top-10 Specialist · Bug Bounty Hunter
+            </p>
           </motion.div>
         )}
-      </AnimatePresence>
+      </div>
+    </div>
+  );
+}
 
-      {/* Main hero content */}
-      <AnimatePresence>
-        {bootDone && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            className="container mx-auto px-6 relative z-10 flex flex-col items-center text-center"
-          >
-            {/* Status badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 mb-10 hack-badge"
-            >
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              <span>root@j0yceson ~ — available for engagements</span>
-            </motion.div>
+export function Hero() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
-            {/* ASCII-style name */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="mb-4"
-            >
-              <p className="text-xs text-green-600 tracking-[0.3em] uppercase mb-3 font-mono">
-                $ whoami
-              </p>
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight font-mono leading-none">
-                <span className="text-gradient">Joyceson</span>
-                <br />
-                <span className="text-gradient-blue">Danielraj</span>
-              </h1>
-            </motion.div>
+  return (
+    <section
+      id="home"
+      className="relative w-full min-h-screen flex flex-col justify-center px-6 md:px-12 py-16 md:py-24"
+    >
+      {/* Top label */}
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+        className="flex items-center gap-3 mb-8"
+      >
+        <Shield
+          className="w-4 h-4 text-green-400"
+          style={{ filter: "drop-shadow(0 0 6px rgba(0,255,65,0.8))" }}
+        />
+        <span className="text-[10px] font-mono text-green-700 tracking-[0.3em] uppercase">
+          Authorized Access Only — Ethical Hacker Portfolio
+        </span>
+        <span className="h-px flex-1 bg-green-900/50" />
+        <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+        <span className="text-[10px] font-mono text-green-700">ONLINE</span>
+      </motion.div>
 
-            {/* Role */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-base md:text-lg text-green-600 max-w-2xl mb-4 leading-relaxed font-mono"
-            >
-              <span className="text-green-400/50">// </span>
-              Ethical Hacker · Penetration Tester · Security Researcher
-            </motion.p>
+      {/* Main headline */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="mb-10"
+      >
+        <h1
+          className="text-5xl md:text-7xl lg:text-8xl font-bold font-mono leading-none tracking-tighter mb-3 glitch"
+          data-text="JOYCESON"
+          style={{ color: "rgba(0,255,65,0.9)", textShadow: "0 0 30px rgba(0,255,65,0.4)" }}
+        >
+          JOYCESON
+        </h1>
+        <h2
+          className="text-2xl md:text-4xl font-mono font-bold tracking-widest"
+          style={{ color: "rgba(0,204,51,0.6)", textShadow: "0 0 16px rgba(0,204,51,0.3)" }}
+        >
+          DANIELRAJ
+        </h2>
+        <p className="mt-4 text-xs font-mono text-green-800 tracking-[0.25em] uppercase">
+          Ethical Hacker · Penetration Tester · Security Researcher
+        </p>
+      </motion.div>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-sm text-green-700 max-w-xl mb-12 leading-relaxed"
-            >
-              I break into systems legally — finding vulnerabilities before the bad actors do.
-              Specializing in web app pentesting, CTF competitions, and security-hardened engineering.
-            </motion.p>
+      {/* Two-panel terminal layout */}
+      {mounted && (
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-10"
+          style={{ height: "clamp(280px, 35vh, 380px)" }}
+        >
+          <TypewriterTerminal />
+          <StatusPanel />
+        </motion.div>
+      )}
 
-            {/* Stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 w-full max-w-2xl"
-            >
-              {STATS.map((stat, i) => (
-                <div
-                  key={i}
-                  className="glass-panel p-4 flex flex-col items-center gap-1"
-                >
-                  <stat.icon className="w-4 h-4 text-green-400 mb-1" style={{ filter: "drop-shadow(0 0 6px rgba(0,255,65,0.7))" }} />
-                  <span className="text-2xl font-bold text-green-400" style={{ textShadow: "0 0 10px rgba(0,255,65,0.6)" }}>
-                    {stat.value}
-                  </span>
-                  <span className="text-xs text-green-700 uppercase tracking-wider">{stat.label}</span>
-                </div>
-              ))}
-            </motion.div>
+      {/* CTAs */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8 }}
+        className="flex flex-wrap items-center gap-4"
+      >
+        <Link href="#projects" className="btn-primary">
+          <Terminal className="w-4 h-4" />
+          ./view_projects.sh
+        </Link>
+        <Link href="#contact" className="btn-secondary">
+          <Shield className="w-4 h-4" />
+          initiate_contact()
+        </Link>
+        <span className="text-xs font-mono text-green-900 hidden md:block">
+          — scroll down to explore ↓
+        </span>
+      </motion.div>
 
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="flex flex-col sm:flex-row items-center gap-4"
-            >
-              <Link href="#projects" className="btn-primary w-full sm:w-auto">
-                <Terminal className="w-4 h-4 mr-2" />
-                ./view_exploits.sh
-              </Link>
-              <Link href="#contact" className="btn-secondary w-full sm:w-auto">
-                <Lock className="w-4 h-4 mr-2" />
-                initiate_contact()
-              </Link>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Scroll indicator */}
+      <motion.div
+        animate={{ y: [0, 6, 0] }}
+        transition={{ repeat: Infinity, duration: 2 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-green-900"
+      >
+        <ChevronDown className="w-5 h-5" />
+      </motion.div>
     </section>
   );
 }

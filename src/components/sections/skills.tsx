@@ -2,125 +2,182 @@
 
 import { motion } from "framer-motion";
 
-const skills = [
+const categories = [
   {
-    category: "Offensive Security",
-    prefix: "[attack]",
-    items: [
-      { name: "Web App Pentesting",    level: 92 },
-      { name: "SQL Injection / XSS",   level: 90 },
-      { name: "Privilege Escalation",  level: 85 },
-      { name: "Reverse Engineering",   level: 75 },
+    name: "Offensive Security",
+    prefix: "[ATK]",
+    color: "rgba(255,80,80,0.7)",
+    skills: [
+      { name: "Web App Pentesting",   pct: 92 },
+      { name: "SQL Injection / XSS",  pct: 90 },
+      { name: "Privilege Escalation", pct: 85 },
+      { name: "Buffer Overflow",      pct: 76 },
+      { name: "Reverse Engineering",  pct: 72 },
     ],
   },
   {
-    category: "Recon & OSINT",
-    prefix: "[recon]",
-    items: [
-      { name: "Nmap / Shodan",       level: 90 },
-      { name: "Burp Suite",          level: 88 },
-      { name: "Maltego / OSINT",     level: 80 },
-      { name: "Metasploit",          level: 82 },
+    name: "Recon & OSINT",
+    prefix: "[RCN]",
+    color: "rgba(255,180,0,0.7)",
+    skills: [
+      { name: "Nmap / Shodan",    pct: 92 },
+      { name: "Burp Suite",       pct: 90 },
+      { name: "Metasploit",       pct: 84 },
+      { name: "Maltego / OSINT",  pct: 80 },
+      { name: "Wireshark",        pct: 78 },
     ],
   },
   {
-    category: "Defensive & Hardening",
-    prefix: "[defend]",
-    items: [
-      { name: "Firewall / IDS",       level: 78 },
-      { name: "SIEM / Log Analysis",  level: 74 },
-      { name: "Secure Code Review",   level: 85 },
+    name: "Defensive",
+    prefix: "[DEF]",
+    color: "rgba(0,180,255,0.7)",
+    skills: [
+      { name: "Secure Code Review", pct: 87 },
+      { name: "Firewall / IDS",     pct: 80 },
+      { name: "SIEM / Splunk",      pct: 74 },
+      { name: "Threat Modelling",   pct: 76 },
     ],
   },
   {
-    category: "Programming",
-    prefix: "[code]",
-    items: [
-      { name: "Python / Scripting",   level: 88 },
-      { name: "Bash / PowerShell",    level: 85 },
-      { name: "JavaScript / Next.js", level: 92 },
+    name: "Programming",
+    prefix: "[PRG]",
+    color: "rgba(0,255,65,0.7)",
+    skills: [
+      { name: "Python / Scripting",   pct: 90 },
+      { name: "Bash / PowerShell",    pct: 87 },
+      { name: "JavaScript / Next.js", pct: 92 },
+      { name: "C / Assembly",         pct: 68 },
     ],
   },
 ];
 
+const tools = [
+  "Burp Suite", "Metasploit", "Nmap", "Wireshark", "OWASP ZAP",
+  "Kali Linux", "John the Ripper", "Hashcat", "Ghidra", "pwntools",
+  "Shodan", "Maltego", "Nikto", "SQLmap", "Hydra",
+  "Gobuster", "BloodHound", "Mimikatz", "Netcat", "tmux",
+];
+
+function SkillBar({ name, pct, color, delay }: { name: string; pct: number; color: string; delay: number }) {
+  return (
+    <div className="space-y-1">
+      <div className="flex justify-between items-center text-[10px] font-mono">
+        <span className="text-green-600">{name}</span>
+        <span className="text-green-900">{pct}%</span>
+      </div>
+      <div className="relative h-px bg-green-900/30">
+        <motion.div
+          initial={{ width: 0 }}
+          whileInView={{ width: `${pct}%` }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, delay, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute top-0 left-0 h-full"
+          style={{
+            background: `linear-gradient(90deg, ${color}, ${color.replace("0.7", "0.4")})`,
+            boxShadow: `0 0 6px ${color}`,
+          }}
+        />
+        <motion.div
+          initial={{ left: 0 }}
+          whileInView={{ left: `${pct}%` }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, delay, ease: [0.16, 1, 0.3, 1] }}
+          className="absolute top-[-3px] w-1.5 h-1.5 rounded-full"
+          style={{ transform: "translateX(-50%)", background: color, boxShadow: `0 0 8px ${color}` }}
+        />
+      </div>
+    </div>
+  );
+}
 
 export function Skills() {
   return (
-    <section id="skills" className="relative w-full py-24 md:py-32 flex justify-center">
-      <div className="container mx-auto px-6 max-w-6xl">
+    <section id="skills" className="relative w-full py-20 md:py-32 px-6 md:px-12">
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        className="mb-16"
+      >
+        <div className="section-prompt">cat skills.log</div>
+        <h2 className="text-4xl md:text-6xl font-bold font-mono tracking-tight mb-3">
+          <span className="text-gradient">SKILL</span>{" "}
+          <span className="text-green-900">MATRIX</span>
+        </h2>
+        <p className="text-xs font-mono text-green-800">
+          <span className="text-green-900">// </span>Arsenal of tools, techniques, and technologies.
+        </p>
+      </motion.div>
 
-        <div className="mb-16">
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-xs text-green-600 tracking-[0.3em] uppercase mb-3"
-          >
-            $ cat skills.log
-          </motion.p>
-          <motion.h2
+      {/* Skill bars grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
+        {categories.map((cat, gi) => (
+          <motion.div
+            key={cat.name}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-3xl md:text-5xl font-bold tracking-tight mb-4"
+            transition={{ delay: gi * 0.1 }}
+            className="term-window"
           >
-            <span className="text-gradient">Skill</span> <span className="text-gradient-blue">Matrix.</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-sm text-green-700 max-w-xl"
-          >
-            <span className="text-green-500/50">// </span>
-            Tools, techniques, and technologies in my arsenal.
-          </motion.p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {skills.map((group, gi) => (
-            <motion.div
-              key={group.category}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: gi * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="glass-panel p-8"
-            >
-              <div className="flex items-center gap-2 mb-6">
-                <span className="text-green-600 text-xs font-mono">{group.prefix}</span>
-                <h3 className="text-sm font-semibold text-green-300 font-mono uppercase tracking-wider">{group.category}</h3>
-              </div>
-              <div className="space-y-5">
-                {group.items.map((item) => (
-                  <div key={item.name} className="flex flex-col gap-2">
-                    <div className="flex justify-between items-center text-xs font-mono">
-                      <span className="text-green-400/80">{item.name}</span>
-                      <span className="text-green-700">{item.level}%</span>
-                    </div>
-                    <div className="w-full h-px bg-green-900/50 overflow-hidden relative">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${item.level}%` }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1.5, delay: gi * 0.1 + 0.3, ease: [0.16, 1, 0.3, 1] }}
-                        className="h-full absolute top-0 left-0"
-                        style={{
-                          background: "linear-gradient(90deg, #00ff41, #00cc33)",
-                          boxShadow: "0 0 8px rgba(0,255,65,0.8)",
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
+            <div className="term-titlebar" data-title={`${cat.prefix} ${cat.name}`}>
+              <span className="term-dot term-dot-red" />
+              <span className="term-dot term-dot-yellow" />
+              <span className="term-dot term-dot-green" />
+              <span
+                className="ml-3 text-[10px] font-mono font-bold tracking-widest"
+                style={{ color: cat.color }}
+              >
+                {cat.prefix}
+              </span>
+              <span className="ml-2 text-[10px] font-mono text-green-800">{cat.name}</span>
+            </div>
+            <div className="p-6 space-y-4">
+              {cat.skills.map((skill, si) => (
+                <SkillBar
+                  key={skill.name}
+                  name={skill.name}
+                  pct={skill.pct}
+                  color={cat.color}
+                  delay={gi * 0.1 + si * 0.08}
+                />
+              ))}
+            </div>
+          </motion.div>
+        ))}
       </div>
+
+      {/* Tools arsenal */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="term-window"
+      >
+        <div className="term-titlebar" data-title="tools —arsenal">
+          <span className="term-dot term-dot-red" />
+          <span className="term-dot term-dot-yellow" />
+          <span className="term-dot term-dot-green" />
+          <span className="ml-3 text-[10px] font-mono text-green-800">$ ls /usr/local/tools/</span>
+        </div>
+        <div className="p-6">
+          <div className="flex flex-wrap gap-2">
+            {tools.map((tool, i) => (
+              <motion.span
+                key={tool}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.03 }}
+                className="hack-badge cursor-default hover:border-green-500/50 hover:text-green-400 transition-colors"
+              >
+                {tool}
+              </motion.span>
+            ))}
+          </div>
+        </div>
+      </motion.div>
     </section>
   );
 }
