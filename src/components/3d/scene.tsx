@@ -1,182 +1,132 @@
 "use client";
 
-import { useRef, useState, useMemo } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { 
-  Float, 
-  Text, 
-  MeshTransmissionMaterial, 
-  Environment, 
-  ContactShadows,
-  Html,
-  Icosahedron
-} from "@react-three/drei";
+import { useRef, useMemo, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Sphere, Line, Html, OrbitControls } from "@react-three/drei";
+import { EffectComposer, Bloom, ChromaticAberration } from "@react-three/postprocessing";
+import { BlendFunction } from "postprocessing";
 import * as THREE from "three";
-import { easing } from "maath";
 
-// Dynamic Camera that follows mouse
-function CameraRig() {
+// Massive Wireframe Globe
+function WireframeGlobe() {
+  const mesh = useRef<THREE.Mesh>(null!);
   useFrame((state, delta) => {
-    // Smoothly move camera based on mouse position
-    easing.damp3(
-      state.camera.position,
-      [state.pointer.x * 2, state.pointer.y * 2, 10],
-      0.5,
-      delta
-    );
-    state.camera.lookAt(0, 0, 0);
+    mesh.current.rotation.y += delta * 0.1;
+    mesh.current.rotation.x += delta * 0.05;
   });
-  return null;
+
+  return (
+    <Sphere ref={mesh} args={[4, 32, 32]}>
+      <meshBasicMaterial color="#00ffcc" wireframe transparent opacity={0.15} />
+    </Sphere>
+  );
 }
 
-// Background Massive Text
-function BackgroundText() {
+// Data Nodes floating around the globe
+function DataNodes() {
+  const group = useRef<THREE.Group>(null!);
+  
+  const nodes = useMemo(() => {
+    const data = [];
+    for(let i=0; i<15; i++) {
+      // Random position on sphere surface
+      const phi = Math.acos(-1 + (2 * i) / 15);
+      const theta = Math.sqrt(15 * Math.PI) * phi;
+      
+      const r = 4.2; // slightly larger than globe
+      data.push({
+        pos: [
+          r * Math.cos(theta) * Math.sin(phi),
+          r * Math.sin(theta) * Math.sin(phi),
+          r * Math.cos(phi)
+        ] as [number, number, number],
+        label: `SYS.NODE_${i.toString().padStart(3, '0')}`
+      });
+    }
+    return data;
+  }, []);
+
+  useFrame((state, delta) => {
+    group.current.rotation.y -= delta * 0.05;
+  });
+
   return (
-    <group position={[0, 0, -5]}>
-      <Text
-        fontSize={4}
-        letterSpacing={-0.05}
-        font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff"
-        position={[0, 1.5, 0]}
-        color="#ffffff"
-        anchorX="center"
-        anchorY="middle"
-      >
-        SPATIAL
-      </Text>
-      <Text
-        fontSize={4}
-        letterSpacing={-0.05}
-        font="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff"
-        position={[0, -2, 0]}
-        color="#222222" // Darker for depth
-        anchorX="center"
-        anchorY="middle"
-      >
-        DESIGNER
-      </Text>
+    <group ref={group}>
+      {nodes.map((n, i) => (
+        <group key={i} position={n.pos}>
+          <mesh>
+            <boxGeometry args={[0.1, 0.1, 0.1]} />
+            <meshBasicMaterial color="#ffffff" />
+          </mesh>
+          {/* Connection line to center */}
+          <Line points={[[0,0,0], [-n.pos[0], -n.pos[1], -n.pos[2]]]} color="#00ffcc" opacity={0.2} transparent />
+          
+          <Html distanceFactor={15} zIndexRange={[100, 0]}>
+            <div className="flex items-center gap-2 pointer-events-none opacity-50">
+              <div className="w-1 h-1 bg-white" />
+              <span className="text-[8px] text-white font-mono uppercase tracking-widest whitespace-nowrap bg-black/50 px-1 border border-white/20">
+                {n.label}
+              </span>
+            </div>
+          </Html>
+        </group>
+      ))}
     </group>
   );
 }
 
-// Interactive Glass Shard (Represents a project)
-function ProjectShard({ position, title, subtitle, color }: { position: [number, number, number], title: string, subtitle: string, color: string }) {
-  const mesh = useRef<THREE.Mesh>(null!);
-  const [hovered, setHover] = useState(false);
+// High-speed data rings
+function DataRings() {
+  const ring1 = useRef<THREE.Mesh>(null!);
+  const ring2 = useRef<THREE.Mesh>(null!);
 
   useFrame((state, delta) => {
-    if (mesh.current) {
-      mesh.current.rotation.x += delta * 0.2;
-      mesh.current.rotation.y += delta * 0.3;
-      
-      // Scale up when hovered
-      const targetScale = hovered ? 1.2 : 1;
-      easing.damp3(mesh.current.scale, [targetScale, targetScale, targetScale], 0.2, delta);
-    }
+    ring1.current.rotation.z += delta * 0.5;
+    ring2.current.rotation.x -= delta * 0.3;
+    ring2.current.rotation.y += delta * 0.4;
   });
 
   return (
-    <Float speed={2} rotationIntensity={1} floatIntensity={2} position={position}>
-      <mesh 
-        ref={mesh}
-        onPointerOver={() => setHover(true)}
-        onPointerOut={() => setHover(false)}
-        onClick={() => alert(`Opening project: ${title}`)}
-      >
-        <icosahedronGeometry args={[1, 0]} />
-        <MeshTransmissionMaterial
-          backside
-          samples={4}
-          thickness={0.8}
-          chromaticAberration={1}
-          anisotropy={0.2}
-          distortion={0.5}
-          distortionScale={0.5}
-          temporalDistortion={0.1}
-          color={color}
-          clearcoat={1}
-          clearcoatRoughness={0.1}
-        />
-        
-        {/* HTML Label that appears on hover */}
-        <Html distanceFactor={10} zIndexRange={[100, 0]} center>
-          <div 
-            className={`transition-all duration-300 pointer-events-none flex flex-col items-center justify-center`}
-            style={{ opacity: hovered ? 1 : 0, transform: `translateY(${hovered ? '0' : '20px'})` }}
-          >
-            <div className="px-4 py-2 bg-black/80 backdrop-blur-md border border-white/20 rounded-full whitespace-nowrap">
-              <p className="text-white text-xs font-bold uppercase tracking-widest">{title}</p>
-            </div>
-            <p className="text-white/60 text-[10px] font-medium uppercase tracking-wider mt-2">{subtitle}</p>
-          </div>
-        </Html>
+    <>
+      <mesh ref={ring1} rotation={[Math.PI/2, 0, 0]}>
+        <torusGeometry args={[5, 0.01, 16, 100]} />
+        <meshBasicMaterial color="#00ffcc" transparent opacity={0.3} />
       </mesh>
-    </Float>
-  );
-}
-
-// Floating Particles
-function Particles() {
-  const count = 100;
-  const positions = useMemo(() => {
-    const arr = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      arr[i * 3]     = (Math.random() - 0.5) * 20;
-      arr[i * 3 + 1] = (Math.random() - 0.5) * 20;
-      arr[i * 3 + 2] = (Math.random() - 0.5) * 10;
-    }
-    return arr;
-  }, []);
-
-  const ref = useRef<THREE.Points>(null!);
-  useFrame((state, delta) => {
-    if (ref.current) {
-      ref.current.rotation.y += delta * 0.05;
-      ref.current.rotation.x += delta * 0.02;
-    }
-  });
-
-  return (
-    <points ref={ref}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <pointsMaterial color="#ffffff" size={0.05} transparent opacity={0.3} sizeAttenuation />
-    </points>
+      <mesh ref={ring2} rotation={[0, Math.PI/4, 0]}>
+        <torusGeometry args={[6, 0.02, 16, 100, Math.PI * 1.5]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.5} />
+      </mesh>
+    </>
   );
 }
 
 export function SpatialScene() {
   return (
     <Canvas
-      camera={{ position: [0, 0, 10], fov: 40 }}
+      camera={{ position: [0, 0, 12], fov: 45 }}
       style={{ width: "100%", height: "100vh" }}
-      gl={{ antialias: true, alpha: false }}
+      gl={{ antialias: false, powerPreference: "high-performance" }}
     >
-      <color attach="background" args={['#050505']} />
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 10]} intensity={2} color="#ffffff" />
-      <spotLight position={[-10, 10, 10]} angle={0.15} penumbra={1} intensity={2} color="#a855f7" />
+      <color attach="background" args={['#000000']} />
       
-      {/* Dynamic Camera */}
-      <CameraRig />
+      <WireframeGlobe />
+      <DataNodes />
+      <DataRings />
 
-      {/* Massive Background Text */}
-      <BackgroundText />
+      <OrbitControls 
+        enablePan={false} 
+        enableZoom={false} 
+        autoRotate 
+        autoRotateSpeed={0.5} 
+        maxPolarAngle={Math.PI/1.5} 
+        minPolarAngle={Math.PI/3}
+      />
 
-      {/* Interactive Project Shards */}
-      <ProjectShard position={[-3, 1, 0]} title="Cosmos Brand" subtitle="WebGL • React" color="#a855f7" />
-      <ProjectShard position={[3, -1, 1]} title="Fluid Studio" subtitle="GLSL • Motion" color="#06b6d4" />
-      <ProjectShard position={[0, -2.5, 2]} title="Ethereal Agency" subtitle="Three.js • GSAP" color="#f59e0b" />
-      
-      {/* Particles */}
-      <Particles />
-
-      {/* Ground Shadow */}
-      <ContactShadows resolution={1024} scale={20} blur={2} opacity={0.5} far={10} color="#000000" position={[0, -4, 0]} />
-      
-      {/* Environment for glass reflections */}
-      <Environment preset="city" />
+      {/* Post Processing for that Sci-Fi Glow */}
+      <EffectComposer>
+        <Bloom luminanceThreshold={0.2} mipmapBlur intensity={1.5} />
+        <ChromaticAberration blendFunction={BlendFunction.NORMAL} offset={new THREE.Vector2(0.002, 0.002)} />
+      </EffectComposer>
     </Canvas>
   );
 }

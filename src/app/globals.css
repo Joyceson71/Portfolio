@@ -2,16 +2,16 @@
 @import "tw-animate-css";
 
 /* ═══════════════════════════════════════════════════════
-   SPATIAL 3D DESIGNER PORTFOLIO - IMMERSIVE DARK
+   3D WEB DESIGNER - TECHNICAL / HUD SCENE
 ═══════════════════════════════════════════════════════ */
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
   --color-background: #000000;
-  --color-foreground: #ffffff;
+  --color-foreground: #00ffcc; /* Tech Cyan */
   
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
 @layer base {
@@ -19,30 +19,19 @@
 
   html, body {
     width: 100%;
-    min-height: 100%;
+    height: 100%;
     margin: 0;
     padding: 0;
     background-color: #000000;
-    color: #ffffff;
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-  }
-  
-  /* Disable scroll on homepage only */
-  body:has(main.h-screen) {
+    color: #00ffcc;
+    font-family: var(--font-mono);
     overflow: hidden;
+    -webkit-font-smoothing: antialiased;
   }
 
   ::selection {
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-  }
-
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: #000; }
-  ::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.2);
-    border-radius: 99px;
+    background: #00ffcc;
+    color: #000;
   }
 }
 
@@ -52,74 +41,45 @@
     inset: 0;
     pointer-events: none;
     z-index: 10;
+    display: grid;
+    grid-template-columns: 300px 1fr 300px;
+    grid-template-rows: 80px 1fr 80px;
   }
 
   .interactive {
     pointer-events: auto;
   }
 
-  .nav-link {
-    font-size: 11px;
-    font-weight: 700;
+  .tech-panel {
+    background: rgba(0, 20, 20, 0.4);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 255, 204, 0.2);
+    box-shadow: inset 0 0 20px rgba(0, 255, 204, 0.05);
+  }
+
+  .tech-text {
+    font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: rgba(255,255,255,0.5);
-    transition: color 0.3s ease;
-    cursor: pointer;
+    letter-spacing: 0.1em;
+    color: rgba(0, 255, 204, 0.7);
   }
 
-  .nav-link:hover {
-    color: #ffffff;
+  .tech-title {
+    font-size: 12px;
+    font-weight: bold;
+    color: #00ffcc;
+    border-bottom: 1px solid rgba(0, 255, 204, 0.3);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
   }
 
-  /* Subpage utilities */
-  .dark-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 24px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    transition: all 0.3s ease;
-  }
-
-  .dark-card:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-
-  .btn-outline {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 24px;
-    border-radius: 99px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #ffffff;
-    border: 1px solid rgba(255,255,255,0.2);
-    background: transparent;
-    transition: all 0.3s ease;
-  }
-
-  .btn-outline:hover {
-    background: #ffffff;
-    color: #000000;
-  }
-
-  .input-dark {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px;
-    padding: 14px 18px;
-    font-size: 14px;
-    color: #fff;
-    outline: none;
-    transition: all 0.2s ease;
-  }
-  
-  .input-dark:focus {
-    border-color: rgba(255,255,255,0.4);
-    background: rgba(255, 255, 255, 0.06);
+  .scanline {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,255,204,0) 0%, rgba(0,255,204,0.05) 50%, rgba(0,255,204,0) 100%);
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0.5;
   }
 }
