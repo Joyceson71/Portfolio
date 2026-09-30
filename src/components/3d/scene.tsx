@@ -2,157 +2,85 @@
 
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, MeshDistortMaterial, Sphere, Torus, Box, OrbitControls } from "@react-three/drei";
+import { Float, MeshTransmissionMaterial, Sphere, Torus, Box, Edges } from "@react-three/drei";
 import * as THREE from "three";
 
-function FloatingSphere({ position, color, speed = 1, distort = 0.4 }: {
+function GlassSphere({ position, color, speed = 1, distort = 0.4 }: {
   position: [number, number, number];
   color: string;
   speed?: number;
   distort?: number;
 }) {
   return (
-    <Float speed={speed} rotationIntensity={0.4} floatIntensity={0.8}>
-      <Sphere args={[1, 64, 64]} position={position}>
-        <MeshDistortMaterial
+    <Float speed={speed} rotationIntensity={0.8} floatIntensity={1.5}>
+      <Sphere args={[1.2, 64, 64]} position={position}>
+        <MeshTransmissionMaterial
+          backside
+          samples={4}
+          thickness={0.5}
+          chromaticAberration={0.05}
+          anisotropy={0.1}
+          distortion={distort}
+          distortionScale={0.2}
+          temporalDistortion={0.1}
           color={color}
-          attach="material"
-          distort={distort}
-          speed={2}
-          roughness={0}
-          metalness={0.8}
-          transparent
-          opacity={0.85}
+          clearcoat={1}
+          clearcoatRoughness={0.1}
         />
       </Sphere>
     </Float>
   );
 }
 
-function FloatingTorus({ position, color, speed = 0.8 }: {
+function FloatingGeometry({ position, color, speed = 0.8, type = "torus" }: {
   position: [number, number, number];
   color: string;
   speed?: number;
+  type?: "torus" | "box";
 }) {
   const ref = useRef<THREE.Mesh>(null!);
   useFrame((state) => {
     ref.current.rotation.x = Math.sin(state.clock.elapsedTime * speed) * 0.5;
     ref.current.rotation.y = state.clock.elapsedTime * speed * 0.5;
   });
-  return (
-    <Float speed={speed} floatIntensity={0.6}>
-      <Torus ref={ref} args={[1, 0.35, 32, 100]} position={position}>
-        <meshStandardMaterial
-          color={color}
-          wireframe
-          emissive={color}
-          emissiveIntensity={0.3}
-          transparent
-          opacity={0.6}
-        />
-      </Torus>
-    </Float>
-  );
-}
-
-function FloatingCube({ position, color, speed = 1.2 }: {
-  position: [number, number, number];
-  color: string;
-  speed?: number;
-}) {
-  const ref = useRef<THREE.Mesh>(null!);
-  useFrame((state) => {
-    ref.current.rotation.x = state.clock.elapsedTime * speed * 0.4;
-    ref.current.rotation.y = state.clock.elapsedTime * speed * 0.3;
-  });
+  
   return (
     <Float speed={speed} floatIntensity={1}>
-      <Box ref={ref} args={[1.2, 1.2, 1.2]} position={position}>
-        <meshStandardMaterial
-          color={color}
-          wireframe
-          emissive={color}
-          emissiveIntensity={0.5}
-          transparent
-          opacity={0.5}
-        />
-      </Box>
+      {type === "torus" ? (
+        <Torus ref={ref} args={[1, 0.3, 32, 64]} position={position}>
+          <meshPhysicalMaterial color={color} roughness={0.1} metalness={0.2} clearcoat={1} />
+        </Torus>
+      ) : (
+        <Box ref={ref} args={[1.5, 1.5, 1.5]} position={position}>
+           <meshPhysicalMaterial color={color} roughness={0.1} metalness={0.2} clearcoat={1} />
+        </Box>
+      )}
     </Float>
-  );
-}
-
-function ParticleField() {
-  const count = 200;
-  const positions = useMemo(() => {
-    const arr = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      arr[i * 3]     = (Math.random() - 0.5) * 30;
-      arr[i * 3 + 1] = (Math.random() - 0.5) * 30;
-      arr[i * 3 + 2] = (Math.random() - 0.5) * 30;
-    }
-    return arr;
-  }, []);
-
-  const ref = useRef<THREE.Points>(null!);
-  useFrame((state) => {
-    ref.current.rotation.y = state.clock.elapsedTime * 0.02;
-  });
-
-  return (
-    <points ref={ref}>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <pointsMaterial color="#a855f7" size={0.06} transparent opacity={0.6} />
-    </points>
   );
 }
 
 export function HeroScene() {
   return (
     <Canvas
-      camera={{ position: [0, 0, 8], fov: 50 }}
-      style={{ width: "100%", height: "100%" }}
+      camera={{ position: [0, 0, 10], fov: 45 }}
+      style={{ width: "100%", height: "100%", position: "absolute", inset: 0, pointerEvents: "none" }}
       gl={{ antialias: true, alpha: true }}
     >
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} intensity={1.5} color="#a855f7" />
-      <pointLight position={[-10, -5, -10]} intensity={1} color="#06b6d4" />
-      <pointLight position={[0, 10, -10]} intensity={0.8} color="#f59e0b" />
+      <ambientLight intensity={1.5} />
+      <directionalLight position={[10, 10, 10]} intensity={2} color="#ffffff" />
+      <directionalLight position={[-10, -10, -10]} intensity={1} color="#fbcfe8" />
 
-      <ParticleField />
+      {/* Glass elements */}
+      <GlassSphere position={[-4, 1.5, -2]} color="#fecdd3" speed={1.2} distort={0.5} />
+      <GlassSphere position={[4, -1.5, -1]} color="#bfdbfe" speed={0.9} distort={0.3} />
+      <GlassSphere position={[0, 3, -4]} color="#fed7aa" speed={1.4} distort={0.6} />
 
-      <FloatingSphere position={[-3.5, 1, -2]} color="#a855f7" speed={1.2} distort={0.5} />
-      <FloatingSphere position={[3.5, -1, -1]} color="#06b6d4" speed={0.9} distort={0.3} />
-      <FloatingSphere position={[0, 2.5, -3]} color="#f59e0b" speed={1.4} distort={0.6} />
-
-      <FloatingTorus position={[-2, -2, 0]} color="#a855f7" speed={0.7} />
-      <FloatingTorus position={[4, 1.5, -2]} color="#06b6d4" speed={1.1} />
-
-      <FloatingCube position={[2, -2.5, 1]} color="#f59e0b" speed={0.8} />
-      <FloatingCube position={[-4, 1.5, -1]} color="#ec4899" speed={1.0} />
+      {/* Solid elements */}
+      <FloatingGeometry position={[-3, -2, -1]} color="#f472b6" speed={0.7} type="torus" />
+      <FloatingGeometry position={[3, 2, -3]} color="#60a5fa" speed={1.1} type="box" />
+      
+      {/* Tiny decorative spheres */}
+      <FloatingGeometry position={[1, -3, 2]} color="#fb923c" speed={1.5} type="box" />
     </Canvas>
-  );
-}
-
-export function SkillSphere({ color, label }: { color: string; label: string }) {
-  return (
-    <div className="w-full h-32">
-      <Canvas camera={{ position: [0, 0, 3], fov: 45 }} gl={{ antialias: true, alpha: true }}>
-        <ambientLight intensity={0.8} />
-        <pointLight position={[5, 5, 5]} intensity={1.5} color={color} />
-        <Float speed={2} floatIntensity={1.2} rotationIntensity={1}>
-          <Sphere args={[0.9, 64, 64]}>
-            <MeshDistortMaterial
-              color={color}
-              distort={0.4}
-              speed={3}
-              roughness={0.1}
-              metalness={0.9}
-            />
-          </Sphere>
-        </Float>
-      </Canvas>
-    </div>
   );
 }
