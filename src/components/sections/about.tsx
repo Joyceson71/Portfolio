@@ -1,138 +1,231 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
-import { Shield, Bug, Key, Server, Eye, Terminal, Award, Clock, Target, Zap } from "lucide-react";
+import { Box, Layers, Zap, Globe, Cpu, Brush, Award, Clock, Target, Star } from "lucide-react";
 
-const expertise = [
-  { icon: Shield, label: "Web App Pentesting",    desc: "OWASP Top-10, API attacks"  },
-  { icon: Bug,    label: "Vuln Research",          desc: "CVE discovery & disclosure" },
-  { icon: Key,    label: "Privilege Escalation",   desc: "Linux / Windows privesc"    },
-  { icon: Server, label: "Network Security",       desc: "Recon, lateral movement"    },
-  { icon: Eye,    label: "OSINT",                  desc: "Passive recon & profiling"  },
-  { icon: Terminal, label: "CTF / Red Team",       desc: "HackTheBox, TryHackMe"      },
+const services = [
+  {
+    icon: Box,
+    label: "3D Web Experiences",
+    desc: "Fully interactive Three.js & WebGL scenes embedded directly in browsers — no plugin required.",
+    color: "#a855f7",
+    badge: "badge-purple",
+  },
+  {
+    icon: Layers,
+    label: "Motion & Animation",
+    desc: "GSAP-powered scroll animations, Framer Motion transitions, and CSS-based micro-interactions.",
+    color: "#06b6d4",
+    badge: "badge-cyan",
+  },
+  {
+    icon: Globe,
+    label: "Creative Web Design",
+    desc: "Pixel-perfect, responsive layouts with modern design systems built in Figma and code.",
+    color: "#f59e0b",
+    badge: "badge-amber",
+  },
+  {
+    icon: Zap,
+    label: "Performance Optimization",
+    desc: "Lighthouse 100 scores, lazy loading 3D assets, texture compression, and GPU-friendly code.",
+    color: "#a855f7",
+    badge: "badge-purple",
+  },
+  {
+    icon: Cpu,
+    label: "Shader Programming",
+    desc: "Custom GLSL vertex and fragment shaders for unique visual effects that can't exist anywhere else.",
+    color: "#06b6d4",
+    badge: "badge-cyan",
+  },
+  {
+    icon: Brush,
+    label: "Brand & Identity",
+    desc: "Logo systems, color palettes, typography scale, and full brand guidelines for digital-first companies.",
+    color: "#f59e0b",
+    badge: "badge-amber",
+  },
 ];
 
 const timeline = [
-  { year: "2022", event: "Started ethical hacking journey", icon: Zap },
-  { year: "2023", event: "Obtained CEH & Security+ certs", icon: Award },
-  { year: "2023", event: "First CVE submission accepted",   icon: Bug },
-  { year: "2024", event: "Reached TryHackMe Top 1%",       icon: Target },
-  { year: "2025", event: "30+ pentests completed",          icon: Shield },
-  { year: "2026", event: "Full-time security researcher",   icon: Clock },
+  { year: "2020", event: "Started as a self-taught web designer", icon: Star },
+  { year: "2021", event: "Fell in love with Three.js & WebGL", icon: Box },
+  { year: "2022", event: "First commercial 3D web project launched", icon: Globe },
+  { year: "2023", event: "Won 3× Awwwards Site of the Day", icon: Award },
+  { year: "2024", event: "50+ projects delivered across 20 countries", icon: Target },
+  { year: "2025", event: "Founded a creative studio with 5 designers", icon: Layers },
+  { year: "2026", event: "Speaking at WebGL Summit & SIGGRAPH Web", icon: Clock },
 ];
 
 const stats = [
-  { value: "12+",    label: "CVEs Found"      },
-  { value: "30+",    label: "Pentests Done"   },
-  { value: "80+",    label: "CTF Challenges"  },
-  { value: "Top 1%", label: "THM Rank"        },
+  { value: "50+",  label: "Projects Shipped" },
+  { value: "3×",   label: "Awwwards SOTD"   },
+  { value: "20+",  label: "Countries Served" },
+  { value: "100%", label: "Client Satisfaction" },
 ];
 
 export function About() {
   return (
-    <div className="w-full h-full flex flex-col gap-4 text-[var(--fg)] font-mono">
-      <div className="mb-2">
-        <h3 className="text-2xl font-bold tracking-tight text-[var(--cyber-cyan)] uppercase">
-          Joyceson Danielraj
-        </h3>
-        <p className="text-[10px] text-[var(--cyber-pink)] uppercase tracking-widest mt-1">
-          // SYS_CLASS: Offensive_Security_Specialist
-        </p>
-      </div>
+    <section id="about" className="w-full px-6 md:px-12 py-32 max-w-[1400px] mx-auto">
+      {/* Label */}
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="section-label"
+      >
+        About Me
+      </motion.div>
 
-      {/* Stats bar */}
-      <div className="grid grid-cols-2 gap-2 mb-4">
-        {stats.map((s, i) => (
-          <div
-            key={s.label}
-            className="border border-[var(--color-border)] p-2 text-center bg-black/40 hover:bg-[var(--cyber-cyan)] hover:text-black transition-colors group cursor-default"
-          >
-            <div className="text-xl font-bold text-[var(--cyber-cyan)] group-hover:text-black mb-1">
-              {s.value}
-            </div>
-            <div className="text-[9px] text-[var(--cyber-pink)] group-hover:text-black font-medium uppercase tracking-widest">
-              {s.label}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="flex flex-col gap-4">
-        {/* Bio terminal */}
-        <div className="bg-black/40 border border-[var(--color-border)] p-4 relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-1 text-[8px] text-[var(--cyber-cyan)]/50 bg-[var(--cyber-cyan)]/10">ID_BIO_DATA</div>
-          
-          <div className="space-y-2 text-[11px] leading-relaxed mb-6 text-gray-400">
+      {/* Header + bio */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+        >
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6 leading-tight">
+            Crafting{" "}
+            <span className="gradient-text">Impossible</span>
+            <br />
+            Web Experiences
+          </h2>
+          <div className="space-y-4 text-zinc-400 text-base leading-relaxed">
             <p>
-              <span className="text-[var(--cyber-cyan)] font-bold">»</span> I extract unauthorized data from systems legally. Finding vulnerabilities before they become headline news.
+              I&apos;m <span className="text-white font-semibold">Joyceson Danielraj</span>, a 3D web
+              designer and creative developer based in Chennai. I transform brands into living,
+              breathing digital worlds — merging artistry with cutting-edge browser technology.
             </p>
             <p>
-              <span className="text-[var(--cyber-cyan)] font-bold">»</span> Expertise in web application pentesting, advanced network recon, and stealth exploit deployment.
+              My work sits at the intersection of design and engineering. I believe the best
+              web experiences don&apos;t just communicate — they captivate, immerse, and leave an
+              impression that lasts long after the tab is closed.
             </p>
             <p>
-              <span className="text-[var(--cyber-cyan)] font-bold">»</span> My defensive strategy is built strictly from an attacker's perspective.
+              When I&apos;m not pushing pixels into the third dimension, I&apos;m contributing to the
+              open-source creative-coding community and mentoring junior designers breaking into
+              the world of WebGL.
             </p>
           </div>
 
-          {/* Expertise grid */}
-          <div>
-            <h4 className="text-[10px] font-bold text-[var(--cyber-pink)] uppercase tracking-widest mb-3">
-              [ Core_Vectors ]
-            </h4>
-            <div className="grid grid-cols-1 gap-2">
-              {expertise.map((item, i) => {
-                const Icon = item.icon;
-                return (
-                  <div
-                    key={item.label}
-                    className="flex items-center gap-3 p-2 bg-[var(--cyber-cyan)]/5 border border-[var(--color-border)] hover:bg-[var(--cyber-cyan)]/20 transition-colors"
-                  >
-                    <Icon className="w-4 h-4 text-[var(--cyber-cyan)] shrink-0" />
-                    <div>
-                      <div className="text-[10px] font-bold text-white">{item.label}</div>
-                      <div className="text-[9px] text-gray-500">{item.desc}</div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+          <div className="mt-8 flex gap-4">
+            <a href="#work" className="btn-primary">See My Work</a>
+            <a
+              href="/resume.pdf"
+              target="_blank"
+              rel="noreferrer"
+              className="btn-ghost"
+            >
+              Download CV
+            </a>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Timeline */}
-        <div className="bg-black/40 border border-[var(--color-border)] p-4 relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-1 text-[8px] text-[var(--cyber-cyan)]/50 bg-[var(--cyber-cyan)]/10">ID_LOG_FILE</div>
-          <h3 className="text-[10px] font-bold text-[var(--cyber-yellow)] uppercase tracking-widest mb-4">[ Op_Timeline ]</h3>
-          
-          <div className="relative">
-            <div className="absolute left-2.5 top-0 bottom-0 w-[1px] bg-[var(--cyber-cyan)]/30" />
-            <div className="space-y-4">
+        {/* Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="flex flex-col gap-6"
+        >
+          <div className="grid grid-cols-2 gap-4">
+            {stats.map((s, i) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.08 }}
+                className="stat-card"
+              >
+                <div className="text-4xl font-extrabold gradient-text mb-1">{s.value}</div>
+                <div className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+                  {s.label}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Timeline */}
+          <div className="card p-6 mt-2">
+            <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider mb-6">
+              My Journey
+            </h3>
+            <div className="space-y-5">
               {timeline.map((item, i) => {
                 const Icon = item.icon;
                 return (
-                  <div key={i} className="relative pl-8">
-                    <div className="absolute left-[3px] top-1 w-3 h-3 bg-black border border-[var(--cyber-cyan)] flex items-center justify-center transform rotate-45">
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: i * 0.07 }}
+                    className="flex items-start gap-4"
+                  >
+                    <div className="timeline-dot mt-1" />
+                    <div className="flex-1">
+                      <span className="text-xs font-bold text-purple-400 uppercase tracking-widest">
+                        {item.year}
+                      </span>
+                      <p className="text-sm text-zinc-300 font-medium leading-snug mt-0.5">
+                        {item.event}
+                      </p>
                     </div>
-                    <div className="text-[9px] font-bold text-[var(--cyber-cyan)] mb-0.5">{item.year}</div>
-                    <div className="text-[11px] text-gray-300">{item.event}</div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
           </div>
+        </motion.div>
+      </div>
 
-          <div className="mt-6 pt-4 border-t border-[var(--color-border)] space-y-2">
-            <p className="text-[9px] font-bold text-[var(--cyber-pink)] uppercase tracking-widest mb-2">[ Certs_Acquired ]</p>
-            {["CEH", "CompTIA Security+", "TryHackMe Top 1%", "HackTheBox Pro"].map((c) => (
-              <div key={c} className="flex items-center gap-2">
-                <span className="w-1 h-1 bg-[var(--cyber-cyan)] rounded-full" />
-                <span className="text-[10px] text-gray-400">{c}</span>
-              </div>
-            ))}
-          </div>
+      {/* Services grid */}
+      <div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-10"
+        >
+          <div className="section-label">What I Do</div>
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+            Services & Expertise
+          </h2>
+        </motion.div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {services.map((svc, i) => {
+            const Icon = svc.icon;
+            return (
+              <motion.div
+                key={svc.label}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.08 }}
+                className="card p-6 group cursor-default"
+              >
+                <div
+                  className="w-12 h-12 rounded-2xl flex items-center justify-center mb-5"
+                  style={{ background: `${svc.color}18`, border: `1px solid ${svc.color}30` }}
+                >
+                  <Icon className="w-6 h-6" style={{ color: svc.color }} />
+                </div>
+                <h3 className="text-base font-bold mb-2">{svc.label}</h3>
+                <p className="text-sm text-zinc-400 leading-relaxed">{svc.desc}</p>
+                <div className="mt-5">
+                  <span className={`badge ${svc.badge}`}>Learn More →</span>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

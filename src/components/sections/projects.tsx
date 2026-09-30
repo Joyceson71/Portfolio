@@ -3,238 +3,283 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { ExternalLink, Github, ChevronRight, Terminal } from "lucide-react";
+import { ExternalLink, Github, ChevronRight, Box, Globe, Zap, Layers } from "lucide-react";
 
 const projects = [
   {
     id: 1,
-    title: "VulnScan Pro",
-    slug: "vulnscan-pro",
-    category: "Penetration Testing Tool",
-    tags: ["[OFFENSIVE]", "[PYTHON]"],
-    severity: "CRITICAL",
-    desc: "Automated web vulnerability scanner with custom payload injection engine. Detects OWASP Top-10 vulnerabilities, generates executive-level reports, and integrates with Jira for issue tracking.",
+    slug: "cosmos-brand",
+    title: "Cosmos Brand Site",
+    category: "3D Web Experience",
+    tags: ["Three.js", "Next.js", "GLSL"],
+    desc: "Award-winning brand website featuring real-time particle systems, custom GLSL shaders, and scroll-driven 3D animations.",
     longDesc: [
-      "Built a modular payload injection engine covering SQLi, XSS, SSRF, XXE, and command injection",
-      "Auto-generates executive and technical reports in PDF/HTML format",
-      "Integrates with Jira, Slack, and Bugzilla for workflow automation",
-      "Supports authenticated scanning via session cookie injection",
+      "Built a fully custom WebGL rendering pipeline with 2M+ particle simulations running at 60fps.",
+      "Wrote custom vertex/fragment GLSL shaders for nebula-like effects that respond to user mouse movement.",
+      "Implemented scroll-driven camera paths using GSAP ScrollTrigger and Lenis smooth scroll.",
+      "Won Awwwards Site of the Day within 24 hours of launch.",
     ],
-    tech: ["Python", "FastAPI", "Burp Suite API", "Docker", "PostgreSQL"],
-    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=800&auto=format&fit=crop",
-    demo: "https://kings-lms.vercel.app/",
-    github: "https://github.com/Joyceson71/kings-lms",
-    color: "rgba(255,80,80,0.6)",
+    tech: ["Three.js", "GSAP", "GLSL", "Next.js 16", "Lenis", "TypeScript"],
+    image: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=800&q=80",
+    demo: "https://cosmos.design",
+    github: "https://github.com/joyceson71",
+    icon: Box,
+    accentColor: "#a855f7",
   },
   {
     id: 2,
-    title: "CTF Arsenal",
-    slug: "ctf-arsenal",
-    category: "CTF & Exploitation",
-    tags: ["[CTF]", "[PWNTOOLS]"],
-    severity: "HIGH",
-    desc: "Personal toolkit and write-up repository for Capture the Flag competitions. Contains custom exploits, reverse engineering scripts, and 80+ documented solutions across HackTheBox and TryHackMe.",
+    slug: "fluid-studio",
+    title: "Fluid Studio",
+    category: "Interactive Art Direction",
+    tags: ["WebGL", "Spline", "Framer"],
+    desc: "A digital art gallery where visitors walk through 3D rooms showcasing generative artwork powered by WebGL.",
     longDesc: [
-      "80+ documented CTF solutions with full methodology explanations",
-      "Custom ROP chain generators and heap exploitation helpers",
-      "Automated reconnaissance script suite for initial foothold",
-      "Ghidra/GDB helper scripts for binary reverse engineering",
+      "Designed and coded an immersive first-person navigation system entirely in Three.js.",
+      "Procedurally generated artwork using noise functions and GPU-based compute passes.",
+      "Integrated Spline 3D models as interactive objects that visitors can rotate and explore.",
+      "Built custom post-processing pipeline: bloom, depth of field, and chromatic aberration.",
     ],
-    tech: ["Python", "Pwntools", "GDB", "Ghidra", "Bash"],
-    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=800&auto=format&fit=crop",
-    demo: "https://quizarena71.vercel.app/",
-    github: "https://github.com/Joyceson71/Quiz-app",
-    color: "rgba(255,180,0,0.6)",
+    tech: ["React Three Fiber", "Drei", "Postprocessing", "Spline", "Framer Motion"],
+    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
+    demo: "https://fluid.studio",
+    github: "https://github.com/joyceson71",
+    icon: Globe,
+    accentColor: "#06b6d4",
   },
   {
     id: 3,
-    title: "SecureDash",
-    slug: "securedash",
-    category: "Security Dashboard",
-    tags: ["[DEFENSIVE]", "[NEXT.JS]"],
-    severity: "MEDIUM",
-    desc: "Real-time threat intelligence dashboard aggregating CVE feeds, IP reputation data, and honeypot alerts into a unified analyst workspace with severity scoring and team collaboration.",
+    slug: "neon-fintech",
+    title: "Neon Fintech Dashboard",
+    category: "UI/UX + Motion Design",
+    tags: ["Figma", "Next.js", "GSAP"],
+    desc: "Next-gen fintech dashboard with 3D data visualizations, real-time chart morphing, and a dark-mode-first design system.",
     longDesc: [
-      "Aggregates NVD, Shodan, AbuseIPDB, and GreyNoise feeds in real-time",
-      "Custom severity scoring engine with CVSS v3.1 integration",
-      "Team workspace with role-based access and audit logs",
-      "Automated alerting via PagerDuty, Slack, and email",
+      "Designed a 40-component design system in Figma with 3D perspective cards and depth layers.",
+      "Implemented Chart.js with custom 3D CSS transforms for a genuine depth effect on flat data.",
+      "All chart transitions animated with GSAP with spring physics for a tactile, physical feel.",
+      "Lighthouse performance score: 100/100 across all categories.",
     ],
-    tech: ["Next.js", "TypeScript", "PostgreSQL", "Prisma", "WebSockets"],
-    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=800&auto=format&fit=crop",
-    demo: "https://smart-biz-inky.vercel.app/",
-    github: "https://github.com/Joyceson71/smart_biz",
-    color: "rgba(0,180,255,0.6)",
+    tech: ["Next.js", "TypeScript", "GSAP", "Chart.js", "Tailwind", "Framer Motion"],
+    image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&q=80",
+    demo: "https://neon.finance",
+    github: "https://github.com/joyceson71",
+    icon: Zap,
+    accentColor: "#f59e0b",
+  },
+  {
+    id: 4,
+    slug: "ethereal-agency",
+    title: "Ethereal Agency",
+    category: "Creative Agency Site",
+    tags: ["Three.js", "GSAP", "ScrollTrigger"],
+    desc: "Full creative agency website with scroll-hijacked 3D sequences, morphing typography, and GPU-accelerated background scenes.",
+    longDesc: [
+      "Built a custom scroll engine that maps scroll position to 3D camera animation curves.",
+      "Text morphing effects using Troika Three Text with animated vertex displacement.",
+      "Landing sequence features 500k+ particle system representing agency's global reach.",
+      "Entire site accessible at AAA WCAG level despite heavy 3D usage.",
+    ],
+    tech: ["Three.js", "GSAP ScrollTrigger", "Troika Text", "Lenis", "TypeScript"],
+    image: "https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?w=800&q=80",
+    demo: "https://ethereal.agency",
+    github: "https://github.com/joyceson71",
+    icon: Layers,
+    accentColor: "#ec4899",
   },
 ];
 
-const SEVERITY_COLOR: Record<string, string> = {
-  CRITICAL: "rgba(255,60,60,0.8)",
-  HIGH:     "rgba(255,160,0,0.8)",
-  MEDIUM:   "rgba(0,180,255,0.8)",
-  LOW:      "rgba(0,255,65,0.8)",
-};
-
 export function Projects() {
-  const [activeId, setActiveId] = useState<number | null>(projects[0].id);
-  const active = projects.find((p) => p.id === activeId);
+  const [activeId, setActiveId] = useState(projects[0].id);
+  const active = projects.find((p) => p.id === activeId)!;
 
   return (
-    <div className="w-full h-full flex flex-col font-mono text-[var(--fg)]">
-      {/* Header */}
-      <div className="border-b border-[var(--color-border)] pb-2 mb-4">
-        <h3 className="text-xl font-bold tracking-tight text-[var(--cyber-yellow)] uppercase">
-          Op_History_
-        </h3>
-      </div>
+    <section id="work" className="w-full px-6 md:px-12 py-24 max-w-[1400px] mx-auto">
+      {/* Label */}
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        className="section-label"
+      >
+        Selected Work
+      </motion.div>
 
-      {/* Project list + detail panel layout */}
-      <div className="flex-1 flex flex-col lg:flex-row gap-4 overflow-hidden">
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4"
+      >
+        Featured <span className="gradient-text">Projects</span>
+      </motion.h2>
+      <motion.p
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.1 }}
+        className="text-zinc-400 text-lg mb-16 max-w-xl"
+      >
+        A curated selection of immersive 3D web experiences and creative digital work.
+      </motion.p>
+
+      <div className="flex flex-col lg:flex-row gap-6">
         {/* Left: project list */}
-        <div className="lg:w-1/3 flex flex-col gap-2 overflow-y-auto pr-2 custom-scrollbar">
-          {projects.map((p, i) => (
-            <button
-              key={p.id}
-              onClick={() => setActiveId(p.id)}
-              className={`w-full text-left p-3 transition-all border ${
-                activeId === p.id 
-                  ? "bg-[var(--cyber-yellow)]/10 border-[var(--cyber-yellow)] shadow-[inset_0_0_10px_rgba(252,238,10,0.2)]" 
-                  : "bg-black/40 border-[var(--color-border)] hover:bg-[var(--cyber-yellow)]/5 hover:border-[var(--cyber-yellow)]/50"
-              }`}
-            >
-              <div className="flex items-start justify-between mb-2">
-                <div className="flex gap-1 flex-wrap">
-                  {p.tags.map((t) => (
-                    <span
-                      key={t}
-                      className="text-[8px] uppercase tracking-widest px-1 py-0.5 bg-[var(--cyber-cyan)]/20 text-[var(--cyber-cyan)]"
+        <div className="lg:w-[380px] flex flex-col gap-3 shrink-0">
+          {projects.map((p, i) => {
+            const Icon = p.icon;
+            const isActive = activeId === p.id;
+            return (
+              <motion.button
+                key={p.id}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                onClick={() => setActiveId(p.id)}
+                className={`w-full text-left p-5 rounded-2xl border transition-all duration-300 ${
+                  isActive
+                    ? "border-purple-500/40 bg-purple-500/8"
+                    : "border-white/6 bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/10"
+                }`}
+                style={
+                  isActive
+                    ? { boxShadow: `0 0 30px ${p.accentColor}20` }
+                    : {}
+                }
+              >
+                <div className="flex items-center gap-3 mb-2">
+                  <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                    style={{
+                      background: `${p.accentColor}18`,
+                      border: `1px solid ${p.accentColor}30`,
+                    }}
+                  >
+                    <Icon className="w-4 h-4" style={{ color: p.accentColor }} />
+                  </div>
+                  <div>
+                    <div
+                      className={`text-sm font-bold transition-colors ${
+                        isActive ? "text-white" : "text-zinc-300"
+                      }`}
                     >
-                      {t.replace('[', '').replace(']', '')}
+                      {p.title}
+                    </div>
+                    <div className="text-[11px] text-zinc-500 font-medium">{p.category}</div>
+                  </div>
+                  <ChevronRight
+                    className={`w-4 h-4 ml-auto transition-transform ${
+                      isActive ? "translate-x-1 text-purple-400" : "text-zinc-600"
+                    }`}
+                  />
+                </div>
+                <p className="text-xs text-zinc-500 leading-relaxed line-clamp-2">{p.desc}</p>
+                <div className="flex gap-1.5 flex-wrap mt-3">
+                  {p.tags.map((t) => (
+                    <span key={t} className="badge badge-purple !text-[10px] !py-0.5 !px-2">
+                      {t}
                     </span>
                   ))}
                 </div>
-                <span
-                  className="text-[8px] font-bold px-1.5 py-0.5"
-                  style={{ backgroundColor: SEVERITY_COLOR[p.severity].replace('0.8', '0.2'), color: SEVERITY_COLOR[p.severity].replace('0.8', '1'), border: `1px solid ${SEVERITY_COLOR[p.severity]}` }}
-                >
-                  {p.severity}
-                </span>
-              </div>
-
-              <h3
-                className={`text-sm font-bold uppercase tracking-wider mb-1 transition-colors ${
-                  activeId === p.id ? "text-[var(--cyber-yellow)]" : "text-white"
-                }`}
-              >
-                {p.title}
-              </h3>
-              <p className="text-[10px] text-gray-500 mb-2 line-clamp-2 leading-relaxed">{p.desc}</p>
-
-              <div className="flex items-center justify-between">
-                <div className="flex gap-1 flex-wrap">
-                  {p.tech.slice(0, 2).map((t) => (
-                    <span key={t} className="text-[8px] uppercase tracking-wider border border-[var(--color-border)] text-gray-400 px-1 py-0.5">{t}</span>
-                  ))}
-                  {p.tech.length > 2 && (
-                    <span className="text-[8px] uppercase tracking-wider border border-[var(--color-border)] text-gray-400 px-1 py-0.5">+{p.tech.length - 2}</span>
-                  )}
-                </div>
-                <ChevronRight
-                  className={`w-4 h-4 transition-transform ${activeId === p.id ? "translate-x-1 text-[var(--cyber-yellow)]" : "text-gray-600"}`}
-                />
-              </div>
-            </button>
-          ))}
+              </motion.button>
+            );
+          })}
         </div>
 
         {/* Right: detail panel */}
-        <div className="lg:w-2/3 h-full overflow-hidden">
+        <div className="flex-1 min-h-[560px]">
           <AnimatePresence mode="wait">
-            {active && (
-              <motion.div
-                key={active.id}
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.2 }}
-                className="bg-black/60 border border-[var(--cyber-yellow)] h-full flex flex-col relative overflow-hidden"
-              >
-                <div className="absolute top-0 right-0 bg-[var(--cyber-yellow)] text-black text-[8px] font-bold px-2 py-0.5 uppercase tracking-widest z-10">
-                  {active.slug}.dat
-                </div>
+            <motion.div
+              key={active.id}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className="card h-full flex flex-col overflow-hidden"
+              style={{ borderColor: `${active.accentColor}25` }}
+            >
+              {/* Image */}
+              <div className="relative h-64 sm:h-80 shrink-0 overflow-hidden">
+                <Image
+                  src={active.image}
+                  alt={active.title}
+                  fill
+                  className="object-cover transition-transform duration-700 hover:scale-105"
+                />
+                <div className="project-overlay" />
 
-                {/* Image Header */}
-                <div className="relative h-48 sm:h-56 shrink-0 border-b border-[var(--cyber-yellow)]">
-                  <Image
-                    src={active.image}
-                    alt={active.title}
-                    fill
-                    className="object-cover opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent pointer-events-none" />
-                  
-                  <div className="absolute bottom-4 left-6">
-                    <h3 className="text-2xl font-bold text-white mb-1 uppercase tracking-wider text-shadow-sm shadow-[var(--cyber-yellow)]">
-                      {active.title}
-                    </h3>
-                    <p className="text-[10px] font-bold text-[var(--cyber-yellow)] uppercase tracking-widest">[{active.category}]</p>
+                {/* Overlay info */}
+                <div className="absolute bottom-6 left-6 right-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span
+                      className="badge !text-[11px]"
+                      style={{
+                        background: `${active.accentColor}18`,
+                        borderColor: `${active.accentColor}40`,
+                        color: active.accentColor,
+                      }}
+                    >
+                      {active.category}
+                    </span>
                   </div>
+                  <h3 className="text-2xl font-extrabold text-white">{active.title}</h3>
                 </div>
+              </div>
 
-                <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                  {/* Finding list */}
-                  <h4 className="text-[10px] font-bold text-[var(--cyber-pink)] uppercase tracking-widest mb-4">
-                    [ Tactical_Overview ]
-                  </h4>
-                  <div className="space-y-3 mb-8 border-l border-[var(--color-border)] pl-3">
-                    {active.longDesc.map((line, i) => (
-                      <div key={i} className="flex gap-3 text-[11px] text-gray-300">
-                        <span className="text-[var(--cyber-cyan)] font-bold mt-0.5 shrink-0">{'>'}</span>
-                        <span>{line}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Tech stack */}
-                  <h4 className="text-[10px] font-bold text-[var(--cyber-pink)] uppercase tracking-widest mb-4">
-                    [ Subroutines ]
-                  </h4>
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {active.tech.map((t) => (
-                      <span key={t} className="px-2 py-1 bg-[var(--cyber-yellow)]/10 border border-[var(--cyber-yellow)]/30 text-[9px] uppercase tracking-wider text-[var(--cyber-yellow)]">
-                        {t}
+              {/* Content */}
+              <div className="flex-1 p-7 flex flex-col">
+                <h4 className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-4">
+                  Project Overview
+                </h4>
+                <ul className="space-y-3 mb-7 flex-1">
+                  {active.longDesc.map((line, i) => (
+                    <li key={i} className="flex gap-3 text-sm text-zinc-300 leading-relaxed">
+                      <span
+                        className="shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5 text-[10px] font-bold"
+                        style={{ background: `${active.accentColor}20`, color: active.accentColor }}
+                      >
+                        {i + 1}
                       </span>
-                    ))}
-                  </div>
+                      {line}
+                    </li>
+                  ))}
+                </ul>
 
-                  {/* Links */}
-                  <div className="flex gap-4 pt-4 border-t border-[var(--color-border)] mt-auto">
-                    <a
-                      href={active.demo}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="cyber-btn text-[10px]"
-                    >
-                      <ExternalLink className="w-3 h-3 mr-2" />
-                      Execute_Demo
-                    </a>
-                    <a
-                      href={active.github}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="cyber-btn text-[10px]"
-                      style={{ borderColor: 'var(--cyber-pink)', color: 'var(--cyber-pink)' }}
-                    >
-                      <Github className="w-3 h-3 mr-2" />
-                      View_Source
-                    </a>
-                  </div>
+                {/* Tech */}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {active.tech.map((t) => (
+                    <span key={t} className="badge !text-[11px]">
+                      {t}
+                    </span>
+                  ))}
                 </div>
-              </motion.div>
-            )}
+
+                {/* Links */}
+                <div className="flex gap-3 pt-5 border-t border-white/6">
+                  <a
+                    href={active.demo}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-primary !py-2.5 !px-5 !text-sm flex-1 justify-center"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    Live Site
+                  </a>
+                  <a
+                    href={active.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-ghost !py-2.5 !px-5 !text-sm flex-1 justify-center"
+                  >
+                    <Github className="w-4 h-4" />
+                    Source
+                  </a>
+                </div>
+              </div>
+            </motion.div>
           </AnimatePresence>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

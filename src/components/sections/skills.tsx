@@ -4,75 +4,74 @@ import { motion } from "framer-motion";
 
 const categories = [
   {
-    name: "Offensive Security",
-    prefix: "[ATK]",
-    color: "rgba(255,80,80,0.7)",
+    name: "3D & Graphics",
+    color: "#a855f7",
     skills: [
-      { name: "Web App Pentesting",   pct: 92 },
-      { name: "SQL Injection / XSS",  pct: 90 },
-      { name: "Privilege Escalation", pct: 85 },
-      { name: "Buffer Overflow",      pct: 76 },
-      { name: "Reverse Engineering",  pct: 72 },
+      { name: "Three.js",    pct: 97 },
+      { name: "WebGL / GLSL", pct: 88 },
+      { name: "React Three Fiber", pct: 94 },
+      { name: "Blender",    pct: 80 },
+      { name: "Spline 3D",  pct: 90 },
     ],
   },
   {
-    name: "Recon & OSINT",
-    prefix: "[RCN]",
-    color: "rgba(255,180,0,0.7)",
+    name: "Frontend",
+    color: "#06b6d4",
     skills: [
-      { name: "Nmap / Shodan",    pct: 92 },
-      { name: "Burp Suite",       pct: 90 },
-      { name: "Metasploit",       pct: 84 },
-      { name: "Maltego / OSINT",  pct: 80 },
-      { name: "Wireshark",        pct: 78 },
+      { name: "React / Next.js", pct: 96 },
+      { name: "TypeScript",      pct: 90 },
+      { name: "Tailwind CSS",    pct: 95 },
+      { name: "Framer Motion",   pct: 93 },
+      { name: "GSAP",            pct: 88 },
     ],
   },
   {
-    name: "Defensive",
-    prefix: "[DEF]",
-    color: "rgba(0,180,255,0.7)",
+    name: "Design",
+    color: "#f59e0b",
     skills: [
-      { name: "Secure Code Review", pct: 87 },
-      { name: "Firewall / IDS",     pct: 80 },
-      { name: "SIEM / Splunk",      pct: 74 },
-      { name: "Threat Modelling",   pct: 76 },
+      { name: "Figma",           pct: 95 },
+      { name: "UI/UX Design",    pct: 90 },
+      { name: "Motion Design",   pct: 85 },
+      { name: "Brand Identity",  pct: 82 },
+      { name: "Typography",      pct: 88 },
     ],
   },
   {
-    name: "Programming",
-    prefix: "[PRG]",
-    color: "rgba(0,255,65,0.7)",
+    name: "Tools & Backend",
+    color: "#ec4899",
     skills: [
-      { name: "Python / Scripting",   pct: 90 },
-      { name: "Bash / PowerShell",    pct: 87 },
-      { name: "JavaScript / Next.js", pct: 92 },
-      { name: "C / Assembly",         pct: 68 },
+      { name: "Node.js",         pct: 78 },
+      { name: "Git & GitHub",    pct: 92 },
+      { name: "Vercel / AWS",    pct: 85 },
+      { name: "Prisma + PgSQL",  pct: 72 },
+      { name: "Performance Opt", pct: 90 },
     ],
   },
 ];
 
 const tools = [
-  "Burp Suite", "Metasploit", "Nmap", "Wireshark", "OWASP ZAP",
-  "Kali Linux", "John the Ripper", "Hashcat", "Ghidra", "pwntools",
-  "Shodan", "Maltego", "Nikto", "SQLmap", "Hydra",
-  "Gobuster", "BloodHound", "Mimikatz", "Netcat", "tmux",
+  "Three.js", "React Three Fiber", "Drei", "WebGL", "GLSL Shaders",
+  "GSAP", "Framer Motion", "Blender", "Spline", "Figma",
+  "Next.js 16", "TypeScript", "Tailwind CSS", "Node.js", "Prisma",
+  "Vercel", "AWS S3", "GitHub Actions", "Lenis Scroll", "ScrollTrigger",
+  "Postprocessing", "Shader Forge", "Adobe CC", "Rive", "Lottie",
 ];
 
 function SkillBar({ name, pct, color, delay }: { name: string; pct: number; color: string; delay: number }) {
   return (
-    <div className="space-y-1">
-      <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-gray-300">
-        <span>{name}</span>
+    <div className="space-y-1.5">
+      <div className="flex justify-between text-xs font-semibold">
+        <span className="text-zinc-300">{name}</span>
         <span style={{ color }}>{pct}%</span>
       </div>
-      <div className="relative h-[2px] bg-white/10 w-full overflow-hidden">
+      <div className="skill-track">
         <motion.div
           initial={{ width: 0 }}
           whileInView={{ width: `${pct}%` }}
           viewport={{ once: true }}
-          transition={{ duration: 1.2, delay, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute top-0 left-0 h-full"
-          style={{ background: color, boxShadow: `0 0 10px ${color}` }}
+          transition={{ duration: 1.4, delay, ease: [0.16, 1, 0.3, 1] }}
+          className="skill-fill"
+          style={{ background: `linear-gradient(90deg, ${color}aa, ${color})`, boxShadow: `0 0 12px ${color}60` }}
         />
       </div>
     </div>
@@ -81,65 +80,96 @@ function SkillBar({ name, pct, color, delay }: { name: string; pct: number; colo
 
 export function Skills() {
   return (
-    <div className="w-full h-full flex flex-col gap-4 font-mono text-gray-300">
-      
-      {/* Header */}
-      <div className="border-b border-[var(--color-border)] pb-2 mb-2">
-        <h3 className="text-xl font-bold tracking-tight text-[var(--cyber-cyan)] uppercase">
-          Neural Uplink_
-        </h3>
-      </div>
+    <section id="skills" className="w-full px-6 md:px-12 py-24 max-w-[1400px] mx-auto">
+      {/* Label */}
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        className="section-label"
+      >
+        Skill Matrix
+      </motion.div>
 
-      {/* Skill bars grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4"
+      >
+        My Tech <span className="gradient-text">Arsenal</span>
+      </motion.h2>
+      <motion.p
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.1 }}
+        className="text-zinc-400 text-lg mb-16 max-w-xl"
+      >
+        A carefully curated stack for crafting performance-first, visually extraordinary web experiences.
+      </motion.p>
+
+      {/* Skill categories */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
         {categories.map((cat, gi) => (
-          <div
+          <motion.div
             key={cat.name}
-            className="border border-[var(--color-border)] bg-black/40 p-4 relative"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: gi * 0.1 }}
+            className="card p-7"
           >
-            <div className="absolute top-0 right-0 p-1 text-[8px] bg-[var(--cyber-cyan)]/10 text-[var(--cyber-cyan)]">SEC_BLOCK_{gi}</div>
-            
-            <div className="flex items-center gap-2 mb-4">
-              <span
-                className="text-[10px] font-bold px-1.5 py-0.5 border"
-                style={{ borderColor: cat.color.replace('0.7', '0.5'), color: cat.color.replace('0.7', '1') }}
-              >
-                {cat.prefix}
-              </span>
-              <span className="text-xs font-bold text-white uppercase tracking-widest">{cat.name}</span>
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-7">
+              <div
+                className="w-2 h-8 rounded-full"
+                style={{ background: cat.color, boxShadow: `0 0 12px ${cat.color}80` }}
+              />
+              <h3 className="text-base font-bold">{cat.name}</h3>
             </div>
-            
-            <div className="space-y-4">
+
+            <div className="space-y-5">
               {cat.skills.map((skill, si) => (
                 <SkillBar
                   key={skill.name}
                   name={skill.name}
                   pct={skill.pct}
-                  color={cat.color.replace('0.7', '1')}
-                  delay={gi * 0.1 + si * 0.08}
+                  color={cat.color}
+                  delay={gi * 0.1 + si * 0.07}
                 />
               ))}
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
-      {/* Tools arsenal */}
-      <div className="border border-[var(--color-border)] bg-black/40 p-4 relative mt-2">
-        <div className="absolute top-0 right-0 p-1 text-[8px] bg-[var(--cyber-yellow)]/10 text-[var(--cyber-yellow)]">TOOLS_ARRAY</div>
-        <div className="text-[10px] font-bold text-[var(--cyber-yellow)] uppercase tracking-widest mb-3">[ Utilities & Frameworks ]</div>
-        
+      {/* Tools cloud */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="card p-8"
+      >
+        <h3 className="text-sm font-bold text-zinc-400 uppercase tracking-wider mb-6">
+          Full Toolbox
+        </h3>
         <div className="flex flex-wrap gap-2">
           {tools.map((tool, i) => (
-            <span
+            <motion.span
               key={tool}
-              className="px-2 py-1 bg-[var(--cyber-cyan)]/5 border border-[var(--color-border)] text-[9px] uppercase tracking-wider hover:bg-[var(--cyber-cyan)]/20 transition-colors cursor-default"
+              initial={{ opacity: 0, scale: 0.85 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: i * 0.02 }}
+              className="badge cursor-default"
             >
               {tool}
-            </span>
+            </motion.span>
           ))}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </section>
   );
 }
