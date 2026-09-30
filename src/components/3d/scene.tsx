@@ -22,6 +22,28 @@ function WireframeGlobe() {
   );
 }
 
+function DataNode({ n }: { n: { pos: [number, number, number], label: string } }) {
+  return (
+    <group position={n.pos}>
+      <mesh>
+        <boxGeometry args={[0.1, 0.1, 0.1]} />
+        <meshBasicMaterial color="#ffffff" />
+      </mesh>
+      {/* Connection line to center */}
+      <Line points={[[0,0,0], [-n.pos[0], -n.pos[1], -n.pos[2]]]} color="#00ffcc" opacity={0.2} transparent />
+      
+      <Html distanceFactor={15} zIndexRange={[100, 0]}>
+        <div className="flex items-center gap-2 pointer-events-none opacity-50">
+          <div className="w-1 h-1 bg-white" />
+          <span className="text-[8px] text-white font-mono uppercase tracking-widest whitespace-nowrap bg-black/50 px-1 border border-white/20">
+            {n.label}
+          </span>
+        </div>
+      </Html>
+    </group>
+  );
+}
+
 // Data Nodes floating around the globe
 function DataNodes() {
   const group = useRef<THREE.Group>(null!);
@@ -53,23 +75,7 @@ function DataNodes() {
   return (
     <group ref={group}>
       {nodes.map((n, i) => (
-        <group key={i} position={n.pos}>
-          <mesh>
-            <boxGeometry args={[0.1, 0.1, 0.1]} />
-            <meshBasicMaterial color="#ffffff" />
-          </mesh>
-          {/* Connection line to center */}
-          <Line points={[[0,0,0], [-n.pos[0], -n.pos[1], -n.pos[2]]]} color="#00ffcc" opacity={0.2} transparent />
-          
-          <Html distanceFactor={15} zIndexRange={[100, 0]}>
-            <div className="flex items-center gap-2 pointer-events-none opacity-50">
-              <div className="w-1 h-1 bg-white" />
-              <span className="text-[8px] text-white font-mono uppercase tracking-widest whitespace-nowrap bg-black/50 px-1 border border-white/20">
-                {n.label}
-              </span>
-            </div>
-          </Html>
-        </group>
+        <DataNode key={i} n={n} />
       ))}
     </group>
   );
