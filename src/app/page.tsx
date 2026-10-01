@@ -8,7 +8,6 @@ import {
   ArrowRight, 
   Github, 
   ExternalLink, 
-  Terminal as TerminalIcon, 
   Sparkles, 
   Layers, 
   Code2, 
@@ -17,7 +16,9 @@ import {
   Send, 
   ArrowUp,
   Mail,
-  FolderGit2
+  FileText,
+  Info,
+  Award
 } from "lucide-react";
 
 import { ScrambleText } from "@/components/ui/scramble-text";
@@ -25,8 +26,10 @@ import { TechMarquee } from "@/components/ui/tech-marquee";
 import { SpiderRadarHUD } from "@/components/ui/spider-radar";
 import { BentoGrid } from "@/components/ui/bento-grid";
 import { CareerTimeline } from "@/components/ui/timeline";
-import { InteractiveTerminal } from "@/components/ui/interactive-terminal";
 import { DailyBugleReviews } from "@/components/ui/daily-bugle";
+import { CredentialsSection } from "@/components/ui/credentials";
+import { ProjectDetailModal, ProjectDetail } from "@/components/ui/project-detail-modal";
+import { SuitSelector, SuitMode } from "@/components/ui/suit-selector";
 import { spiderAudio } from "@/lib/spider-audio";
 
 const SpiderScene = dynamic(
@@ -38,7 +41,7 @@ const SpiderScene = dynamic(
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-2 border-[#CC0000] rounded-full border-t-transparent animate-spin" />
           <p className="text-[#CC0000] font-mono text-xs uppercase tracking-widest">
-            Loading Spider-Verse...
+            Calibrating Nanotech Web...
           </p>
         </div>
       </div>
@@ -53,58 +56,94 @@ const heroTitles = [
   "FULL-STACK BUILDER",
 ];
 
-const projects = [
+const projects: ProjectDetail[] = [
   {
     id: 1,
     title: "Kings LMS",
     category: "Web App",
-    tagline: "Enterprise Education Ecosystem",
-    desc: "Digital learning platform with virtual classrooms, smart automated attendance, real-time analytics, and role-based permissions.",
-    tech: ["Next.js 16", "React 19", "TypeScript", "PostgreSQL", "Prisma"],
+    tagline: "Enterprise Digital Learning Platform",
+    desc: "Comprehensive learning management system engineered for high-concurrency academic institutions. Features live virtual lectures, automated biometric attendance, and student performance predictive metrics.",
+    tech: ["Next.js 16", "React 19", "TypeScript", "PostgreSQL", "Prisma", "Tailwind CSS"],
     demo: "https://kings-lms.vercel.app/",
     github: "https://github.com/Joyceson71/kings-lms",
     year: "2025",
-    metrics: "2.4k+ Active Users · 99.8% Uptime",
-    featured: true,
+    metrics: "2.4k+ Active Students · 99.8% Uptime",
+    architecture: [
+      "Next.js 16 App Router with React 19 Server Actions for instantaneous form mutations",
+      "PostgreSQL connection pooling via Prisma with strict foreign key constraints",
+      "Sub-50ms response times on grading submissions using edge caching strategies"
+    ],
+    highlights: [
+      "Designed role-based access matrix separating Students, Faculty, and Administrators",
+      "Integrated automated PDF report card and invoice generation pipelines",
+      "Zero-downtime database migrations with automated schema rollback guards"
+    ]
   },
   {
     id: 2,
     title: "Quiz Arena",
     category: "Web App",
-    tagline: "Real-Time Battleground",
-    desc: "Interactive live quiz platform featuring socket multiplayer battles, millisecond leaderboards, and comprehensive administrator dashboard.",
+    tagline: "Real-Time Multiplayer Combat Quiz",
+    desc: "Low-latency multiplayer trivia battleground featuring live socket synchronized rounds, instant leaderboard sorting, and custom question creation suite.",
     tech: ["React", "Node.js", "MongoDB", "WebSockets", "Tailwind CSS"],
     demo: "https://quizarena71.vercel.app/",
     github: "https://github.com/Joyceson71/Quiz-app",
     year: "2024",
     metrics: "<30ms Latency · Live WebSockets",
-    featured: true,
+    architecture: [
+      "Bi-directional WebSocket streaming enabling simultaneous 500+ participant quiz sync",
+      "In-memory Redis cache for millisecond leaderboard scoring calculation",
+      "Stateless JWT auth tokens with automatic token rotation"
+    ],
+    highlights: [
+      "Custom anti-cheat timer synchronization preventing client-side clock tampering",
+      "Interactive audio feedback and dynamic particle confetti animations",
+      "Admin analytics panel displaying question drop-off rates and difficulty tiers"
+    ]
   },
   {
     id: 3,
     title: "SmartBiz OS",
     category: "UI/UX & SaaS",
-    tagline: "Business Intelligence Suite",
-    desc: "Executive management suite with financial forecasting graphs, instant invoice generation, and lightning-fast dark mode UI.",
+    tagline: "Executive Financial & Analytics Engine",
+    desc: "Modern operational cockpit for growth businesses, providing cashflow visualizers, automated tax calculations, and one-click PDF invoice dispatching.",
     tech: ["Next.js", "TypeScript", "Chart.js", "Tailwind CSS"],
     demo: "https://smart-biz-inky.vercel.app/",
     github: "https://github.com/Joyceson71/smart_biz",
     year: "2024",
-    metrics: "100 Lighthouse Score · Zero Jank",
-    featured: false,
+    metrics: "100 Lighthouse Score · Zero Layout Shift",
+    architecture: [
+      "Strict client-side memoization preventing unneeded re-renders on financial charts",
+      "Modular design system with reusable typography, button tokens, and card containers",
+      "Optimistic UI updates delivering immediate tactile feedback on invoice creation"
+    ],
+    highlights: [
+      "Dynamic dark-mode and custom high-contrast accessibility color palettes",
+      "Exportable CSV/Excel transaction history with instantaneous data aggregation",
+      "Seamless mobile responsive viewports tested across 15+ real hardware configurations"
+    ]
   },
   {
     id: 4,
     title: "Spider-Verse 3D Web",
     category: "3D & Creative",
-    tagline: "WebGL Interactive Canvas",
-    desc: "High-performance three-dimensional spiderweb simulation using Three.js, custom radial geometry, and cinematic bloom post-processing.",
+    tagline: "WebGL Interactive Canvas Simulation",
+    desc: "Mathematical 3D spiderweb geometry simulation built with Three.js and custom GLSL post-processing shaders, responding in real-time to cursor physics.",
     tech: ["Three.js", "React Three Fiber", "GLSL Shaders", "PostProcessing"],
     demo: "#home",
     github: "https://github.com/Joyceson71/Portfolio",
     year: "2025",
-    metrics: "60 FPS Render · Custom Shaders",
-    featured: false,
+    metrics: "60 FPS Stable · GPU Accelerated",
+    architecture: [
+      "BufferGeometry allocation with dynamic Float32Array coordinates for zero garbage collection overhead",
+      "Multi-pass Bloom and Chromatic Aberration post-processing composers",
+      "Camera rig with exponential lerp parallax interpolation"
+    ],
+    highlights: [
+      "8 articulated spider legs with synchronized rotational oscillation",
+      "Mouse-driven point light casting dynamic specular highlights across wireframes",
+      "Swarming nanite field simulating orbital particle physics"
+    ]
   },
 ];
 
@@ -123,8 +162,8 @@ const navLinks = [
   { label: "Origins", href: "#origins" },
   { label: "Arsenal", href: "#arsenal" },
   { label: "Work", href: "#work" },
+  { label: "Credentials", href: "#credentials" },
   { label: "Timeline", href: "#timeline" },
-  { label: "Terminal", href: "#terminal" },
   { label: "Reviews", href: "#reviews" },
   { label: "Contact", href: "#contact" },
 ];
@@ -135,6 +174,8 @@ export default function Home() {
   const [heroTitleIndex, setHeroTitleIndex] = useState(0);
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [activeProjectModal, setActiveProjectModal] = useState<ProjectDetail | null>(null);
+  const [suitMode, setSuitMode] = useState<SuitMode>("classic");
 
   useEffect(() => {
     const onMouse = (e: MouseEvent) => {
@@ -194,7 +235,7 @@ export default function Home() {
           <span>JD</span>
           <span className="text-[#CC0000]">.</span>
           <span className="font-mono text-[9px] text-white/30 hidden sm:inline ml-1 uppercase">
-            // Spider-OS
+            // Spider-Verse OS
           </span>
         </Link>
 
@@ -212,10 +253,12 @@ export default function Home() {
         </nav>
 
         <div className="flex items-center gap-3">
+          <SuitSelector currentSuit={suitMode} onSelectSuit={setSuitMode} />
+
           <a
             href="#contact"
             onClick={() => spiderAudio.playWebShoot()}
-            className="spider-btn text-xs py-2 px-5"
+            className="spider-btn text-xs py-2 px-5 hidden sm:inline-flex"
           >
             Launch Web
           </a>
@@ -225,7 +268,7 @@ export default function Home() {
       {/* ══ HERO SECTION ══ */}
       <section id="home" className="relative w-full min-h-screen overflow-hidden flex items-center pt-20">
         
-        {/* 3D Spider Web Canvas */}
+        {/* Upgraded 3D Spider Canvas */}
         <div className="absolute inset-0 z-0">
           <SpiderScene mouseX={mouse.x} mouseY={mouse.y} />
         </div>
@@ -248,18 +291,18 @@ export default function Home() {
             transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
             {/* Live Role Badge */}
-            <div className="inline-flex items-center gap-3 px-3 py-1.5 rounded-full bg-[#0c0c18]/80 border border-[#CC0000]/30 backdrop-blur-md mb-6 shadow-[0_0_15px_rgba(204,0,0,0.15)]">
+            <div className="inline-flex items-center gap-3 px-3.5 py-1.5 rounded-full bg-[#0c0c18]/85 border border-[#CC0000]/30 backdrop-blur-md mb-6 shadow-[0_0_15px_rgba(204,0,0,0.15)]">
               <span className="w-2 h-2 rounded-full bg-[#CC0000] animate-ping" />
               <span className="font-mono text-xs font-bold text-white tracking-widest uppercase">
                 <ScrambleText text={heroTitles[heroTitleIndex]} triggerKey={heroTitleIndex} />
               </span>
               <span className="text-white/20">|</span>
               <span className="font-mono text-[10px] text-[#0047FF] tracking-wider uppercase hidden sm:inline">
-                Available Q2/Q3
+                Available for Q2/Q3 Roles
               </span>
             </div>
 
-            {/* Giant Title */}
+            {/* Title */}
             <h1 className="font-bold text-[clamp(2.8rem,8.5vw,7.5rem)] leading-[0.92] tracking-tight mb-8 max-w-5xl">
               <span className="text-white">Weaving</span>{" "}
               <span className="text-spider">immense</span>{" "}
@@ -304,12 +347,12 @@ export default function Home() {
                 Inspect Vault <ArrowRight className="w-4 h-4" />
               </a>
               <a
-                href="#terminal"
+                href="#credentials"
                 onClick={() => spiderAudio.playBlip(750, 0.05)}
                 className="spider-btn-outline flex items-center gap-2"
               >
-                <TerminalIcon className="w-4 h-4 text-[#CC0000]" />
-                Launch CLI
+                <Award className="w-4 h-4 text-[#CC0000]" />
+                View Credentials
               </a>
               <button
                 onClick={handleCopyEmail}
@@ -439,7 +482,6 @@ export default function Home() {
                   onMouseEnter={() => spiderAudio.playBlip(650 + i * 50, 0.03)}
                   className="web-panel group p-6 md:p-8 rounded-sm hover:border-[#CC0000]/60 transition-all duration-300 flex flex-col justify-between relative overflow-hidden"
                 >
-                  {/* Subtle top indicator bar */}
                   <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#CC0000] via-[#0047FF] to-transparent opacity-40 group-hover:opacity-100 transition-opacity" />
 
                   <div>
@@ -456,10 +498,22 @@ export default function Home() {
                     <p className="font-mono text-xs text-[#0047FF] mb-3">{p.tagline}</p>
                     <p className="text-white/60 text-sm leading-relaxed mb-6">{p.desc}</p>
 
-                    {/* Metrics Badge */}
-                    <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-white/[0.03] border border-white/10 text-xs font-mono text-white/80 mb-6">
-                      <Sparkles className="w-3 h-3 text-[#CC0000]" />
-                      <span>{p.metrics}</span>
+                    {/* Metrics Badge & Deep Dive CTA */}
+                    <div className="flex flex-wrap items-center gap-3 mb-6">
+                      <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-white/[0.03] border border-white/10 text-xs font-mono text-white/80">
+                        <Sparkles className="w-3 h-3 text-[#CC0000]" />
+                        <span>{p.metrics}</span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          spiderAudio.playBlip(800, 0.04);
+                          setActiveProjectModal(p);
+                        }}
+                        className="inline-flex items-center gap-1.5 text-xs font-mono text-[#0047FF] hover:underline"
+                      >
+                        <Info className="w-3.5 h-3.5" />
+                        <span>Architecture Deep-Dive</span>
+                      </button>
                     </div>
                   </div>
 
@@ -498,7 +552,12 @@ export default function Home() {
                           <span>Live Prototype</span>
                         </a>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-white/20 group-hover:text-[#CC0000] group-hover:translate-x-1 transition-all" />
+                      <button
+                        onClick={() => setActiveProjectModal(p)}
+                        className="text-white/30 hover:text-[#CC0000] transition-colors"
+                      >
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </button>
                     </div>
                   </div>
                 </motion.div>
@@ -508,9 +567,32 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ══ CREDENTIALS & CERTIFICATIONS (NEW SECTION) ══ */}
+      <section id="credentials" className="relative w-full py-24 md:py-32 overflow-hidden">
+        <span className="web-num left-[-3vw] top-[-2vh]">03</span>
+
+        <div className="container mx-auto px-6 md:px-12 max-w-7xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+            className="mb-14"
+          >
+            <div className="web-label mb-4">Official Verification</div>
+            <h2 className="font-bold text-[clamp(2.2rem,5.5vw,4.5rem)] leading-[0.95] tracking-tight">
+              <span className="text-white">Credentials &</span>{" "}
+              <span className="text-web">certifications.</span>
+            </h2>
+          </motion.div>
+
+          <CredentialsSection />
+        </div>
+      </section>
+
       {/* ══ TECHNICAL SKILLS ARSENAL ══ */}
       <section id="skills" className="relative w-full py-24 md:py-32 overflow-hidden">
-        <span className="web-num left-[-3vw] top-[-2vh]">03</span>
+        <span className="web-num right-[-3vw] top-[-2vh]">04</span>
 
         <div className="container mx-auto px-6 md:px-12 max-w-7xl relative z-10">
           <motion.div
@@ -523,7 +605,7 @@ export default function Home() {
             <div className="web-label mb-4">Precision Engineering</div>
             <h2 className="font-bold text-[clamp(2.2rem,5.5vw,4.5rem)] leading-[0.95] tracking-tight">
               <span className="text-white">Technical</span>{" "}
-              <span className="text-web">proficiency.</span>
+              <span className="text-spider">proficiency.</span>
             </h2>
           </motion.div>
 
@@ -574,7 +656,7 @@ export default function Home() {
 
       {/* ══ CAREER TIMELINE / WEB TRAJECTORY ══ */}
       <section id="timeline" className="relative w-full py-24 md:py-32 overflow-hidden">
-        <span className="web-num right-[-3vw] top-[-2vh]">04</span>
+        <span className="web-num left-[-3vw] top-[-2vh]">05</span>
 
         <div className="container mx-auto px-6 md:px-12 max-w-5xl relative z-10">
           <motion.div
@@ -587,7 +669,7 @@ export default function Home() {
             <div className="web-label mb-4">Web Trajectory</div>
             <h2 className="font-bold text-[clamp(2.2rem,5.5vw,4.5rem)] leading-[0.95] tracking-tight">
               <span className="text-white">Career</span>{" "}
-              <span className="text-spider">milestones.</span>
+              <span className="text-web">milestones.</span>
             </h2>
           </motion.div>
 
@@ -595,37 +677,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ INTERACTIVE SPIDER-OS TERMINAL ══ */}
-      <section id="terminal" className="relative w-full py-24 md:py-32 overflow-hidden">
-        <div className="container mx-auto px-6 md:px-12 max-w-5xl relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-10 text-center"
-          >
-            <div className="inline-flex justify-center mb-4">
-              <div className="web-label">Playable Terminal</div>
-            </div>
-            <h2 className="font-bold text-[clamp(2rem,4.5vw,3.8rem)] leading-[0.95] tracking-tight">
-              <span className="text-white">Query the</span>{" "}
-              <span className="text-web">Spider-Sense CLI.</span>
-            </h2>
-            <p className="text-white/50 text-sm mt-3 max-w-lg mx-auto">
-              Type <code className="text-[#CC0000] font-mono font-bold">help</code>,{" "}
-              <code className="text-[#0047FF] font-mono font-bold">skills</code>, or{" "}
-              <code className="text-white font-mono font-bold">spidersense</code> to execute live directives.
-            </p>
-          </motion.div>
-
-          <InteractiveTerminal />
-        </div>
-      </section>
-
       {/* ══ THE DAILY BUGLE / MULTIVERSE REVIEWS ══ */}
       <section id="reviews" className="relative w-full py-24 md:py-32 overflow-hidden">
-        <span className="web-num left-[-3vw] top-[-2vh]">05</span>
+        <span className="web-num right-[-3vw] top-[-2vh]">06</span>
 
         <div className="container mx-auto px-6 md:px-12 max-w-7xl relative z-10">
           <motion.div
@@ -648,7 +702,7 @@ export default function Home() {
 
       {/* ══ CONTACT / INITIATE CONNECTION ══ */}
       <section id="contact" className="relative w-full py-24 md:py-36 overflow-hidden">
-        <span className="web-num right-[-3vw] top-[-2vh]">06</span>
+        <span className="web-num left-[-3vw] top-[-2vh]">07</span>
 
         <div className="container mx-auto px-6 md:px-12 max-w-4xl relative z-10 text-center">
           <motion.div
@@ -794,6 +848,12 @@ export default function Home() {
           </button>
         </div>
       </footer>
+
+      {/* ══ INTERACTIVE ARCHITECTURAL MODAL ══ */}
+      <ProjectDetailModal
+        project={activeProjectModal}
+        onClose={() => setActiveProjectModal(null)}
+      />
 
     </main>
   );
