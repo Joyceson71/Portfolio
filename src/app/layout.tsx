@@ -7,10 +7,17 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const mono  = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", weight: ["400","500"] });
 
 export const metadata: Metadata = {
-  title: "Joyceson Danielraj — Frontend Engineer",
-  description: "Portfolio of Joyceson Danielraj. Building immersive, high-performance web experiences.",
+  title: "Joyceson Danielraj 🕷️ Frontend Engineer & Creative Technologist",
+  description: "Portfolio of Joyceson Danielraj. Building immersive, high-performance 3D web experiences.",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   openGraph: {
-    title: "Joyceson Danielraj — Frontend Engineer",
+    title: "Joyceson Danielraj 🕷️ Frontend Engineer & Creative Technologist",
     description: "Building immersive, high-performance web experiences.",
     type: "website",
   },
