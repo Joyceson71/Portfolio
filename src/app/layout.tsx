@@ -1,20 +1,26 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { CustomCursor } from "@/components/ui/custom-cursor";
 
-const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const mono  = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", weight: ["400","500"] });
 
 export const metadata: Metadata = {
-  title: "SYS.OP // 3D DESIGNER",
-  description: "Advanced WebGL Architecture.",
+  title: "Joyceson Danielraj — Frontend Engineer",
+  description: "Portfolio of Joyceson Danielraj. Building immersive, high-performance web experiences.",
+  openGraph: {
+    title: "Joyceson Danielraj — Frontend Engineer",
+    description: "Building immersive, high-performance web experiences.",
+    type: "website",
+  },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${mono.variable} font-mono antialiased bg-black`}>
+      <body className={`${inter.variable} ${mono.variable} font-sans antialiased bg-[#080810] overflow-x-hidden`}>
+        <CustomCursor />
         {children}
       </body>
     </html>

@@ -1,49 +1,61 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export default function ContactPage() {
   return (
-    <main className="w-full min-h-screen px-6 pt-32 pb-24 max-w-2xl mx-auto flex flex-col justify-center">
-      <motion.h1 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-4xl md:text-6xl font-bold tracking-tighter mb-4"
-      >
-        Start a Project.
-      </motion.h1>
-      <motion.p 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="text-white/50 mb-12"
-      >
-        I'm currently available for freelance work. Drop me a line.
-      </motion.p>
+    <main className="relative w-full min-h-screen bg-[#080810] px-6 md:px-16 py-28 flex flex-col justify-center">
+      <Link href="/" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-white/40 hover:text-[#CC0000] transition-colors mb-16">
+        <ArrowLeft className="w-3 h-3" /> Back
+      </Link>
 
-      <motion.form 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="dark-card p-8 flex flex-col gap-6"
-        onSubmit={(e) => { e.preventDefault(); alert('Message sent!'); }}
-      >
-        <div>
-          <label className="text-xs font-bold uppercase tracking-widest text-white/40 block mb-2">Name</label>
-          <input type="text" className="input-dark" required placeholder="John Doe" />
-        </div>
-        <div>
-          <label className="text-xs font-bold uppercase tracking-widest text-white/40 block mb-2">Email</label>
-          <input type="email" className="input-dark" required placeholder="john@example.com" />
-        </div>
-        <div>
-          <label className="text-xs font-bold uppercase tracking-widest text-white/40 block mb-2">Message</label>
-          <textarea className="input-dark resize-none" rows={4} required placeholder="Tell me about your vision..."></textarea>
-        </div>
-        <button type="submit" className="btn-outline w-full mt-2">
-          Send Message
-        </button>
-      </motion.form>
+      <div className="max-w-2xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="mb-12"
+        >
+          <div className="web-label mb-5">Say Hello</div>
+          <h1 className="font-bold text-[clamp(3rem,8vw,7rem)] leading-[0.9] tracking-tight mb-4">
+            <span className="text-white">Start a</span><br />
+            <span className="text-spider">project.</span>
+          </h1>
+          <p className="text-white/50 text-lg leading-relaxed">
+            Open to freelance, full-time, and collaborations. Let's build something great.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="web-panel p-8"
+        >
+          <form
+            onSubmit={(e) => { e.preventDefault(); alert("Message sent!"); }}
+            className="space-y-6"
+          >
+            <div className="space-y-2">
+              <label className="font-mono text-[10px] uppercase tracking-widest text-white/40">Name</label>
+              <input type="text" required placeholder="Peter Parker" className="web-input" />
+            </div>
+            <div className="space-y-2">
+              <label className="font-mono text-[10px] uppercase tracking-widest text-white/40">Email</label>
+              <input type="email" required placeholder="hero@marvel.com" className="web-input" />
+            </div>
+            <div className="space-y-2">
+              <label className="font-mono text-[10px] uppercase tracking-widest text-white/40">Message</label>
+              <textarea rows={5} required placeholder="Tell me about your vision..." className="web-input resize-none" />
+            </div>
+            <button type="submit" className="spider-btn w-full justify-center py-4">
+              Send Message <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
+        </motion.div>
+      </div>
     </main>
   );
 }

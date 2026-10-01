@@ -4,19 +4,19 @@ import { useEffect, useRef } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 export function CustomCursor() {
-  const cursorDot  = useRef<HTMLDivElement>(null);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { stiffness: 200, damping: 30 });
-  const springY = useSpring(mouseY, { stiffness: 200, damping: 30 });
+  const cursorRef = useRef<HTMLDivElement>(null);
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
+  const springX = useSpring(mouseX, { stiffness: 350, damping: 30 });
+  const springY = useSpring(mouseY, { stiffness: 350, damping: 30 });
 
   useEffect(() => {
     const move = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-      if (cursorDot.current) {
-        cursorDot.current.style.left = `${e.clientX}px`;
-        cursorDot.current.style.top  = `${e.clientY}px`;
+      mouseX.set(e.clientX - 20);
+      mouseY.set(e.clientY - 20);
+      if (cursorRef.current) {
+        cursorRef.current.style.left = `${e.clientX - 4}px`;
+        cursorRef.current.style.top  = `${e.clientY - 4}px`;
       }
     };
     window.addEventListener("mousemove", move);
@@ -25,10 +25,16 @@ export function CustomCursor() {
 
   return (
     <>
-      <div ref={cursorDot} className="cursor-dot" />
+      {/* Dot — crisp spider eye */}
+      <div
+        ref={cursorRef}
+        className="fixed z-[9999] w-2 h-2 rounded-full bg-[#CC0000] pointer-events-none mix-blend-difference"
+        style={{ position: "fixed", transform: "translate(-50%,-50%)" }}
+      />
+      {/* Ring — web swing trail */}
       <motion.div
-        className="cursor-ring"
-        style={{ left: springX, top: springY }}
+        className="fixed z-[9998] w-10 h-10 rounded-full border border-[#CC0000]/50 pointer-events-none"
+        style={{ left: springX, top: springY, translateX: 0, translateY: 0 }}
       />
     </>
   );

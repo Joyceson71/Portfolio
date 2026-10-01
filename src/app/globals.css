@@ -2,16 +2,22 @@
 @import "tw-animate-css";
 
 /* ═══════════════════════════════════════════════════════
-   3D WEB DESIGNER - TECHNICAL / HUD SCENE
+   SPIDER-MAN PORTFOLIO — COLOR SYSTEM & THEME
+   Colors: Deep Crimson #CC0000, Electric Blue #0047FF, Web Silver #E8E8E8
 ═══════════════════════════════════════════════════════ */
 
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-background: #000000;
-  --color-foreground: #00ffcc; /* Tech Cyan */
-  
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-background: #080810;
+  --color-foreground: #e8e8ec;
+  --color-primary:   #CC0000;
+  --color-blue:      #0047FF;
+  --color-web:       #c0c0d0;
+
+  --font-display: "Bebas Neue", "Impact", sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+  --font-sans:    "Inter", system-ui, sans-serif;
 }
 
 @layer base {
@@ -22,64 +28,177 @@
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #000000;
-    color: #00ffcc;
-    font-family: var(--font-mono);
-    overflow: hidden;
+    background-color: #080810;
+    color: #e8e8ec;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
   ::selection {
-    background: #00ffcc;
-    color: #000;
+    background: #CC0000;
+    color: #fff;
   }
 }
 
 @layer utilities {
-  .ui-layer {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 10;
-    display: grid;
-    grid-template-columns: 300px 1fr 300px;
-    grid-template-rows: 80px 1fr 80px;
+
+  /* ── Web-line text gradient ── */
+  .text-spider {
+    background: linear-gradient(135deg, #CC0000 0%, #ff2a2a 50%, #CC0000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
-  .interactive {
-    pointer-events: auto;
+  .text-web {
+    background: linear-gradient(135deg, #0047FF 0%, #4d80ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
-  .tech-panel {
-    background: rgba(0, 20, 20, 0.4);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 255, 204, 0.2);
-    box-shadow: inset 0 0 20px rgba(0, 255, 204, 0.05);
+  /* ── Glass panel — like Spider-Man's lens ── */
+  .web-panel {
+    background: rgba(8, 8, 20, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(204, 0, 0, 0.2);
+    border-radius: 4px;
+    box-shadow:
+      0 0 0 1px rgba(204, 0, 0, 0.05),
+      inset 0 0 40px rgba(204, 0, 0, 0.03),
+      0 20px 60px rgba(0, 0, 0, 0.8);
   }
 
-  .tech-text {
-    font-size: 10px;
+  .web-panel-blue {
+    background: rgba(8, 8, 20, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 71, 255, 0.25);
+    border-radius: 4px;
+    box-shadow:
+      0 0 0 1px rgba(0, 71, 255, 0.05),
+      inset 0 0 40px rgba(0, 71, 255, 0.04),
+      0 20px 60px rgba(0, 0, 0, 0.8);
+  }
+
+  /* ── Spider-Man primary button ── */
+  .spider-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2.5rem;
+    background: #CC0000;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.8rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(0, 255, 204, 0.7);
+    letter-spacing: 0.15em;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-
-  .tech-title {
-    font-size: 12px;
-    font-weight: bold;
-    color: #00ffcc;
-    border-bottom: 1px solid rgba(0, 255, 204, 0.3);
-    padding-bottom: 4px;
-    margin-bottom: 8px;
-  }
-
-  .scanline {
+  .spider-btn::before {
+    content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(0,255,204,0) 0%, rgba(0,255,204,0.05) 50%, rgba(0,255,204,0) 100%);
-    background-size: 100% 4px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+  }
+  .spider-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(204, 0, 0, 0.5);
+  }
+
+  .spider-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2.5rem;
+    background: transparent;
+    color: #e8e8ec;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .spider-btn-outline:hover {
+    border-color: rgba(204, 0, 0, 0.6);
+    color: #CC0000;
+    background: rgba(204, 0, 0, 0.05);
+  }
+
+  /* ── Web label ── */
+  .web-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: #CC0000;
+  }
+  .web-label::before {
+    content: '';
+    width: 2rem;
+    height: 1px;
+    background: #CC0000;
+  }
+
+  /* ── Tech tag ── */
+  .web-tag {
+    display: inline-block;
+    padding: 0.2rem 0.75rem;
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border: 1px solid rgba(204, 0, 0, 0.3);
+    color: rgba(204, 0, 0, 0.9);
+    background: rgba(204, 0, 0, 0.05);
+    border-radius: 2px;
+  }
+
+  /* ── Ghost section number (spider eye aesthetic) ── */
+  .web-num {
+    position: absolute;
+    font-size: clamp(8rem, 20vw, 18rem);
+    font-weight: 900;
+    font-family: var(--font-display, Impact, sans-serif);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(204, 0, 0, 0.06);
     pointer-events: none;
-    z-index: 50;
-    opacity: 0.5;
+    user-select: none;
+    line-height: 1;
+    z-index: 0;
+  }
+
+  /* ── Input fields ── */
+  .web-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    color: #e8e8ec;
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .web-input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+  }
+  .web-input:focus {
+    border-color: rgba(204, 0, 0, 0.5);
+    box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.1);
   }
 }
