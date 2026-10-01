@@ -201,4 +201,76 @@
     border-color: rgba(204, 0, 0, 0.5);
     box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.1);
   }
+
+  /* ── Cyber web grid background ── */
+  .cyber-grid {
+    background-size: 40px 40px;
+    background-image: 
+      linear-gradient(to right, rgba(204, 0, 0, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(204, 0, 0, 0.04) 1px, transparent 1px);
+  }
+
+  .cyber-dots {
+    background-image: radial-gradient(rgba(204, 0, 0, 0.15) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  /* ── Marquee infinite scrolling ── */
+  @keyframes marquee-left {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes marquee-right {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0%); }
+  }
+
+  .animate-marquee-left {
+    display: flex;
+    width: max-content;
+    animation: marquee-left 28s linear infinite;
+  }
+  .animate-marquee-left:hover {
+    animation-play-state: paused;
+  }
+
+  .animate-marquee-right {
+    display: flex;
+    width: max-content;
+    animation: marquee-right 28s linear infinite;
+  }
+  .animate-marquee-right:hover {
+    animation-play-state: paused;
+  }
+
+  /* ── Radar Sweep ── */
+  @keyframes radar-sweep {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .animate-radar {
+    animation: radar-sweep 4s linear infinite;
+    transform-origin: center;
+  }
+
+  /* ── Scanline effect ── */
+  .scanlines {
+    background: linear-gradient(
+      rgba(18, 16, 16, 0) 50%, 
+      rgba(0, 0, 0, 0.25) 50%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+  }
+
+  /* ── Spider sense glow pulse ── */
+  @keyframes spider-pulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+  }
+  .animate-spider-pulse {
+    animation: spider-pulse 3s ease-in-out infinite;
+  }
 }
