@@ -2,22 +2,49 @@
 @import "tw-animate-css";
 
 /* ═══════════════════════════════════════════════════════
-   SPIDER-MAN PORTFOLIO — COLOR SYSTEM & THEME
-   Colors: Deep Crimson #CC0000, Electric Blue #0047FF, Web Silver #E8E8E8
+   WEB-VERSE PORTFOLIO — Spider-Man Design System
+   Skin vars: --skin-primary, --skin-accent, --skin-glow
+   Default skin: classic (crimson + electric blue)
 ═══════════════════════════════════════════════════════ */
 
 @custom-variant dark (&:is(.dark *));
 
-@theme {
+/* ── Global skin CSS variables (updated by SkinSwitcher) ── */
+:root {
+  --skin-primary: #CC0000;
+  --skin-accent:  #0047FF;
+  --skin-glow:    #CC0000;
+
   --color-background: #080810;
   --color-foreground: #e8e8ec;
-  --color-primary:   #CC0000;
-  --color-blue:      #0047FF;
-  --color-web:       #c0c0d0;
+  --color-primary:    #CC0000;
+  --color-blue:       #0047FF;
+  --color-web:        #c0c0d0;
 
   --font-display: "Bebas Neue", "Impact", sans-serif;
   --font-mono:    "JetBrains Mono", ui-monospace, monospace;
   --font-sans:    "Inter", system-ui, sans-serif;
+}
+
+/* Skin: Miles Morales */
+html[data-skin="miles"] {
+  --skin-primary: #9900ff;
+  --skin-accent:  #CC0000;
+  --skin-glow:    #6600ff;
+}
+
+/* Skin: Venom */
+html[data-skin="venom"] {
+  --skin-primary: #ffffff;
+  --skin-accent:  #444444;
+  --skin-glow:    #aaaaaa;
+}
+
+/* Skin: Iron Spider */
+html[data-skin="iron"] {
+  --skin-primary: #CC0000;
+  --skin-accent:  #eab308;
+  --skin-glow:    #ff8800;
 }
 
 @layer base {
@@ -25,7 +52,6 @@
 
   html, body {
     width: 100%;
-    height: 100%;
     margin: 0;
     padding: 0;
     background-color: #080810;
@@ -34,73 +60,103 @@
     overflow-x: hidden;
   }
 
+  /* Hide the native cursor sitewide */
+  * { cursor: none !important; }
+
+  /* Restore for touch / non-fine-pointer devices */
+  @media (pointer: coarse) {
+    * { cursor: auto !important; }
+  }
+
   ::selection {
-    background: #CC0000;
+    background: var(--skin-primary);
     color: #fff;
+  }
+
+  /* Smooth skin color transitions on the html element */
+  html {
+    transition:
+      --skin-primary 0.6s ease,
+      --skin-accent  0.6s ease,
+      --skin-glow    0.6s ease;
   }
 }
 
 @layer utilities {
 
-  /* ── Web-line text gradient ── */
+  /* ── Web-verse 3D Canvas layer ── */
+  .scene-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── Content layer sits above the canvas ── */
+  .content-layer {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* ── Text gradients ── */
   .text-spider {
-    background: linear-gradient(135deg, #CC0000 0%, #ff2a2a 50%, #CC0000 100%);
+    background: linear-gradient(135deg, var(--skin-primary) 0%, color-mix(in srgb, var(--skin-primary) 70%, white) 50%, var(--skin-primary) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .text-web {
-    background: linear-gradient(135deg, #0047FF 0%, #4d80ff 100%);
+    background: linear-gradient(135deg, var(--skin-accent) 0%, color-mix(in srgb, var(--skin-accent) 70%, white) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  /* ── Glass panel — like Spider-Man's lens ── */
+  /* ── Glass panel ── */
   .web-panel {
-    background: rgba(8, 8, 20, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(204, 0, 0, 0.2);
+    background: rgba(8, 8, 20, 0.72);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid color-mix(in srgb, var(--skin-primary) 30%, transparent);
     border-radius: 4px;
     box-shadow:
-      0 0 0 1px rgba(204, 0, 0, 0.05),
-      inset 0 0 40px rgba(204, 0, 0, 0.03),
+      0 0 0 1px color-mix(in srgb, var(--skin-primary) 6%, transparent),
+      inset 0 0 40px color-mix(in srgb, var(--skin-primary) 4%, transparent),
       0 20px 60px rgba(0, 0, 0, 0.8);
+    transition: border-color 0.6s ease, box-shadow 0.6s ease;
   }
 
   .web-panel-blue {
-    background: rgba(8, 8, 20, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(0, 71, 255, 0.25);
+    background: rgba(8, 8, 20, 0.72);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid color-mix(in srgb, var(--skin-accent) 28%, transparent);
     border-radius: 4px;
     box-shadow:
-      0 0 0 1px rgba(0, 71, 255, 0.05),
-      inset 0 0 40px rgba(0, 71, 255, 0.04),
+      0 0 0 1px color-mix(in srgb, var(--skin-accent) 6%, transparent),
+      inset 0 0 40px color-mix(in srgb, var(--skin-accent) 5%, transparent),
       0 20px 60px rgba(0, 0, 0, 0.8);
   }
 
-  /* ── Spider-Man primary button ── */
+  /* ── Primary button ── */
   .spider-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     padding: 0.85rem 2.5rem;
-    background: #CC0000;
+    background: var(--skin-primary);
     color: #fff;
     font-weight: 700;
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.15em;
     border: none;
-    cursor: pointer;
     position: relative;
     overflow: hidden;
     clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.6s ease;
   }
   .spider-btn::before {
     content: '';
@@ -110,7 +166,7 @@
   }
   .spider-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(204, 0, 0, 0.5);
+    box-shadow: 0 10px 30px color-mix(in srgb, var(--skin-primary) 60%, transparent);
   }
 
   .spider-btn-outline {
@@ -126,14 +182,13 @@
     text-transform: uppercase;
     letter-spacing: 0.15em;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    cursor: pointer;
-    transition: all 0.2s ease;
     clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: all 0.2s ease;
   }
   .spider-btn-outline:hover {
-    border-color: rgba(204, 0, 0, 0.6);
-    color: #CC0000;
-    background: rgba(204, 0, 0, 0.05);
+    border-color: color-mix(in srgb, var(--skin-primary) 70%, transparent);
+    color: var(--skin-primary);
+    background: color-mix(in srgb, var(--skin-primary) 8%, transparent);
   }
 
   /* ── Web label ── */
@@ -145,13 +200,15 @@
     font-family: var(--font-mono);
     text-transform: uppercase;
     letter-spacing: 0.25em;
-    color: #CC0000;
+    color: var(--skin-primary);
+    transition: color 0.6s ease;
   }
   .web-label::before {
     content: '';
     width: 2rem;
     height: 1px;
-    background: #CC0000;
+    background: var(--skin-primary);
+    transition: background 0.6s ease;
   }
 
   /* ── Tech tag ── */
@@ -162,24 +219,26 @@
     font-family: var(--font-mono);
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    border: 1px solid rgba(204, 0, 0, 0.3);
-    color: rgba(204, 0, 0, 0.9);
-    background: rgba(204, 0, 0, 0.05);
+    border: 1px solid color-mix(in srgb, var(--skin-primary) 35%, transparent);
+    color: color-mix(in srgb, var(--skin-primary) 90%, white);
+    background: color-mix(in srgb, var(--skin-primary) 6%, transparent);
     border-radius: 2px;
+    transition: all 0.6s ease;
   }
 
-  /* ── Ghost section number (spider eye aesthetic) ── */
+  /* ── Ghost section number ── */
   .web-num {
     position: absolute;
     font-size: clamp(8rem, 20vw, 18rem);
     font-weight: 900;
     font-family: var(--font-display, Impact, sans-serif);
     color: transparent;
-    -webkit-text-stroke: 1px rgba(204, 0, 0, 0.06);
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--skin-primary) 7%, transparent);
     pointer-events: none;
     user-select: none;
     line-height: 1;
     z-index: 0;
+    transition: -webkit-text-stroke 0.6s ease;
   }
 
   /* ── Input fields ── */
@@ -192,37 +251,31 @@
     color: #e8e8ec;
     font-size: 0.875rem;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
   .web-input::placeholder {
     color: rgba(255, 255, 255, 0.25);
   }
   .web-input:focus {
-    border-color: rgba(204, 0, 0, 0.5);
-    box-shadow: 0 0 0 2px rgba(204, 0, 0, 0.1);
+    border-color: color-mix(in srgb, var(--skin-primary) 60%, transparent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--skin-primary) 12%, transparent);
   }
 
   /* ── Cyber web grid background ── */
   .cyber-grid {
     background-size: 40px 40px;
-    background-image: 
-      linear-gradient(to right, rgba(204, 0, 0, 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(204, 0, 0, 0.04) 1px, transparent 1px);
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--skin-primary) 5%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--skin-primary) 5%, transparent) 1px, transparent 1px);
   }
 
-  .cyber-dots {
-    background-image: radial-gradient(rgba(204, 0, 0, 0.15) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-
-  /* ── Marquee infinite scrolling ── */
+  /* ── Infinite marquee ── */
   @keyframes marquee-left {
-    0% { transform: translateX(0%); }
+    0%   { transform: translateX(0%); }
     100% { transform: translateX(-50%); }
   }
-
   @keyframes marquee-right {
-    0% { transform: translateX(-50%); }
+    0%   { transform: translateX(-50%); }
     100% { transform: translateX(0%); }
   }
 
@@ -231,46 +284,84 @@
     width: max-content;
     animation: marquee-left 28s linear infinite;
   }
-  .animate-marquee-left:hover {
-    animation-play-state: paused;
-  }
+  .animate-marquee-left:hover { animation-play-state: paused; }
 
   .animate-marquee-right {
     display: flex;
     width: max-content;
     animation: marquee-right 28s linear infinite;
   }
-  .animate-marquee-right:hover {
-    animation-play-state: paused;
-  }
+  .animate-marquee-right:hover { animation-play-state: paused; }
 
-  /* ── Radar Sweep ── */
+  /* ── Radar sweep ── */
   @keyframes radar-sweep {
-    0% { transform: rotate(0deg); }
+    0%   { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-
   .animate-radar {
     animation: radar-sweep 4s linear infinite;
     transform-origin: center;
   }
 
-  /* ── Scanline effect ── */
+  /* ── Scanlines ── */
   .scanlines {
     background: linear-gradient(
-      rgba(18, 16, 16, 0) 50%, 
-      rgba(0, 0, 0, 0.25) 50%
+      rgba(18, 16, 16, 0) 50%,
+      rgba(0, 0, 0, 0.22) 50%
     );
     background-size: 100% 4px;
     pointer-events: none;
   }
 
-  /* ── Spider sense glow pulse ── */
+  /* ── Spider-Sense pulse ── */
   @keyframes spider-pulse {
     0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 0.8; transform: scale(1.05); }
+    50%       { opacity: 0.8; transform: scale(1.05); }
   }
   .animate-spider-pulse {
     animation: spider-pulse 3s ease-in-out infinite;
+  }
+
+  /* ── Web rope trail ── */
+  @keyframes web-draw {
+    from { stroke-dashoffset: 600; }
+    to   { stroke-dashoffset: 0; }
+  }
+
+  /* ── Click splat ── */
+  @keyframes splat-out {
+    0%   { transform: scale(0) rotate(0deg); opacity: 1; }
+    70%  { transform: scale(1.2) rotate(15deg); opacity: 0.8; }
+    100% { transform: scale(1.5) rotate(20deg); opacity: 0; }
+  }
+  .animate-splat {
+    animation: splat-out 0.7s ease-out forwards;
+  }
+
+  /* ── HUD glow ── */
+  @keyframes hud-flicker {
+    0%, 100% { opacity: 1; }
+    92%       { opacity: 0.95; }
+    93%       { opacity: 0.5; }
+    94%       { opacity: 0.95; }
+  }
+  .animate-hud-flicker {
+    animation: hud-flicker 8s ease infinite;
+  }
+
+  /* ── Loader web weave ── */
+  @keyframes web-weave {
+    0%   { stroke-dashoffset: 300; opacity: 0; }
+    40%  { opacity: 1; }
+    100% { stroke-dashoffset: 0; opacity: 1; }
+  }
+
+  /* ── Section entrance ── */
+  @keyframes assemble-in {
+    from { opacity: 0; transform: translateY(24px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .animate-assemble {
+    animation: assemble-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 }

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, ExternalLink, Github } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 
 const projects = [
   { id: 1, title: "Kings LMS",   year: "2025", tech: "Next.js · TypeScript · PostgreSQL", href: "https://kings-lms.vercel.app/" },

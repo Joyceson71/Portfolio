@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import type { LucideIcon } from "lucide-react";
 import { 
   Code2, 
   Cpu, 
@@ -19,7 +19,7 @@ import {
 interface TechItem {
   name: string;
   category: string;
-  icon: any;
+  icon: LucideIcon;
   color?: string;
 }
 

@@ -1,14 +1,20 @@
 "use client";
 
 // Web Audio synthesizer for Spider-Man sci-fi interface feedback
+// Wired to Zustand sfxEnabled via syncWithStore() called from a client component
 class SpiderAudioController {
   private ctx: AudioContext | null = null;
-  public isMuted: boolean = false;
+  public isMuted: boolean = true; // default OFF per spec
+
+  /** Call once from a Client Component to keep mute in sync with Zustand */
+  public syncWithStore(sfxEnabled: boolean) {
+    this.isMuted = !sfxEnabled;
+  }
 
   private getContext(): AudioContext | null {
     if (typeof window === "undefined") return null;
     if (!this.ctx) {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (AudioCtx) {
         this.ctx = new AudioCtx();
       }

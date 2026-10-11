@@ -15,11 +15,11 @@ interface Credential {
 
 const credentials: Credential[] = [
   {
-    title: "Bachelor of Engineering (B.E.) in Computer Science",
+    title: "B.E. in Electronics & Communication Engineering (3rd Year)",
     issuer: "Anna University Affiliate",
-    year: "2020 — 2024",
-    id: "CSE-FIRST-CLASS",
-    skills: ["Data Structures & Algorithms", "Computer Networks", "DBMS", "Operating Systems"],
+    year: "2023 — 2027 (Undergrad)",
+    id: "ECE-3RD-YR",
+    skills: ["Signals & Systems", "Digital Signal Processing", "Microcontrollers", "Computer Architecture"],
     type: "degree",
   },
   {
