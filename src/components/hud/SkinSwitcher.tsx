@@ -32,17 +32,21 @@ export function SkinSwitcher() {
               if (sfxEnabled) spiderAudio.playBlip(isActive ? 600 : 850, 0.04);
               setSkin(id);
             }}
-            className={`font-mono text-[9px] px-2 py-1 rounded transition-all flex items-center gap-1 ${
+            className={`font-mono text-[9px] px-2 py-1 rounded transition-all flex items-center gap-1.5 ${
               isActive
-                ? "bg-white/10 text-white font-bold"
+                ? "bg-white/15 text-white font-bold border border-white/20 shadow-[0_0_10px_rgba(255,255,255,0.15)]"
                 : "text-white/40 hover:text-white/80"
             }`}
           >
             <span
-              className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+              className="w-2 h-2 rounded-full flex-shrink-0"
               style={{
-                background: config.primary,
-                boxShadow: isActive ? `0 0 6px ${config.primary}` : "none",
+                background: id === "venom" ? "linear-gradient(135deg, #ffffff 40%, #a855f7 100%)" : config.primary,
+                boxShadow: isActive
+                  ? id === "venom"
+                    ? "0 0 8px #ffffff, 0 0 14px #a855f7"
+                    : `0 0 8px ${config.primary}`
+                  : "none",
               }}
             />
             <span className="hidden sm:inline">{config.label.split(" ")[0]}</span>

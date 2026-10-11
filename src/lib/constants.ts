@@ -51,11 +51,11 @@ export const SKINS: Record<
   venom: {
     label: "Venom",
     tag: "Symbiote Override",
-    primary: "#ffffff",
-    accent: "#222222",
-    glow: "#aaaaaa",
-    bloomTint: "#333333",
-    chromaticOffset: 0.0018,
+    primary: "#f8fafc",
+    accent: "#a855f7",
+    glow: "#c084fc",
+    bloomTint: "#9333ea",
+    chromaticOffset: 0.0022,
   },
   iron: {
     label: "Iron Spider",

@@ -13,13 +13,21 @@ interface WebFieldProps {
   mouseX?: number;
   mouseY?: number;
   scrollProgress?: number;
+  skinColor?: string;
+  skinAccent?: string;
 }
 
 const SPOKES = 20;
 const RINGS = 14;
 const MAX_R = 12;
 
-export function WebField({ mouseX = 0, mouseY = 0, scrollProgress = 0 }: WebFieldProps) {
+export function WebField({
+  mouseX = 0,
+  mouseY = 0,
+  scrollProgress = 0,
+  skinColor = "#CC0000",
+  skinAccent = "#0047FF",
+}: WebFieldProps) {
   const groupRef = useRef<THREE.Group>(null!);
   // Fade out as user scrolls past the hero
   const opacity = Math.max(0, 1 - scrollProgress * 8);
@@ -49,11 +57,11 @@ export function WebField({ mouseX = 0, mouseY = 0, scrollProgress = 0 }: WebFiel
       const y = Math.sin(angle) * MAX_R;
       geoms.push({
         pts: new Float32Array([0, 0, 0, x, y, 0]),
-        color: "#CC0000",
+        color: skinColor,
       });
     }
     return geoms;
-  }, []);
+  }, [skinColor]);
 
   const ringGeoms = useMemo(() => {
     const geoms: { pts: Float32Array; color: string }[] = [];
@@ -67,11 +75,11 @@ export function WebField({ mouseX = 0, mouseY = 0, scrollProgress = 0 }: WebFiel
       }
       geoms.push({
         pts: new Float32Array(pts),
-        color: r % 3 === 0 ? "#0047FF" : "#CC0000",
+        color: r % 3 === 0 ? skinAccent : skinColor,
       });
     }
     return geoms;
-  }, []);
+  }, [skinColor, skinAccent]);
 
   return (
     <group ref={groupRef}>

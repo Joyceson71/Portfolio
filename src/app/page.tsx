@@ -534,12 +534,20 @@ export default function Home() {
                   key={f}
                   id={`filter-${f.replace("/", "-")}`}
                   onClick={() => { if (sfxEnabled) spiderAudio.playBlip(750, 0.03); setSelectedFilter(f); }}
-                  className={`font-mono text-xs uppercase px-3 py-1.5 rounded transition-all ${
+                  className={`font-mono text-xs uppercase px-3.5 py-1.5 rounded transition-all font-semibold ${
                     selectedFilter === f
-                      ? "text-white font-bold shadow-[0_0_12px_rgba(204,0,0,0.5)]"
+                      ? "border border-white/20"
                       : "bg-[#0c0c18] text-white/50 border border-white/10 hover:text-white hover:border-white/30"
                   }`}
-                  style={selectedFilter === f ? { background: "var(--skin-primary,#CC0000)" } : {}}
+                  style={
+                    selectedFilter === f
+                      ? {
+                          background: "var(--skin-primary, #CC0000)",
+                          color: "var(--skin-btn-text, #ffffff)",
+                          boxShadow: "0 0 16px var(--skin-glow, rgba(204,0,0,0.5))",
+                        }
+                      : {}
+                  }
                 >
                   {f}
                 </button>

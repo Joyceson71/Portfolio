@@ -12,9 +12,17 @@ interface CoreNanotechProps {
   mouseX: number;
   mouseY: number;
   scrollProgress: number;
+  skinColor?: string;
+  skinAccent?: string;
 }
 
-export function CoreNanotech({ mouseX, mouseY, scrollProgress }: CoreNanotechProps) {
+export function CoreNanotech({
+  mouseX,
+  mouseY,
+  scrollProgress,
+  skinColor = "#CC0000",
+  skinAccent = "#0047FF",
+}: CoreNanotechProps) {
   const groupRef = useRef<THREE.Group>(null!);
   const icosaRef = useRef<THREE.Mesh>(null!);
   const ring1 = useRef<THREE.Mesh>(null!);
@@ -56,8 +64,8 @@ export function CoreNanotech({ mouseX, mouseY, scrollProgress }: CoreNanotechPro
       <mesh ref={ring1}>
         <torusGeometry args={[1.5, 0.035, 16, 100]} />
         <meshStandardMaterial
-          color="var(--skin-primary, #CC0000)"
-          emissive="#CC0000"
+          color={skinColor}
+          emissive={skinColor}
           emissiveIntensity={3}
           roughness={0.2}
           metalness={0.8}
@@ -69,8 +77,8 @@ export function CoreNanotech({ mouseX, mouseY, scrollProgress }: CoreNanotechPro
       <mesh ref={ring2}>
         <torusGeometry args={[1.1, 0.025, 16, 100]} />
         <meshStandardMaterial
-          color="#0047FF"
-          emissive="#0047FF"
+          color={skinAccent}
+          emissive={skinAccent}
           emissiveIntensity={3.5}
           roughness={0.2}
           metalness={0.8}
@@ -82,7 +90,7 @@ export function CoreNanotech({ mouseX, mouseY, scrollProgress }: CoreNanotechPro
       <mesh ref={icosaRef}>
         <icosahedronGeometry args={[0.9, 1]} />
         <meshBasicMaterial
-          color="#CC0000"
+          color={skinColor}
           wireframe
           transparent
           opacity={0.35 * opacity}
@@ -91,8 +99,8 @@ export function CoreNanotech({ mouseX, mouseY, scrollProgress }: CoreNanotechPro
 
       <Sphere args={[0.42, 32, 32]}>
         <meshStandardMaterial
-          color="#CC0000"
-          emissive="#CC0000"
+          color={skinColor}
+          emissive={skinColor}
           emissiveIntensity={2.2}
           roughness={0.05}
           metalness={0.95}

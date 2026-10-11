@@ -37,15 +37,32 @@ function SceneContent({ mouseX, mouseY }: SceneContentProps) {
   return (
     <>
       <ScrollSync />
-      <color attach="background" args={["#080810"]} />
+      <color attach="background" args={[skin === "venom" ? "#040408" : "#080810"]} />
 
-      <LightRig mouseX={mouseX} mouseY={mouseY} skinColor={skinConfig.primary} />
+      <LightRig
+        mouseX={mouseX}
+        mouseY={mouseY}
+        skinColor={skinConfig.primary}
+        skinAccent={skinConfig.accent}
+      />
 
       <Stars radius={60} depth={30} count={1500} factor={2.5} saturation={0.3} fade speed={0.4} />
 
       {/* Hero region */}
-      <WebField mouseX={mouseX} mouseY={mouseY} scrollProgress={scrollProgress} />
-      <CoreNanotech mouseX={mouseX} mouseY={mouseY} scrollProgress={scrollProgress} />
+      <WebField
+        mouseX={mouseX}
+        mouseY={mouseY}
+        scrollProgress={scrollProgress}
+        skinColor={skinConfig.primary}
+        skinAccent={skinConfig.accent}
+      />
+      <CoreNanotech
+        mouseX={mouseX}
+        mouseY={mouseY}
+        scrollProgress={scrollProgress}
+        skinColor={skinConfig.primary}
+        skinAccent={skinConfig.accent}
+      />
 
       {/* Arsenal region */}
       <StackGraph scrollProgress={scrollProgress} />
