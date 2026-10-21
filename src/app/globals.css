@@ -460,4 +460,103 @@ html[data-skin="iron"] {
   .animate-assemble {
     animation: assemble-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
+
+  /* ── Card shimmer sweep ── */
+  @keyframes shimmer-sweep {
+    0%   { transform: translateX(-100%) skewX(-12deg); }
+    100% { transform: translateX(200%) skewX(-12deg); }
+  }
+  .card-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  .card-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--skin-primary) 10%, transparent) 40%,
+      color-mix(in srgb, white 8%, transparent) 50%,
+      color-mix(in srgb, var(--skin-primary) 10%, transparent) 60%,
+      transparent 100%
+    );
+    transform: translateX(-100%) skewX(-12deg);
+    opacity: 0;
+    transition: opacity 0.1s;
+    pointer-events: none;
+  }
+  .card-shimmer:hover::after {
+    opacity: 1;
+    animation: shimmer-sweep 0.65s ease forwards;
+  }
+
+  /* ── Text glow ── */
+  .text-glow {
+    text-shadow:
+      0 0 12px color-mix(in srgb, var(--skin-primary) 70%, transparent),
+      0 0 28px color-mix(in srgb, var(--skin-primary) 40%, transparent);
+  }
+
+  /* ── Cursor blink ── */
+  @keyframes cursor-blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+  .animate-cursor-blink {
+    animation: cursor-blink 1s step-end infinite;
+  }
+
+  /* ── Location pin bounce ── */
+  @keyframes pin-bounce {
+    0%, 100% { transform: translateY(0); }
+    40%       { transform: translateY(-5px); }
+    60%       { transform: translateY(-2px); }
+  }
+  .animate-pin-bounce {
+    animation: pin-bounce 2s ease-in-out infinite;
+  }
+
+  /* ── Social link hover glow ── */
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.2s, filter 0.2s;
+  }
+  .social-link:hover {
+    color: var(--skin-primary);
+    filter: drop-shadow(0 0 6px color-mix(in srgb, var(--skin-primary) 60%, transparent));
+  }
+
+  /* ── Skill cluster divider ── */
+  .skill-cluster-label {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 0.75rem;
+  }
+  .skill-cluster-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+  }
+
+  /* ── Mobile hamburger lines ── */
+  .hamburger-line {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: currentColor;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+  }
 }

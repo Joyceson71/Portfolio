@@ -11,7 +11,9 @@ import {
   GitCommit, 
   CheckCircle,
   Shield,
-  Layers
+  Layers,
+  MapPin,
+  BriefcaseBusiness,
 } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
 
@@ -41,7 +43,7 @@ export function BentoGrid() {
       <motion.div
         whileHover={{ y: -4 }}
         onMouseEnter={() => spiderAudio.playBlip(620, 0.04)}
-        className="md:col-span-2 p-6 md:p-8 rounded-sm bg-[#0c0c18] border border-[#CC0000]/30 hover:border-[#CC0000]/70 transition-all duration-300 relative overflow-hidden group"
+        className="md:col-span-2 card-shimmer p-6 md:p-8 rounded-sm bg-[#0c0c18] border border-[#CC0000]/30 hover:border-[#CC0000]/70 transition-all duration-300 relative overflow-hidden group"
       >
         <div className="absolute top-0 right-0 w-48 h-48 bg-[#CC0000]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#CC0000]/20 transition-all" />
         
@@ -81,7 +83,7 @@ export function BentoGrid() {
       <motion.div
         whileHover={{ y: -4 }}
         onMouseEnter={() => spiderAudio.playBlip(780, 0.04)}
-        className="p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[#0047FF]/60 transition-all duration-300 relative flex flex-col justify-between group"
+        className="card-shimmer p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[#0047FF]/60 transition-all duration-300 relative flex flex-col justify-between group"
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
@@ -113,7 +115,7 @@ export function BentoGrid() {
       <motion.div
         whileHover={{ y: -4 }}
         onMouseEnter={() => spiderAudio.playBlip(840, 0.04)}
-        className="p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[#CC0000]/60 transition-all duration-300 relative flex flex-col justify-between group"
+        className="card-shimmer p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[#CC0000]/60 transition-all duration-300 relative flex flex-col justify-between group"
       >
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
@@ -176,7 +178,7 @@ export function BentoGrid() {
       <motion.div
         whileHover={{ y: -4 }}
         onMouseEnter={() => spiderAudio.playBlip(700, 0.04)}
-        className="md:col-span-2 p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[#0047FF]/50 transition-all duration-300 relative flex flex-col justify-between"
+        className="md:col-span-2 card-shimmer p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[#0047FF]/50 transition-all duration-300 relative flex flex-col justify-between"
       >
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
@@ -191,7 +193,7 @@ export function BentoGrid() {
         <div className="space-y-2.5 my-2">
           <div>
             <div className="flex justify-between text-xs font-mono mb-1">
-              <span className="text-white/70">App Router & Server Actions</span>
+              <span className="text-white/70">App Router &amp; Server Actions</span>
               <span className="text-[#CC0000]">Next.js 16</span>
             </div>
             <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
@@ -200,7 +202,7 @@ export function BentoGrid() {
           </div>
           <div>
             <div className="flex justify-between text-xs font-mono mb-1">
-              <span className="text-white/70">Reactive Concurrency & Hooks</span>
+              <span className="text-white/70">Reactive Concurrency &amp; Hooks</span>
               <span className="text-[#0047FF]">React 19</span>
             </div>
             <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
@@ -214,6 +216,48 @@ export function BentoGrid() {
           <span className="text-white font-mono">0 any types</span>
         </div>
       </motion.div>
+
+      {/* ── CARD 6: Open to Work + Location ── */}
+      <motion.div
+        whileHover={{ y: -4 }}
+        onMouseEnter={() => spiderAudio.playBlip(900, 0.04)}
+        className="md:col-span-2 card-shimmer p-6 rounded-sm bg-gradient-to-br from-emerald-950/40 via-[#0c0c18] to-[#0c0c18] border border-emerald-500/20 hover:border-emerald-400/50 transition-all duration-300 relative overflow-hidden group"
+      >
+        {/* Background glow */}
+        <div className="absolute top-0 left-0 w-40 h-40 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex items-start justify-between gap-4 mb-4">
+          <div className="flex items-center gap-3">
+            <BriefcaseBusiness className="w-5 h-5 text-emerald-400 shrink-0" />
+            <div>
+              <span className="font-mono text-[10px] uppercase tracking-widest text-emerald-400 block">Hiring Status</span>
+              <h4 className="text-white font-bold text-sm">Open to Work</h4>
+            </div>
+          </div>
+          <div className="relative flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping absolute left-2" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400 relative ml-0" />
+            <span className="font-mono text-[10px] text-emerald-400 font-bold uppercase ml-1">Active</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 text-xs font-mono mb-4">
+          <div className="space-y-1.5">
+            <p className="text-white/40 uppercase tracking-wider text-[10px]">Seeking</p>
+            <p className="text-white/80">Full-Stack · Freelance · SDE Roles</p>
+          </div>
+          <div className="space-y-1.5">
+            <p className="text-white/40 uppercase tracking-wider text-[10px]">Availability</p>
+            <p className="text-white/80">Q4 2026 / Q1 2027</p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1.5 pt-3 border-t border-white/[0.06]">
+          <MapPin className="w-3.5 h-3.5 text-emerald-400" />
+          <span className="font-mono text-[11px] text-white/50">Chennai, India · Remote Worldwide</span>
+        </div>
+      </motion.div>
     </div>
   );
 }
+

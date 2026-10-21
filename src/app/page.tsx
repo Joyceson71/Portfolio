@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowRight, Github, ExternalLink, Sparkles, Send,
-  ArrowUp, Mail, Info, Award,
+  ArrowUp, Mail, Info, Award, Linkedin, MapPin, Menu, X,
 } from "lucide-react";
 
 // HUD
@@ -69,6 +69,20 @@ function SkillBar({ skill, index }: { skill: typeof SKILLS[0]; index: number }) 
   );
 }
 
+// ── Skill Cluster metadata ────────────────────────────────────────
+const CLUSTER_ICONS: Record<string, string> = {
+  frontend: "⚡",
+  creative: "🌐",
+  backend: "🖥️",
+  devops: "🚀",
+};
+const CLUSTER_LABELS: Record<string, string> = {
+  frontend: "Frontend & UI",
+  creative: "3D & Creative",
+  backend: "Backend & Data",
+  devops: "DevOps & Tooling",
+};
+
 // ── Project Card ─────────────────────────────────────────────────
 function ProjectCard({
   p, i, onOpen,
@@ -87,7 +101,7 @@ function ProjectCard({
       transition={{ duration: 0.6, delay: i * 0.1 }}
       whileHover={{ y: -6 }}
       onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(650 + i * 50, 0.03); }}
-      className="web-panel group p-6 md:p-8 rounded-sm hover:border-[var(--skin-primary,#CC0000)]/60 transition-all duration-300 flex flex-col justify-between relative overflow-hidden"
+      className="web-panel card-shimmer group p-6 md:p-8 rounded-sm hover:border-[var(--skin-primary,#CC0000)]/60 transition-all duration-300 flex flex-col justify-between relative overflow-hidden"
     >
       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[var(--skin-primary,#CC0000)] via-[var(--skin-accent,#0047FF)] to-transparent opacity-40 group-hover:opacity-100 transition-opacity" />
 
@@ -266,6 +280,7 @@ export default function Home() {
   const [selectedFilter, setSelectedFilter] = useState<string>("all");
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [activeProjectModal, setActiveProjectModal] = useState<ProjectDetail | null>(null);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const sfxEnabled = useStore((s) => s.sfxEnabled);
 
   // Keep spiderAudio mute flag in sync with store
@@ -340,9 +355,10 @@ export default function Home() {
               key={l.label}
               href={l.href}
               onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(700, 0.02); }}
-              className="text-xs font-mono tracking-wider uppercase text-white/60 hover:text-[var(--skin-primary,#CC0000)] transition-colors"
+              className="text-xs font-mono tracking-wider uppercase text-white/60 hover:text-[var(--skin-primary,#CC0000)] transition-colors relative group"
             >
               {l.label}
+              <span className="absolute -bottom-0.5 left-0 w-0 h-px group-hover:w-full transition-all duration-300" style={{ background: "var(--skin-primary,#CC0000)" }} />
             </Link>
           ))}
         </nav>
@@ -357,8 +373,55 @@ export default function Home() {
           >
             Signal
           </a>
+          {/* Mobile hamburger */}
+          <button
+            id="mobile-nav-toggle"
+            aria-label="Toggle mobile navigation"
+            onClick={() => { setMobileNavOpen((v) => !v); if (sfxEnabled) spiderAudio.playBlip(700, 0.03); }}
+            className="lg:hidden flex flex-col justify-center items-center w-9 h-9 gap-[5px] text-white/70 hover:text-white transition-colors"
+          >
+            {mobileNavOpen ? <X className="w-5 h-5" /> : (
+              <>
+                <span className="hamburger-line" />
+                <span className="hamburger-line" />
+                <span className="hamburger-line" />
+              </>
+            )}
+          </button>
         </div>
       </header>
+
+      {/* ══ MOBILE NAV DRAWER ══ */}
+      <AnimatePresence>
+        {mobileNavOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.25 }}
+            className="fixed top-16 left-0 right-0 z-40 bg-[#080810]/96 backdrop-blur-2xl border-b border-[var(--skin-primary,#CC0000)]/20 py-6 px-8 flex flex-col gap-5"
+          >
+            {NAV_LINKS.map((l) => (
+              <Link
+                key={l.label}
+                href={l.href}
+                onClick={() => { setMobileNavOpen(false); if (sfxEnabled) spiderAudio.playBlip(700, 0.02); }}
+                className="font-mono text-sm tracking-wider uppercase text-white/70 hover:text-[var(--skin-primary,#CC0000)] transition-colors flex items-center gap-3"
+              >
+                <span className="w-4 h-px" style={{ background: "var(--skin-primary,#CC0000)" }} />
+                {l.label}
+              </Link>
+            ))}
+            <a
+              href="#contact"
+              onClick={() => { setMobileNavOpen(false); if (sfxEnabled) spiderAudio.playWebShoot(); }}
+              className="spider-btn text-xs py-2.5 px-5 self-start mt-2"
+            >
+              Signal
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ══ HERO ══ */}
       <section id="home" className="relative w-full min-h-screen overflow-hidden flex items-center pt-20">
@@ -435,6 +498,24 @@ export default function Home() {
                 <Mail className="w-3.5 h-3.5" />
                 {copiedEmail ? "Copied!" : "Copy Email"}
               </button>
+              <a
+                href="https://linkedin.com/in/joyceson-danielraj"
+                target="_blank"
+                rel="noreferrer"
+                onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(820, 0.03); }}
+                className="font-mono text-xs text-white/60 hover:text-[#0A66C2] px-4 py-3 rounded border border-white/10 hover:border-[#0A66C2]/50 transition-all flex items-center gap-2"
+              >
+                <Linkedin className="w-3.5 h-3.5" />
+                LinkedIn
+              </a>
+            </div>
+
+            {/* Location badge */}
+            <div className="flex items-center gap-2 mt-2">
+              <span className="animate-pin-bounce inline-flex">
+                <MapPin className="w-3.5 h-3.5" style={{ color: "var(--skin-primary,#CC0000)" }} />
+              </span>
+              <span className="font-mono text-xs text-white/40 uppercase tracking-widest">Chennai, India · Remote Available</span>
             </div>
           </motion.div>
         </div>
@@ -505,9 +586,29 @@ export default function Home() {
               <span className="text-spider">proficiency.</span>
             </h2>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
-            {SKILLS.map((skill, i) => <SkillBar key={skill.name} skill={skill} index={i} />)}
-          </div>
+
+          {/* Grouped by cluster */}
+          {(["frontend", "creative", "backend", "devops"] as const).map((cluster) => {
+            const clusterSkills = SKILLS.filter((s) => s.cluster === cluster);
+            if (!clusterSkills.length) return null;
+            return (
+              <div key={cluster} className="mb-12">
+                <div className="skill-cluster-label">
+                  <span>{CLUSTER_ICONS[cluster]}</span>
+                  <span>{CLUSTER_LABELS[cluster]}</span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8">
+                  {clusterSkills.map((skill) => (
+                    <SkillBar
+                      key={skill.name}
+                      skill={skill}
+                      index={SKILLS.indexOf(skill)}
+                    />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -676,12 +777,17 @@ export default function Home() {
           <div className="flex items-center gap-6">
             <a href="https://github.com/Joyceson71" target="_blank" rel="noreferrer"
               onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(800, 0.02); }}
-              className="text-white/40 hover:text-white transition-colors flex items-center gap-2 font-mono text-xs">
+              className="social-link text-white/40 font-mono text-xs">
               <Github className="w-4 h-4" /><span>GitHub</span>
+            </a>
+            <a href="https://linkedin.com/in/joyceson-danielraj" target="_blank" rel="noreferrer"
+              onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(820, 0.02); }}
+              className="social-link text-white/40 font-mono text-xs" style={{ "--hover-color": "#0A66C2" } as React.CSSProperties}>
+              <Linkedin className="w-4 h-4" /><span>LinkedIn</span>
             </a>
             <a href="mailto:joycesondanielraj71@gmail.com"
               onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(840, 0.02); }}
-              className="text-white/40 hover:text-[var(--skin-primary,#CC0000)] transition-colors flex items-center gap-2 font-mono text-xs">
+              className="social-link text-white/40 font-mono text-xs">
               <Mail className="w-4 h-4" /><span>Transmission</span>
             </a>
           </div>
