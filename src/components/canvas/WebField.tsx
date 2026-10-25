@@ -34,13 +34,19 @@ export function WebField({
 
   useFrame((state, delta) => {
     if (!groupRef.current) return;
+    const t = state.clock.elapsedTime;
     groupRef.current.rotation.z += delta * 0.025;
     groupRef.current.rotation.x = THREE.MathUtils.lerp(
-      groupRef.current.rotation.x, -mouseY * 0.18, 0.04
+      groupRef.current.rotation.x, -mouseY * 0.22, 0.04
     );
     groupRef.current.rotation.y = THREE.MathUtils.lerp(
-      groupRef.current.rotation.y, mouseX * 0.18, 0.04
+      groupRef.current.rotation.y, mouseX * 0.22, 0.04
     );
+
+    // Subtle breathing pulse scale based on time and audio/motion
+    const pulse = 1 + Math.sin(t * 1.5) * 0.02;
+    groupRef.current.scale.set(pulse, pulse, pulse);
+
     groupRef.current.children.forEach((child) => {
       if ((child as THREE.Line).isLine) {
         const mat = (child as THREE.Line).material as THREE.LineBasicMaterial;

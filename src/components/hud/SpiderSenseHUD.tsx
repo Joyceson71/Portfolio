@@ -74,6 +74,10 @@ export function SpiderSenseHUD() {
         <div style={{ color: "var(--skin-primary, #CC0000)" }}>
           NANITE: <span className="text-white/60">{naniteIntegrity}%</span>
         </div>
+        <div className="pt-1 flex items-center justify-end gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-[8px] text-emerald-400/80 font-mono">SYS_NOMINAL</span>
+        </div>
       </div>
     </div>
   );

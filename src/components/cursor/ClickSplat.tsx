@@ -16,23 +16,28 @@ let nextId = 0;
 // ── Web splat decal on click ──────────────────────────────────
 function WebSplatSVG() {
   return (
-    <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Simple radial web spokes */}
-      {Array.from({ length: 8 }, (_, i) => {
-        const angle = (i / 8) * Math.PI * 2;
-        const x2 = 30 + Math.cos(angle) * 26;
-        const y2 = 30 + Math.sin(angle) * 26;
+    <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Radial web spokes */}
+      {Array.from({ length: 12 }, (_, i) => {
+        const angle = (i / 12) * Math.PI * 2;
+        const x2 = 36 + Math.cos(angle) * 32;
+        const y2 = 36 + Math.sin(angle) * 32;
         return (
-          <line key={i} x1="30" y1="30" x2={x2} y2={y2}
-            stroke="currentColor" strokeWidth="1.5" opacity="0.9" />
+          <line key={i} x1="36" y1="36" x2={x2} y2={y2}
+            stroke="currentColor" strokeWidth="1.2" opacity="0.85" />
         );
       })}
       {/* Concentric rings */}
-      <circle cx="30" cy="30" r="8"  fill="none" stroke="currentColor" strokeWidth="1" opacity="0.7" />
-      <circle cx="30" cy="30" r="16" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.5" />
-      <circle cx="30" cy="30" r="24" fill="none" stroke="currentColor" strokeWidth="0.8" opacity="0.3" />
-      {/* Center dot */}
-      <circle cx="30" cy="30" r="2.5" fill="currentColor" />
+      <circle cx="36" cy="36" r="9"  fill="none" stroke="currentColor" strokeWidth="1.2" opacity="0.8" />
+      <circle cx="36" cy="36" r="18" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.6" strokeDasharray="3 3" />
+      <circle cx="36" cy="36" r="28" fill="none" stroke="currentColor" strokeWidth="0.8" opacity="0.4" />
+      {/* Center nanite core */}
+      <circle cx="36" cy="36" r="3" fill="currentColor" />
+      {/* Crosshair accents */}
+      <line x1="36" y1="2" x2="36" y2="8" stroke="currentColor" strokeWidth="1.5" />
+      <line x1="36" y1="64" x2="36" y2="70" stroke="currentColor" strokeWidth="1.5" />
+      <line x1="2" y1="36" x2="8" y2="36" stroke="currentColor" strokeWidth="1.5" />
+      <line x1="64" y1="36" x2="70" y2="36" stroke="currentColor" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -64,10 +69,10 @@ export function ClickSplatLayer() {
             transition={{ duration: 0.7, ease: "easeOut" }}
             style={{
               position: "absolute",
-              left: s.x - 30,
-              top: s.y - 30,
+              left: s.x - 36,
+              top: s.y - 36,
               color: "var(--skin-primary, #CC0000)",
-              filter: "drop-shadow(0 0 4px var(--skin-primary, #CC0000))",
+              filter: "drop-shadow(0 0 6px var(--skin-primary, #CC0000))",
             }}
           >
             <WebSplatSVG />
