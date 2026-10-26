@@ -82,17 +82,20 @@ function SceneContent({ mouseX, mouseY }: SceneContentProps) {
       {/* Post-processing */}
       <EffectComposer>
         <Bloom
-          luminanceThreshold={0.15}
+          luminanceThreshold={0.1}
+          luminanceSmoothing={0.08}
           mipmapBlur
-          intensity={2.2}
-          levels={5}
+          intensity={2.8}
+          levels={6}
         />
         <ChromaticAberration
           blendFunction={BlendFunction.NORMAL}
           offset={new THREE.Vector2(skinConfig.chromaticOffset, skinConfig.chromaticOffset)}
+          radialModulation
+          modulationOffset={0.75}
         />
-        <Noise opacity={0.025} />
-        <Vignette offset={0.35} darkness={0.55} />
+        <Noise opacity={0.032} />
+        <Vignette offset={0.32} darkness={0.65} />
       </EffectComposer>
 
       <Preload all />
