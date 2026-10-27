@@ -1,10 +1,10 @@
-# 🕷️ Joyceson Danielraj — Web-Verse 3D Portfolio
+﻿# 🕷️ Joyceson Danielraj — Web-Verse 3D Portfolio
 
-> **Full-Stack Developer & 3D Designer**  
+> **Full-Stack Developer · 3D Designer · AI Integration Engineer**  
 > *"I build the web, and the worlds inside it."*  
 > Live Production: [portfolio-jodan.vercel.app](https://portfolio-jodan.vercel.app/)
 
-A fully immersive, 3D-first, cursor-interactive portfolio redesign engineered with **Next.js 16 (App Router)**, **React 19**, **Three.js / React Three Fiber**, **Tailwind CSS v4**, and custom **GLSL Shaders**. Rather than a static scrolling document, the experience is rendered as one continuous living 3D world with spline-scrubbed camera paths, verlet-rope web physics, reactive post-processing, and a multi-suit theme engine.
+A fully immersive, 3D-first, cursor-interactive portfolio engineered with **Next.js 16 (App Router)**, **React 19**, **Three.js / React Three Fiber**, **Tailwind CSS v4**, and custom **GLSL Shaders**. Rather than a static scrolling document, the experience is rendered as one continuous living 3D world with spline-scrubbed camera paths, verlet-rope web physics, reactive post-processing, and a multi-suit theme engine.
 
 ---
 
@@ -46,7 +46,7 @@ Switching suits updates the entire visual hierarchy across CSS variables, HTML s
 |---|---|---|---|---|---|
 | **Classic Peter** | Crimson & Web | `#CC0000` | `#0047FF` | `#CC0000` | `0.0007` |
 | **Miles Morales** | Stealth Bio-Shock | `#9900ff` | `#CC0000` | `#6600ff` | `0.0012` |
-| **Venom** | Symbiote Override | `#ffffff` | `#222222` | `#333333` | `0.0018` |
+| **Venom** | Symbiote Override | `#f8fafc` | `#a855f7` | `#9333ea` | `0.0022` |
 | **Iron Spider** | Stark Nanotech | `#CC0000` | `#eab308` | `#ff6600` | `0.0006` |
 
 ---
@@ -57,6 +57,18 @@ Switching suits updates the entire visual hierarchy across CSS variables, HTML s
 2. **Verlet Rope Physics**: Real-time numerical integration simulating a dynamic web rope anchored to mouse drag points with tensile spring constraints and gravity sag.
 3. **Click Web Splat**: On mouse click, generates temporary multi-ring web decal splats accompanied by synthesized Web Audio sound effects.
 4. **Velocity Spider-Sense**: Detects fast cursor velocity (>35px/frame) to trigger Spider-Sense HUD ripple animations and audio chirps.
+
+---
+
+## 🚀 Featured Projects
+
+| Project | Category | Year | Tech Highlights |
+|---|---|---|---|
+| **Kings LMS** | Full-Stack Web App | 2025 | Next.js 16, PostgreSQL, Prisma, Resend |
+| **Quiz Arena** | Real-Time Multiplayer | 2024 | WebSockets, Node.js, MongoDB, JWT |
+| **SmartBiz OS** | UI/UX Dashboard | 2024 | Next.js, Chart.js, Lighthouse 100 |
+| **Spider-Verse 3D Web** | WebGL / Creative | 2025 | Three.js, R3F, GLSL, Verlet Physics |
+| **NeuralDesk AI** | AI-Native Web App | 2026 | OpenAI GPT-4o, Anthropic Claude, Supabase, SSE Streaming |
 
 ---
 
@@ -78,6 +90,9 @@ The portfolio includes interactive 3D Lab experiments showcasing creative WebGL 
 - **3D & Creative Code**: Three.js 0.175, React Three Fiber v9, React Three Drei v10, PostProcessing
 - **Physics & Motion**: Framer Motion 12, GSAP 3, Verlet numerical integration
 - **State & Audio**: Zustand 5, Web Audio API Synthesizer
+- **Data Fetching**: TanStack Query (React Query)
+- **Database & Realtime**: PostgreSQL + Prisma, Supabase Realtime
+- **AI Integration**: OpenAI SDK (GPT-4o), Anthropic SDK (Claude 3.5), SSE streaming
 - **Backend & Contact**: Next.js API Routes, Nodemailer with spam honeypot & IP rate limiting
 
 ---
@@ -154,9 +169,19 @@ The 3D engine is configured for a stable 60 FPS across desktop hardware with aut
 
 ---
 
+## 📊 Stats
+
+- **5+ Years** of engineering experience
+- **20+ Production Apps** shipped
+- **60 FPS** stable WebGL standard
+- **100% TypeScript** strict mode across the codebase
+
+---
+
 ## 📬 Contact & Inquiries
 
 - **Engineer**: Joyceson Danielraj
 - **Email**: [joycesondanielraj71@gmail.com](mailto:joycesondanielraj71@gmail.com)
 - **GitHub**: [@Joyceson71](https://github.com/Joyceson71)
+- **LinkedIn**: [linkedin.com/in/joyceson-danielraj](https://linkedin.com/in/joyceson-danielraj)
 - **Live Portfolio**: [portfolio-jodan.vercel.app](https://portfolio-jodan.vercel.app/)

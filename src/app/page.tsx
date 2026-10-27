@@ -448,7 +448,7 @@ export default function Home() {
               </span>
               <span className="text-white/20">|</span>
               <span className="font-mono text-[10px] tracking-wider uppercase hidden sm:inline" style={{ color: "var(--skin-accent,#0047FF)" }}>
-                Available for Q4/Q1 Roles
+                Available for Q2/Q3 2026 Roles
               </span>
             </div>
 
@@ -462,17 +462,17 @@ export default function Home() {
             </h1>
 
             <p className="text-white/70 text-base md:text-xl max-w-2xl mb-8 leading-relaxed font-normal">
-              I&apos;m <strong className="text-white font-semibold">Joyceson Danielraj</strong> — an ECE 3rd-year engineering undergrad, full-stack developer, and 3D designer.
-              I architect APIs, databases, and realtime systems by day; and craft immersive WebGL scenes, shaders, and motion by night.
+              I&apos;m <strong className="text-white font-semibold">Joyceson Danielraj</strong> — an ECE final-year engineering undergrad, full-stack developer, 3D designer, and AI integration engineer.
+              I architect APIs, databases, and AI-powered systems by day; and craft immersive WebGL scenes, shaders, and motion by night.
             </p>
 
             {/* Metrics */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mb-10 p-4 rounded-sm bg-[#0c0c18]/60 border border-white/[0.06] backdrop-blur-sm">
               {[
-                { val: "4+ Yrs", label: "Engineering", color: "text-white" },
+                { val: "5+ Yrs", label: "Engineering", color: "text-white" },
                 { val: "60 FPS", label: "WebGL Standard", color: "text-[var(--skin-primary,#CC0000)]" },
                 { val: "100%", label: "Type Safe", color: "text-[var(--skin-accent,#0047FF)]" },
-                { val: "15+", label: "Shipped Apps", color: "text-white" },
+                { val: "20+", label: "Shipped Apps", color: "text-white" },
               ].map(({ val, label, color }) => (
                 <div key={label}>
                   <span className={`font-mono text-xl md:text-2xl font-bold ${color}`}>{val}</span>

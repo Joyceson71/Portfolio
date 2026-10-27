@@ -85,6 +85,7 @@ export const HERO_TITLES = [
   "3D WEB DESIGNER",
   "CREATIVE TECHNOLOGIST",
   "WEBGL ENGINEER",
+  "AI INTEGRATION ENGINEER",
 ];
 
 // ── Projects ───────────────────────────────────────────────────
@@ -289,6 +290,29 @@ export const PROJECTS: ProjectDetail[] = [
       "Integrated with Web Audio transmission sound synthesis",
     ],
   },
+  {
+    id: 9,
+    title: "NeuralDesk AI",
+    category: "Web App",
+    filter: "web app",
+    tagline: "AI-Powered Chat & Productivity Dashboard",
+    desc: "Full-stack AI chat platform integrating OpenAI GPT-4o and Anthropic Claude APIs with streaming responses, multi-session conversation history, context window management, and a prompt library. Built with Next.js Server Actions and Supabase for real-time storage.",
+    tech: ["Next.js 16", "React 19", "Supabase", "OpenAI SDK", "Anthropic SDK", "TypeScript", "Tailwind CSS"],
+    demo: "https://neuraldesk.vercel.app/",
+    github: "https://github.com/Joyceson71/neural-desk",
+    year: "2026",
+    metrics: "Streaming SSE · Multi-Model · Real-Time",
+    architecture: [
+      "Next.js 15 Server Actions with ReadableStream for token-by-token SSE streaming to the UI",
+      "Supabase Realtime subscriptions syncing chat history across tabs with zero polling",
+      "Context window management with tiktoken to auto-prune oldest messages before token limit",
+    ],
+    highlights: [
+      "Switchable AI backbone — GPT-4o and Claude 3.5 Sonnet selectable per session",
+      "Prompt library with shareable slugs and one-click copy to input",
+      "Markdown + code block rendering with syntax highlighting and copy button",
+    ],
+  },
 ];
 
 // ── Skills ─────────────────────────────────────────────────────
@@ -303,32 +327,37 @@ export interface Skill {
 
 export const SKILLS: Skill[] = [
   // Frontend
-  { name: "React 19 & Next.js 16", level: 96, cluster: "frontend", color: "#61dafb" },
-  { name: "TypeScript (Strict)", level: 92, cluster: "frontend", color: "#3178c6" },
+  { name: "React 19 & Next.js 16", level: 97, cluster: "frontend", color: "#61dafb" },
+  { name: "TypeScript (Strict)", level: 94, cluster: "frontend", color: "#3178c6" },
   { name: "Tailwind CSS v4", level: 95, cluster: "frontend", color: "#38bdf8" },
-  { name: "Framer Motion", level: 90, cluster: "frontend", color: "#ff0080" },
+  { name: "Framer Motion", level: 91, cluster: "frontend", color: "#ff0080" },
+  { name: "React Query / TanStack", level: 85, cluster: "frontend", color: "#ff4154" },
   // Creative / 3D
-  { name: "Three.js / R3F", level: 86, cluster: "creative", color: "#CC0000" },
-  { name: "WebGL & GLSL Shaders", level: 78, cluster: "creative", color: "#9900ff" },
+  { name: "Three.js / R3F", level: 88, cluster: "creative", color: "#CC0000" },
+  { name: "WebGL & GLSL Shaders", level: 80, cluster: "creative", color: "#9900ff" },
   { name: "GSAP & ScrollTrigger", level: 88, cluster: "creative", color: "#88ce02" },
   // Backend
-  { name: "Node.js & REST APIs", level: 84, cluster: "backend", color: "#6cc24a" },
-  { name: "PostgreSQL & Prisma", level: 80, cluster: "backend", color: "#336791" },
-  { name: "WebSockets & Realtime", level: 76, cluster: "backend", color: "#eab308" },
-  { name: "GraphQL", level: 72, cluster: "backend", color: "#e535ab" },
+  { name: "Node.js & REST APIs", level: 86, cluster: "backend", color: "#6cc24a" },
+  { name: "PostgreSQL & Prisma", level: 82, cluster: "backend", color: "#336791" },
+  { name: "Supabase & Realtime", level: 82, cluster: "backend", color: "#3ecf8e" },
+  { name: "WebSockets & Realtime", level: 78, cluster: "backend", color: "#eab308" },
+  { name: "AI / LLM API Integration", level: 84, cluster: "backend", color: "#a855f7" },
+  { name: "GraphQL", level: 74, cluster: "backend", color: "#e535ab" },
   // DevOps
-  { name: "Docker & CI/CD", level: 74, cluster: "devops", color: "#2496ed" },
-  { name: "Git & GitHub Actions", level: 88, cluster: "devops", color: "#f05032" },
+  { name: "Docker & CI/CD", level: 76, cluster: "devops", color: "#2496ed" },
+  { name: "Git & GitHub Actions", level: 90, cluster: "devops", color: "#f05032" },
 ];
 
 // ── Tech Marquee ───────────────────────────────────────────────
 export const TECH_STACK_ROW1 = [
   "React 19", "Next.js 16", "TypeScript", "Three.js", "Tailwind v4",
   "Framer Motion", "Node.js", "WebGL/GLSL", "PostgreSQL", "Prisma",
+  "Supabase", "OpenAI SDK",
 ];
 export const TECH_STACK_ROW2 = [
   "Docker", "GraphQL", "WebSockets", "Zustand", "GSAP",
   "Git/CI-CD", "React Three Fiber", "Resend", "Zod", "Vercel",
+  "TanStack Query", "Anthropic SDK",
 ];
 
 // ── Timeline ───────────────────────────────────────────────────
@@ -382,6 +411,14 @@ export const TIMELINE: TimelineEvent[] = [
     color: "#eab308",
     icon: "🕷️",
   },
+  {
+    year: "2026",
+    title: "AI-Native Engineering",
+    sub: "LLM Integration · Agent Tooling · ECE Final Year",
+    desc: "Expanding into AI-native product engineering — integrating OpenAI, Anthropic, and open-source LLMs into production full-stack systems. Building agentic workflows, streaming chat platforms, and retrieval-augmented pipelines while completing an ECE engineering degree.",
+    color: "#a855f7",
+    icon: "🤖",
+  },
 ];
 
 // ── Reviews ────────────────────────────────────────────────────
@@ -426,6 +463,16 @@ export const REVIEWS: Review[] = [
     quote: "Working with Joyceson was like having a creative director and a systems engineer in one. Every micro-interaction was intentional and the performance stayed at 60 FPS throughout.",
     rating: 5,
     date: "Jun 2025",
+  },
+  {
+    id: 4,
+    name: "Aryan V.",
+    role: "Founding Engineer",
+    company: "BuildFast AI",
+    headline: "AI STREAMING SHIPPED IN RECORD TIME",
+    quote: "We needed a production-ready streaming chat interface with multi-model support in two weeks. Joyceson delivered NeuralDesk with SSE streaming, Supabase Realtime sync, and a polished UI that outclassed tools we'd seen from senior engineers.",
+    rating: 5,
+    date: "Mar 2026",
   },
 ];
 
