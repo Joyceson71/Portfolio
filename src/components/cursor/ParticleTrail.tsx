@@ -93,7 +93,7 @@ export function ParticleTrail() {
         p.life -= 0.04;
 
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, Math.max(0, p.size * p.life), 0, Math.PI * 2);
         ctx.fillStyle = primaryColor;
         ctx.globalAlpha = p.life * 0.6;
         ctx.shadowColor = primaryColor;
