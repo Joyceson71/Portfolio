@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { Shield, Sparkles } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
 
 export type SuitMode = "classic" | "miles" | "iron";

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { GraduationCap, Award, CheckCircle2, Shield, Sparkles, ExternalLink } from "lucide-react";
+import { GraduationCap, Award, Shield } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
 
 interface Credential {

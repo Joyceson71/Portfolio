@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ExternalLink, Github, CheckCircle2, Cpu, Database, Sparkles, Layers } from "lucide-react";
+import { X, ExternalLink, Github, CheckCircle2, Cpu, Sparkles, Layers } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
 
 export interface ProjectDetail {

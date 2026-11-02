@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Volume2, VolumeX, Radio, ShieldCheck, Crosshair } from "lucide-react";
+import { Volume2, VolumeX, ShieldCheck, Crosshair } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
 
 export function SpiderRadarHUD() {
   const [muted, setMuted] = useState(false);
   const [blipPos, setBlipPos] = useState({ x: 65, y: 35 });
-  const [coordinates, setCoordinates] = useState("40.7128° N, 74.0060° W");
+  const coordinates = "40.7128° N, 74.0060° W";
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star, Quote, Newspaper, CheckCircle2 } from "lucide-react";
+import { Star, Newspaper, CheckCircle2 } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
 
 interface Review {

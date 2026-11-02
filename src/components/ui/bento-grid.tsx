@@ -2,14 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { 
-  Zap, 
+import {
   Clock, 
   Activity, 
-  Cpu, 
-  Globe2, 
+  Cpu,
   GitCommit, 
-  CheckCircle,
   Shield,
   Layers,
   MapPin,

@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowRight, Github, ExternalLink, Sparkles, Send,
-  ArrowUp, Mail, Info, Award, Linkedin, MapPin, Menu, X,
+  ArrowUp, Mail, Info, Award, Linkedin, MapPin, X,
 } from "lucide-react";
 
 // HUD

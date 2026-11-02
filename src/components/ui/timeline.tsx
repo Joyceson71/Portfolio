@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Briefcase, Calendar, Award, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
 
 interface ExperienceItem {

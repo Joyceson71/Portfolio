@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Terminal, Shield, CornerDownLeft, Sparkles } from "lucide-react";
+import { Terminal, CornerDownLeft } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
 
 interface CommandOutput {
