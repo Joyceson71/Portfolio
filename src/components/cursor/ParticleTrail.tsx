@@ -6,6 +6,7 @@ import { useCursor } from "./CursorProvider";
 // ── Particle trail following the cursor ───────────────────────
 // Canvas2D approach: ~30 particles that lerp toward the cursor
 // and fade out. On click, they scatter radially.
+// Web filament connector lines between nearby particles.
 
 interface Particle {
   x: number;
@@ -16,7 +17,7 @@ interface Particle {
   size: number;
 }
 
-const MAX_PARTICLES = 28;
+const MAX_PARTICLES = 30;
 
 export function ParticleTrail() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);
@@ -42,9 +43,9 @@ export function ParticleTrail() {
 
     // Scatter on click
     const onDown = (e: MouseEvent) => {
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < 14; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = 2 + Math.random() * 4;
+        const speed = 2 + Math.random() * 4.5;
         particlesRef.current.push({
           x: e.clientX,
           y: e.clientY,
@@ -68,8 +69,8 @@ export function ParticleTrail() {
       const primaryColor = getComputedStyle(document.documentElement)
         .getPropertyValue("--skin-primary").trim() || "#CC0000";
 
-      // Spawn a trail particle every ~30ms
-      if (ts - spawnTimer > 30) {
+      // Spawn a trail particle every ~28ms
+      if (ts - spawnTimer > 28) {
         spawnTimer = ts;
         if (particlesRef.current.length < MAX_PARTICLES) {
           particlesRef.current.push({
@@ -85,17 +86,40 @@ export function ParticleTrail() {
 
       // Update & draw
       particlesRef.current = particlesRef.current.filter((p) => p.life > 0.01);
-      for (const p of particlesRef.current) {
+      const particles = particlesRef.current;
+
+      // Web filaments: draw interconnecting threads between close trail nodes
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const p1 = particles[i];
+          const p2 = particles[j];
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const distSq = dx * dx + dy * dy;
+          if (distSq < 2300) { // ~48px
+            const dist = Math.sqrt(distSq);
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = primaryColor;
+            ctx.lineWidth = 0.75;
+            ctx.globalAlpha = (1 - dist / 48) * Math.min(p1.life, p2.life) * 0.35;
+            ctx.stroke();
+          }
+        }
+      }
+
+      for (const p of particles) {
         p.x += p.vx;
         p.y += p.vy;
         p.vx *= 0.94;
         p.vy *= 0.94;
-        p.life -= 0.04;
+        p.life -= 0.035;
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, Math.max(0, p.size * p.life), 0, Math.PI * 2);
         ctx.fillStyle = primaryColor;
-        ctx.globalAlpha = p.life * 0.6;
+        ctx.globalAlpha = p.life * 0.65;
         ctx.shadowColor = primaryColor;
         ctx.shadowBlur = 6;
         ctx.fill();

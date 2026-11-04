@@ -61,22 +61,42 @@ export function ClickSplatLayer() {
     <div className="fixed inset-0 z-[9997] pointer-events-none" aria-hidden="true">
       <AnimatePresence>
         {splats.map((s) => (
-          <motion.div
-            key={s.id}
-            initial={{ scale: 0, opacity: 1, rotate: 0 }}
-            animate={{ scale: 1.4, opacity: 0, rotate: 20 }}
-            exit={{}}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            style={{
-              position: "absolute",
-              left: s.x - 36,
-              top: s.y - 36,
-              color: "var(--skin-primary, #CC0000)",
-              filter: "drop-shadow(0 0 6px var(--skin-primary, #CC0000))",
-            }}
-          >
-            <WebSplatSVG />
-          </motion.div>
+          <div key={s.id}>
+            {/* Decal Web Reticle */}
+            <motion.div
+              initial={{ scale: 0.3, opacity: 1, rotate: -15 }}
+              animate={{ scale: 1.4, opacity: 0, rotate: 20 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+              style={{
+                position: "absolute",
+                left: s.x - 36,
+                top: s.y - 36,
+                color: "var(--skin-primary, #CC0000)",
+                filter: "drop-shadow(0 0 8px var(--skin-primary, #CC0000))",
+              }}
+            >
+              <WebSplatSVG />
+            </motion.div>
+
+            {/* Shockwave Energy Ring */}
+            <motion.div
+              initial={{ scale: 0.2, opacity: 0.8 }}
+              animate={{ scale: 2.2, opacity: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.55, ease: "easeOut" }}
+              style={{
+                position: "absolute",
+                left: s.x - 24,
+                top: s.y - 24,
+                width: 48,
+                height: 48,
+                borderRadius: "50%",
+                border: "1.5px solid var(--skin-accent, #0047FF)",
+                boxShadow: "0 0 12px var(--skin-accent, #0047FF)",
+              }}
+            />
+          </div>
         ))}
       </AnimatePresence>
     </div>
