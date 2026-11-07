@@ -84,8 +84,9 @@ export const HERO_TITLES = [
   "FULL-STACK DEVELOPER",
   "3D WEB DESIGNER",
   "CREATIVE TECHNOLOGIST",
-  "WEBGL ENGINEER",
+  "WEBGL & SHADER ENGINEER",
   "AI INTEGRATION ENGINEER",
+  "NEXT.JS & THREE.JS ARCHITECT",
 ];
 
 // ── Projects ───────────────────────────────────────────────────

@@ -32,34 +32,63 @@ export function SpiderRadarHUD() {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded bg-[#0d0d1a]/80 border border-[#CC0000]/25 backdrop-blur-md">
+    <div
+      className="relative flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-sm bg-[#0d0d1a]/85 border backdrop-blur-md transition-colors duration-300 shadow-lg"
+      style={{ borderColor: "var(--skin-border, rgba(204,0,0,0.25))" }}
+    >
+      {/* Corner bracket accents */}
+      <div className="absolute top-0 left-0 w-2 h-2 border-t border-l" style={{ borderColor: "var(--skin-primary, #CC0000)" }} />
+      <div className="absolute top-0 right-0 w-2 h-2 border-t border-r" style={{ borderColor: "var(--skin-primary, #CC0000)" }} />
+      <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l" style={{ borderColor: "var(--skin-primary, #CC0000)" }} />
+      <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r" style={{ borderColor: "var(--skin-primary, #CC0000)" }} />
+
       {/* Left: Radar Graphic */}
       <div className="flex items-center gap-4">
-        <div className="relative w-16 h-16 rounded-full border border-[#CC0000]/40 flex items-center justify-center bg-black/40 overflow-hidden shrink-0 shadow-[0_0_15px_rgba(204,0,0,0.15)]">
+        <div
+          className="relative w-16 h-16 rounded-full border flex items-center justify-center bg-black/50 overflow-hidden shrink-0 transition-colors duration-300 shadow-[0_0_15px_rgba(0,0,0,0.5)]"
+          style={{ borderColor: "var(--skin-border, rgba(204,0,0,0.4))" }}
+        >
           {/* Concentric rings */}
-          <div className="absolute inset-2 rounded-full border border-[#CC0000]/20" />
-          <div className="absolute inset-4 rounded-full border border-[#CC0000]/20" />
+          <div className="absolute inset-2 rounded-full border border-white/10" />
+          <div className="absolute inset-4 rounded-full border border-white/10" />
           
           {/* Crosshairs */}
-          <div className="absolute w-full h-[1px] bg-[#CC0000]/20" />
-          <div className="absolute h-full w-[1px] bg-[#CC0000]/20" />
+          <div className="absolute w-full h-[1px] bg-white/10" />
+          <div className="absolute h-full w-[1px] bg-white/10" />
 
           {/* Sweep beam */}
           <div className="absolute inset-0 animate-radar pointer-events-none">
-            <div className="w-1/2 h-1/2 origin-bottom-right bg-gradient-to-tr from-[#CC0000]/40 to-transparent" />
+            <div
+              className="w-1/2 h-1/2 origin-bottom-right"
+              style={{
+                background: "linear-gradient(to top right, var(--skin-primary, #CC0000), transparent)",
+                opacity: 0.35,
+              }}
+            />
           </div>
 
           {/* Active threat/friendly blip */}
           <div
-            className="absolute w-2 h-2 rounded-full bg-[#0047FF] shadow-[0_0_8px_#0047FF] animate-ping"
-            style={{ left: `${blipPos.x}%`, top: `${blipPos.y}%`, transform: "translate(-50%, -50%)" }}
+            className="absolute w-2 h-2 rounded-full animate-ping"
+            style={{
+              left: `${blipPos.x}%`,
+              top: `${blipPos.y}%`,
+              transform: "translate(-50%, -50%)",
+              background: "var(--skin-accent, #0047FF)",
+              boxShadow: "0 0 8px var(--skin-accent, #0047FF)",
+            }}
           />
           <div
-            className="absolute w-1.5 h-1.5 rounded-full bg-[#0047FF]"
-            style={{ left: `${blipPos.x}%`, top: `${blipPos.y}%`, transform: "translate(-50%, -50%)" }}
+            className="absolute w-1.5 h-1.5 rounded-full"
+            style={{
+              left: `${blipPos.x}%`,
+              top: `${blipPos.y}%`,
+              transform: "translate(-50%, -50%)",
+              background: "var(--skin-accent, #0047FF)",
+            }}
           />
 
-          <Crosshair className="w-3 h-3 text-[#CC0000]/60 relative z-10" />
+          <Crosshair className="w-3.5 h-3.5 relative z-10 opacity-70" style={{ color: "var(--skin-primary, #CC0000)" }} />
         </div>
 
         <div className="flex flex-col">
@@ -72,7 +101,7 @@ export function SpiderRadarHUD() {
           <span className="font-mono text-[10px] text-white/40 tracking-wider">
             SECTOR: NYC-QUEENS // {coordinates}
           </span>
-          <span className="font-mono text-[10px] text-[#0047FF] tracking-wider mt-0.5">
+          <span className="font-mono text-[10px] tracking-wider mt-0.5" style={{ color: "var(--skin-accent, #0047FF)" }}>
             NANITE INTEGRITY: 100% · READY TO SHIP
           </span>
         </div>
@@ -82,7 +111,7 @@ export function SpiderRadarHUD() {
       <div className="flex items-center gap-3">
         <button
           onClick={toggleSound}
-          className="flex items-center gap-2 px-3 py-1.5 rounded bg-white/[0.04] border border-white/10 hover:border-[#CC0000]/50 text-white/80 hover:text-white transition-all text-xs font-mono"
+          className="flex items-center gap-2 px-3 py-1.5 rounded-sm bg-white/[0.04] border border-white/10 hover:border-white/30 text-white/80 hover:text-white transition-all text-xs font-mono"
         >
           {muted ? (
             <>
@@ -91,13 +120,20 @@ export function SpiderRadarHUD() {
             </>
           ) : (
             <>
-              <Volume2 className="w-3.5 h-3.5 text-[#CC0000] animate-pulse" />
-              <span className="text-[#CC0000]">SFX: ON</span>
+              <Volume2 className="w-3.5 h-3.5 animate-pulse" style={{ color: "var(--skin-primary, #CC0000)" }} />
+              <span style={{ color: "var(--skin-primary, #CC0000)" }}>SFX: ON</span>
             </>
           )}
         </button>
 
-        <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded bg-[#CC0000]/10 border border-[#CC0000]/30 text-[#CC0000] font-mono text-xs">
+        <div
+          className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-sm border font-mono text-xs"
+          style={{
+            background: "rgba(255,255,255,0.03)",
+            borderColor: "var(--skin-border, rgba(204,0,0,0.3))",
+            color: "var(--skin-primary, #CC0000)",
+          }}
+        >
           <ShieldCheck className="w-3.5 h-3.5" />
           <span>V16.2 · 0 ERRORS</span>
         </div>
