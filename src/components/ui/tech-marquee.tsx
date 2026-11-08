@@ -15,6 +15,8 @@ import {
   Server,
   Atom
 } from "lucide-react";
+import { useStore } from "@/lib/store";
+import { spiderAudio } from "@/lib/spider-audio";
 
 interface TechItem {
   name: string;
@@ -46,6 +48,8 @@ const row2: TechItem[] = [
 ];
 
 export function TechMarquee() {
+  const sfxEnabled = useStore((s) => s.sfxEnabled);
+
   return (
     <div className="relative w-full py-10 overflow-hidden bg-[#080810]/60 border-y border-white/[0.04]">
       {/* Edge gradient masks */}
@@ -60,7 +64,10 @@ export function TechMarquee() {
             return (
               <div
                 key={`r1-${idx}`}
-                className="group flex items-center gap-3 px-4 py-2.5 rounded-sm bg-[#0c0c18] border border-white/[0.06] hover:border-[#CC0000]/60 transition-all duration-300 cursor-default shrink-0 shadow-lg"
+                onMouseEnter={() => {
+                  if (sfxEnabled) spiderAudio.playBlip(720 + (idx % 8) * 30, 0.02);
+                }}
+                className="group flex items-center gap-3 px-4 py-2.5 rounded-sm bg-[#0c0c18] border border-white/[0.06] hover:border-[var(--skin-primary,#CC0000)]/60 hover:shadow-[0_0_15px_rgba(204,0,0,0.2)] transition-all duration-300 cursor-default shrink-0 shadow-lg relative overflow-hidden"
               >
                 <div 
                   className="w-7 h-7 rounded flex items-center justify-center transition-transform group-hover:scale-110"
@@ -90,7 +97,10 @@ export function TechMarquee() {
             return (
               <div
                 key={`r2-${idx}`}
-                className="group flex items-center gap-3 px-4 py-2.5 rounded-sm bg-[#0c0c18] border border-white/[0.06] hover:border-[#0047FF]/60 transition-all duration-300 cursor-default shrink-0 shadow-lg"
+                onMouseEnter={() => {
+                  if (sfxEnabled) spiderAudio.playBlip(680 + (idx % 8) * 35, 0.02);
+                }}
+                className="group flex items-center gap-3 px-4 py-2.5 rounded-sm bg-[#0c0c18] border border-white/[0.06] hover:border-[var(--skin-accent,#0047FF)]/60 hover:shadow-[0_0_15px_rgba(0,71,255,0.2)] transition-all duration-300 cursor-default shrink-0 shadow-lg relative overflow-hidden"
               >
                 <div 
                   className="w-7 h-7 rounded flex items-center justify-center transition-transform group-hover:scale-110"

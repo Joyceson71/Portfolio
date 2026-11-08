@@ -160,7 +160,7 @@ export const PROJECTS: ProjectDetail[] = [
     filter: "ui/ux",
     tagline: "Executive Financial & Analytics Engine",
     desc: "Modern operational cockpit for growth businesses, providing cashflow visualizers, automated tax calculations, and one-click PDF invoice dispatching. Built with a modular design system achieving a perfect 100 Lighthouse score.",
-    tech: ["Next.js", "TypeScript", "Chart.js", "Tailwind CSS", "Docker"],
+    tech: ["Next.js 16", "React 19", "TypeScript", "Chart.js", "Tailwind CSS", "Docker"],
     demo: "https://smart-biz-inky.vercel.app/",
     github: "https://github.com/Joyceson71/smart_biz",
     year: "2024",

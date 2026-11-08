@@ -124,15 +124,28 @@ export function ProjectDetailModal({ project, onClose }: ProjectModalProps) {
 
           {/* Action CTAs */}
           <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-white/[0.08]">
-            <a
-              href={project.demo}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => spiderAudio.playWebShoot()}
-              className="spider-btn text-xs py-2.5 px-6 flex items-center gap-2"
-            >
-              Launch Live App <ExternalLink className="w-3.5 h-3.5" />
-            </a>
+            {project.demo.startsWith("#") ? (
+              <a
+                href={project.demo}
+                onClick={() => {
+                  spiderAudio.playWebShoot();
+                  onClose();
+                }}
+                className="spider-btn text-xs py-2.5 px-6 flex items-center gap-2"
+              >
+                Experience 3D Demo <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            ) : (
+              <a
+                href={project.demo}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => spiderAudio.playWebShoot()}
+                className="spider-btn text-xs py-2.5 px-6 flex items-center gap-2"
+              >
+                Launch Live App <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            )}
             <a
               href={project.github}
               target="_blank"

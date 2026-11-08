@@ -149,10 +149,25 @@ function ProjectCard({
               className="text-white/40 hover:text-white transition-colors flex items-center gap-1.5 text-xs font-mono">
               <Github className="w-4 h-4" /><span>Code</span>
             </a>
-            <a href={p.demo} target="_blank" rel="noreferrer"
-              className="text-white/60 hover:text-[var(--skin-primary,#CC0000)] transition-colors flex items-center gap-1.5 text-xs font-mono">
-              <ExternalLink className="w-4 h-4" /><span>Live</span>
-            </a>
+            {p.demo.startsWith("#") ? (
+              <a
+                href={p.demo}
+                onClick={() => { if (sfxEnabled) spiderAudio.playWebShoot(); }}
+                className="text-white/60 hover:text-[var(--skin-primary,#CC0000)] transition-colors flex items-center gap-1.5 text-xs font-mono"
+              >
+                <ExternalLink className="w-4 h-4" /><span>Demo</span>
+              </a>
+            ) : (
+              <a
+                href={p.demo}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => { if (sfxEnabled) spiderAudio.playBlip(820, 0.03); }}
+                className="text-white/60 hover:text-[var(--skin-primary,#CC0000)] transition-colors flex items-center gap-1.5 text-xs font-mono"
+              >
+                <ExternalLink className="w-4 h-4" /><span>Live</span>
+              </a>
+            )}
           </div>
           <button onClick={() => onOpen(p)} className="text-white/30 hover:text-[var(--skin-primary,#CC0000)] transition-colors">
             <ArrowRight className="w-4 h-4" />
