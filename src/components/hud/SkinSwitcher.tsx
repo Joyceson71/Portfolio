@@ -6,6 +6,13 @@ import { spiderAudio } from "@/lib/spider-audio";
 
 // ── Skin / Suit Switcher (upgraded: 4 skins + Venom) ──────────
 
+const SUIT_AUDIO_FREQ: Record<SkinMode, number> = {
+  classic: 750,
+  miles: 960,
+  venom: 380,
+  iron: 1150,
+};
+
 export function SkinSwitcher() {
   const skin    = useStore((s) => s.skin);
   const setSkin = useStore((s) => s.setSkin);
@@ -28,9 +35,14 @@ export function SkinSwitcher() {
           <button
             key={id}
             id={`skin-${id}`}
+            title={`${config.label} (${config.tag})`}
             aria-label={`Switch to ${config.label} skin`}
+            aria-pressed={isActive}
             onClick={() => {
-              if (sfxEnabled) spiderAudio.playBlip(isActive ? 600 : 850, 0.04);
+              if (sfxEnabled) {
+                const freq = SUIT_AUDIO_FREQ[id] || (isActive ? 600 : 850);
+                spiderAudio.playBlip(freq, 0.04);
+              }
               setSkin(id);
             }}
             className={`font-mono text-[9px] px-2.5 py-1 rounded transition-all duration-200 flex items-center gap-1.5 active:scale-95 ${
@@ -40,7 +52,7 @@ export function SkinSwitcher() {
             }`}
           >
             <span
-              className="w-2 h-2 rounded-full flex-shrink-0 transition-transform duration-200 group-hover:scale-125"
+              className="w-2 h-2 rounded-full flex-shrink-0 transition-transform duration-200"
               style={{
                 background: id === "venom" ? "linear-gradient(135deg, #ffffff 40%, #a855f7 100%)" : config.primary,
                 boxShadow: isActive

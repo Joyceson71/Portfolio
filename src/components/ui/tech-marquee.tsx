@@ -13,7 +13,9 @@ import {
   Zap,
   Box,
   Server,
-  Atom
+  Atom,
+  Bot,
+  Cloud
 } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { spiderAudio } from "@/lib/spider-audio";
@@ -34,6 +36,8 @@ const row1: TechItem[] = [
   { name: "Framer Motion", category: "Animation", icon: Sparkles, color: "#CC0000" },
   { name: "Node.js", category: "Runtime", icon: Server, color: "#0047FF" },
   { name: "WebGL / GLSL", category: "Shaders", icon: Cpu, color: "#CC0000" },
+  { name: "Supabase", category: "Realtime DB", icon: Cloud, color: "#3ECF8E" },
+  { name: "OpenAI & Anthropic", category: "AI & LLM", icon: Bot, color: "#A855F7" },
 ];
 
 const row2: TechItem[] = [
@@ -45,6 +49,8 @@ const row2: TechItem[] = [
   { name: "Zustand", category: "State", icon: Box, color: "#CC0000" },
   { name: "GSAP", category: "Motion", icon: Sparkles, color: "#0047FF" },
   { name: "Git & CI/CD", category: "Workflow", icon: Terminal, color: "#CC0000" },
+  { name: "React Three Fiber", category: "3D Canvas", icon: Box, color: "#CC0000" },
+  { name: "Resend & Edge", category: "Cloud API", icon: Zap, color: "#0047FF" },
 ];
 
 export function TechMarquee() {
@@ -57,18 +63,22 @@ export function TechMarquee() {
       <div className="absolute right-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-l from-[#080810] to-transparent z-10 pointer-events-none" />
 
       {/* Row 1: Leftward Marquee */}
-      <div className="flex overflow-hidden mb-4">
-        <div className="animate-marquee-left flex gap-4 items-center">
+      <div className="flex overflow-hidden mb-4 group/row1">
+        <div className="animate-marquee-left group-hover/row1:[animation-play-state:paused] flex gap-4 items-center">
           {[...row1, ...row1, ...row1].map((item, idx) => {
             const Icon = item.icon;
             return (
               <div
                 key={`r1-${idx}`}
                 onMouseEnter={() => {
-                  if (sfxEnabled) spiderAudio.playBlip(720 + (idx % 8) * 30, 0.02);
+                  if (sfxEnabled) spiderAudio.playBlip(720 + (idx % 10) * 28, 0.02);
                 }}
-                className="group flex items-center gap-3 px-4 py-2.5 rounded-sm bg-[#0c0c18] border border-white/[0.06] hover:border-[var(--skin-primary,#CC0000)]/60 hover:shadow-[0_0_15px_rgba(204,0,0,0.2)] transition-all duration-300 cursor-default shrink-0 shadow-lg relative overflow-hidden"
+                className="group flex items-center gap-3 px-4 py-2.5 rounded-sm bg-[#0c0c18] border border-white/[0.06] hover:border-[var(--skin-primary,#CC0000)]/70 hover:shadow-[0_0_20px_var(--skin-primary,#CC0000)] transition-all duration-300 cursor-default shrink-0 shadow-lg relative overflow-hidden"
               >
+                {/* Micro cyber corner reticle on hover */}
+                <span className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-[var(--skin-primary,#CC0000)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                <span className="absolute bottom-0 left-0 w-1.5 h-1.5 border-b border-l border-[var(--skin-primary,#CC0000)] opacity-0 group-hover:opacity-100 transition-opacity" />
+
                 <div 
                   className="w-7 h-7 rounded flex items-center justify-center transition-transform group-hover:scale-110"
                   style={{ background: `${item.color}15`, color: item.color }}
@@ -90,18 +100,22 @@ export function TechMarquee() {
       </div>
 
       {/* Row 2: Rightward Marquee */}
-      <div className="flex overflow-hidden">
-        <div className="animate-marquee-right flex gap-4 items-center">
+      <div className="flex overflow-hidden group/row2">
+        <div className="animate-marquee-right group-hover/row2:[animation-play-state:paused] flex gap-4 items-center">
           {[...row2, ...row2, ...row2].map((item, idx) => {
             const Icon = item.icon;
             return (
               <div
                 key={`r2-${idx}`}
                 onMouseEnter={() => {
-                  if (sfxEnabled) spiderAudio.playBlip(680 + (idx % 8) * 35, 0.02);
+                  if (sfxEnabled) spiderAudio.playBlip(680 + (idx % 10) * 32, 0.02);
                 }}
-                className="group flex items-center gap-3 px-4 py-2.5 rounded-sm bg-[#0c0c18] border border-white/[0.06] hover:border-[var(--skin-accent,#0047FF)]/60 hover:shadow-[0_0_15px_rgba(0,71,255,0.2)] transition-all duration-300 cursor-default shrink-0 shadow-lg relative overflow-hidden"
+                className="group flex items-center gap-3 px-4 py-2.5 rounded-sm bg-[#0c0c18] border border-white/[0.06] hover:border-[var(--skin-accent,#0047FF)]/70 hover:shadow-[0_0_20px_var(--skin-accent,#0047FF)] transition-all duration-300 cursor-default shrink-0 shadow-lg relative overflow-hidden"
               >
+                {/* Micro cyber corner reticle on hover */}
+                <span className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-[var(--skin-accent,#0047FF)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                <span className="absolute bottom-0 left-0 w-1.5 h-1.5 border-b border-l border-[var(--skin-accent,#0047FF)] opacity-0 group-hover:opacity-100 transition-opacity" />
+
                 <div 
                   className="w-7 h-7 rounded flex items-center justify-center transition-transform group-hover:scale-110"
                   style={{ background: `${item.color}15`, color: item.color }}

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useCursor } from "./CursorProvider";
+import { useStore } from "@/lib/store";
 
 // ── Particle trail following the cursor ───────────────────────
 // Canvas2D approach: ~30 particles that lerp toward the cursor
@@ -15,9 +16,10 @@ interface Particle {
   vx: number;
   vy: number;
   size: number;
+  color: string;
 }
 
-const MAX_PARTICLES = 30;
+const MAX_PARTICLES = 36;
 
 export function ParticleTrail() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);
@@ -25,10 +27,27 @@ export function ParticleTrail() {
   const rafRef = useRef<number>(0);
   const { x, y, isClicking } = useCursor();
   const mouseRef = useRef({ x: 0, y: 0, clicking: false });
+  const skin = useStore((s) => s.skin);
+
+  // Cached theme colors to avoid layout thrashing via per-frame getComputedStyle
+  const colorsRef = useRef({ primary: "#CC0000", accent: "#0047FF" });
 
   useEffect(() => {
     mouseRef.current = { x, y, clicking: isClicking };
   }, [x, y, isClicking]);
+
+  // Update cached colors whenever skin changes or on mount
+  useEffect(() => {
+    const updateColors = () => {
+      const styles = getComputedStyle(document.documentElement);
+      const primary = styles.getPropertyValue("--skin-primary").trim() || "#CC0000";
+      const accent  = styles.getPropertyValue("--skin-accent").trim() || "#0047FF";
+      colorsRef.current = { primary, accent };
+    };
+    updateColors();
+    const timer = setTimeout(updateColors, 100);
+    return () => clearTimeout(timer);
+  }, [skin]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -41,18 +60,21 @@ export function ParticleTrail() {
     resize();
     window.addEventListener("resize", resize);
 
-    // Scatter on click
+    // Scatter on click with dual-tone energy sparks
     const onDown = (e: MouseEvent) => {
-      for (let i = 0; i < 14; i++) {
+      const { primary, accent } = colorsRef.current;
+      for (let i = 0; i < 16; i++) {
         const angle = Math.random() * Math.PI * 2;
-        const speed = 2 + Math.random() * 4.5;
+        const speed = 2.5 + Math.random() * 5;
+        const sparkColor = Math.random() > 0.4 ? primary : accent;
         particlesRef.current.push({
           x: e.clientX,
           y: e.clientY,
           life: 1,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
-          size: 2 + Math.random() * 3,
+          size: 2 + Math.random() * 3.5,
+          color: sparkColor,
         });
       }
     };
@@ -66,20 +88,21 @@ export function ParticleTrail() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const { x: mx, y: my } = mouseRef.current;
-      const primaryColor = getComputedStyle(document.documentElement)
-        .getPropertyValue("--skin-primary").trim() || "#CC0000";
+      const { primary, accent } = colorsRef.current;
 
-      // Spawn a trail particle every ~28ms
-      if (ts - spawnTimer > 28) {
+      // Spawn a trail particle every ~26ms
+      if (ts - spawnTimer > 26) {
         spawnTimer = ts;
         if (particlesRef.current.length < MAX_PARTICLES) {
+          const sparkColor = Math.random() > 0.25 ? primary : accent;
           particlesRef.current.push({
             x: mx + (Math.random() - 0.5) * 6,
             y: my + (Math.random() - 0.5) * 6,
             life: 1,
-            vx: (Math.random() - 0.5) * 0.5,
-            vy: (Math.random() - 0.5) * 0.5,
-            size: 1.5 + Math.random() * 2,
+            vx: (Math.random() - 0.5) * 0.6,
+            vy: (Math.random() - 0.5) * 0.6,
+            size: 1.5 + Math.random() * 2.2,
+            color: sparkColor,
           });
         }
       }
@@ -96,14 +119,14 @@ export function ParticleTrail() {
           const dx = p1.x - p2.x;
           const dy = p1.y - p2.y;
           const distSq = dx * dx + dy * dy;
-          if (distSq < 2300) { // ~48px
+          if (distSq < 2500) { // ~50px
             const dist = Math.sqrt(distSq);
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = primaryColor;
-            ctx.lineWidth = 0.75;
-            ctx.globalAlpha = (1 - dist / 48) * Math.min(p1.life, p2.life) * 0.35;
+            ctx.strokeStyle = p1.color;
+            ctx.lineWidth = 0.8;
+            ctx.globalAlpha = (1 - dist / 50) * Math.min(p1.life, p2.life) * 0.4;
             ctx.stroke();
           }
         }
@@ -118,10 +141,10 @@ export function ParticleTrail() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, Math.max(0, p.size * p.life), 0, Math.PI * 2);
-        ctx.fillStyle = primaryColor;
-        ctx.globalAlpha = p.life * 0.65;
-        ctx.shadowColor = primaryColor;
-        ctx.shadowBlur = 6;
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life * 0.75;
+        ctx.shadowColor = p.color;
+        ctx.shadowBlur = 8;
         ctx.fill();
       }
       ctx.globalAlpha = 1;

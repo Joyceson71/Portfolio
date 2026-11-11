@@ -9,6 +9,8 @@ interface Splat {
   id: number;
   x: number;
   y: number;
+  rotation: number;
+  scale: number;
 }
 
 let nextId = 0;
@@ -48,7 +50,16 @@ export function ClickSplatLayer() {
 
   const addSplat = useCallback((x: number, y: number) => {
     if (sfxEnabled) spiderAudio.playWebShoot();
-    setSplats((prev) => [...prev.slice(-6), { id: nextId++, x, y }]);
+    const id = nextId++;
+    const rotation = (Math.random() - 0.5) * 60;
+    const scale = 0.9 + Math.random() * 0.3;
+
+    setSplats((prev) => [...prev.slice(-7), { id, x, y, rotation, scale }]);
+
+    // Auto garbage-collect splat from DOM after animation finishes
+    setTimeout(() => {
+      setSplats((prev) => prev.filter((s) => s.id !== id));
+    }, 800);
   }, [sfxEnabled]);
 
   useEffect(() => {
@@ -64,8 +75,8 @@ export function ClickSplatLayer() {
           <div key={s.id}>
             {/* Decal Web Reticle */}
             <motion.div
-              initial={{ scale: 0.3, opacity: 1, rotate: -15 }}
-              animate={{ scale: 1.4, opacity: 0, rotate: 20 }}
+              initial={{ scale: 0.2 * s.scale, opacity: 1, rotate: s.rotation - 15 }}
+              animate={{ scale: 1.45 * s.scale, opacity: 0, rotate: s.rotation + 20 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
               style={{
@@ -73,7 +84,7 @@ export function ClickSplatLayer() {
                 left: s.x - 36,
                 top: s.y - 36,
                 color: "var(--skin-primary, #CC0000)",
-                filter: "drop-shadow(0 0 8px var(--skin-primary, #CC0000))",
+                filter: "drop-shadow(0 0 10px var(--skin-primary, #CC0000))",
               }}
             >
               <WebSplatSVG />
@@ -81,8 +92,8 @@ export function ClickSplatLayer() {
 
             {/* Shockwave Energy Ring */}
             <motion.div
-              initial={{ scale: 0.2, opacity: 0.8 }}
-              animate={{ scale: 2.2, opacity: 0 }}
+              initial={{ scale: 0.2, opacity: 0.85 }}
+              animate={{ scale: 2.3 * s.scale, opacity: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.55, ease: "easeOut" }}
               style={{
@@ -93,7 +104,7 @@ export function ClickSplatLayer() {
                 height: 48,
                 borderRadius: "50%",
                 border: "1.5px solid var(--skin-accent, #0047FF)",
-                boxShadow: "0 0 12px var(--skin-accent, #0047FF)",
+                boxShadow: "0 0 14px var(--skin-accent, #0047FF)",
               }}
             />
           </div>
