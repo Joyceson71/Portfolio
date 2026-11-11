@@ -20,7 +20,9 @@ public/           — static assets
 
 ## Rules
 - All 3D components must be in a Client Component ("use client")
+
 - Wrap R3F Canvas in Suspense with a fallback
+
 - Counter animations: use useEffect + IntersectionObserver, NOT useLayoutEffect (SSR will break)
 - Contact form: route to src/app/api/contact/route.ts, POST to Resend or Nodemailer
 - Never import from @base-ui/react — use shadcn primitives
