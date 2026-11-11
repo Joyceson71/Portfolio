@@ -22,6 +22,7 @@ import { CareerTimeline } from "@/components/ui/timeline";
 import { DailyBugleReviews } from "@/components/ui/daily-bugle";
 import { CredentialsSection } from "@/components/ui/credentials";
 import { ProjectDetailModal } from "@/components/ui/project-detail-modal";
+import { InteractiveTerminal } from "@/components/ui/interactive-terminal";
 
 // Store & constants
 import { useStore } from "@/lib/store";
@@ -568,6 +569,17 @@ export default function Home() {
             </h2>
           </motion.div>
           <BentoGrid />
+
+          {/* Interactive Console Terminal */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mt-8"
+          >
+            <InteractiveTerminal />
+          </motion.div>
         </div>
       </section>
 

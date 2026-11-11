@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { GraduationCap, Award, Shield } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
+import { useStore } from "@/lib/store";
 
 interface Credential {
   title: string;
@@ -49,11 +50,13 @@ const credentials: Credential[] = [
 ];
 
 export function CredentialsSection() {
+  const sfxEnabled = useStore((s) => s.sfxEnabled);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {credentials.map((cred, idx) => {
         const isDegree = cred.type === "degree";
-        const accent = isDegree ? "#CC0000" : "#0047FF";
+        const accent = isDegree ? "var(--skin-primary, #CC0000)" : "var(--skin-accent, #0047FF)";
 
         return (
           <motion.div
@@ -63,15 +66,15 @@ export function CredentialsSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: idx * 0.1 }}
             whileHover={{ y: -4 }}
-            onMouseEnter={() => spiderAudio.playBlip(750 + idx * 40, 0.03)}
-            className="web-panel p-6 rounded-sm flex flex-col justify-between hover:border-[#CC0000]/60 transition-all duration-300 relative group"
+            onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(750 + idx * 40, 0.03); }}
+            className="web-panel p-6 rounded-sm flex flex-col justify-between hover:border-[var(--skin-primary,#CC0000)]/60 transition-all duration-300 relative group shadow-lg"
           >
             <div>
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2.5">
                   <div
-                    className="w-8 h-8 rounded flex items-center justify-center"
-                    style={{ background: `${accent}15`, color: accent }}
+                    className="w-8 h-8 rounded flex items-center justify-center transition-transform group-hover:scale-110"
+                    style={{ background: `${isDegree ? "rgba(204,0,0,0.15)" : "rgba(0,71,255,0.15)"}`, color: accent }}
                   >
                     {isDegree ? <GraduationCap className="w-4 h-4" /> : <Award className="w-4 h-4" />}
                   </div>
@@ -82,7 +85,7 @@ export function CredentialsSection() {
                 <span className="font-mono text-xs font-bold text-white/80">{cred.year}</span>
               </div>
 
-              <h4 className="text-base font-bold text-white mb-2 group-hover:text-[#CC0000] transition-colors leading-snug">
+              <h4 className="text-base font-bold text-white mb-2 group-hover:text-[var(--skin-primary,#CC0000)] transition-colors leading-snug">
                 {cred.title}
               </h4>
 

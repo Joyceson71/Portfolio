@@ -13,9 +13,11 @@ import {
   BriefcaseBusiness,
 } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
+import { useStore } from "@/lib/store";
 
 export function BentoGrid() {
   const [time, setTime] = useState("");
+  const sfxEnabled = useStore((s) => s.sfxEnabled);
 
   useEffect(() => {
     const updateTime = () => {
@@ -39,14 +41,21 @@ export function BentoGrid() {
       {/* ── CARD 1: Core Philosophy & Suit OS (Col span 2) ── */}
       <motion.div
         whileHover={{ y: -4 }}
-        onMouseEnter={() => spiderAudio.playBlip(620, 0.04)}
-        className="md:col-span-2 card-shimmer p-6 md:p-8 rounded-sm bg-[#0c0c18] border border-[#CC0000]/30 hover:border-[#CC0000]/70 transition-all duration-300 relative overflow-hidden group"
+        onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(620, 0.04); }}
+        className="md:col-span-2 card-shimmer p-6 md:p-8 rounded-sm bg-[#0c0c18] border transition-all duration-300 relative overflow-hidden group shadow-lg"
+        style={{ borderColor: "var(--skin-primary, #CC0000)40" }}
       >
-        <div className="absolute top-0 right-0 w-48 h-48 bg-[#CC0000]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#CC0000]/20 transition-all" />
+        <div 
+          className="absolute top-0 right-0 w-48 h-48 rounded-full blur-3xl pointer-events-none transition-all duration-500 opacity-20 group-hover:opacity-35"
+          style={{ background: "var(--skin-primary, #CC0000)" }}
+        />
         
         <div className="flex items-center gap-2 mb-4">
-          <Shield className="w-4 h-4 text-[#CC0000]" />
-          <span className="font-mono text-[10px] uppercase tracking-widest text-[#CC0000]">
+          <Shield className="w-4 h-4" style={{ color: "var(--skin-primary, #CC0000)" }} />
+          <span 
+            className="font-mono text-[10px] uppercase tracking-widest font-semibold"
+            style={{ color: "var(--skin-primary, #CC0000)" }}
+          >
             Peter's Principle // Engineering Ethos
           </span>
         </div>
@@ -66,11 +75,11 @@ export function BentoGrid() {
             <span className="font-mono text-[10px] text-white/40 uppercase">Performance</span>
           </div>
           <div className="flex flex-col">
-            <span className="font-mono text-lg font-bold text-[#0047FF]">100%</span>
+            <span className="font-mono text-lg font-bold" style={{ color: "var(--skin-accent, #0047FF)" }}>100%</span>
             <span className="font-mono text-[10px] text-white/40 uppercase">Type Safety</span>
           </div>
           <div className="flex flex-col">
-            <span className="font-mono text-lg font-bold text-[#CC0000]">&lt; 50ms</span>
+            <span className="font-mono text-lg font-bold" style={{ color: "var(--skin-primary, #CC0000)" }}>&lt; 50ms</span>
             <span className="font-mono text-[10px] text-white/40 uppercase">Render Latency</span>
           </div>
         </div>
@@ -79,12 +88,12 @@ export function BentoGrid() {
       {/* ── CARD 2: Live Status & Clock ── */}
       <motion.div
         whileHover={{ y: -4 }}
-        onMouseEnter={() => spiderAudio.playBlip(780, 0.04)}
-        className="card-shimmer p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[#0047FF]/60 transition-all duration-300 relative flex flex-col justify-between group"
+        onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(780, 0.04); }}
+        className="card-shimmer p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[var(--skin-accent,#0047FF)]/60 transition-all duration-300 relative flex flex-col justify-between group shadow-lg"
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-[#0047FF]" />
+            <Clock className="w-4 h-4" style={{ color: "var(--skin-accent, #0047FF)" }} />
             <span className="font-mono text-[10px] uppercase tracking-wider text-white/50">Local Clock</span>
           </div>
           <span className="flex h-2 w-2 relative">
@@ -94,7 +103,9 @@ export function BentoGrid() {
         </div>
 
         <div className="my-auto py-4 text-center">
-          <div className="font-mono text-3xl font-bold tracking-widest text-white group-hover:text-[#0047FF] transition-colors">
+          <div 
+            className="font-mono text-3xl font-bold tracking-widest text-white group-hover:text-[var(--skin-accent,#0047FF)] transition-colors"
+          >
             {time || "00:00:00"}
           </div>
           <span className="font-mono text-[10px] text-white/40 uppercase tracking-widest mt-1 block">
@@ -111,27 +122,50 @@ export function BentoGrid() {
       {/* ── CARD 3: 3D Dimension Canvas ── */}
       <motion.div
         whileHover={{ y: -4 }}
-        onMouseEnter={() => spiderAudio.playBlip(840, 0.04)}
-        className="card-shimmer p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[#CC0000]/60 transition-all duration-300 relative flex flex-col justify-between group"
+        onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(840, 0.04); }}
+        className="card-shimmer p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[var(--skin-primary,#CC0000)]/60 transition-all duration-300 relative flex flex-col justify-between group shadow-lg"
       >
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-[#CC0000]" />
+            <Layers className="w-4 h-4" style={{ color: "var(--skin-primary, #CC0000)" }} />
             <span className="font-mono text-[10px] uppercase tracking-wider text-white/50">3D Graphics</span>
           </div>
-          <span className="font-mono text-[9px] text-[#CC0000] border border-[#CC0000]/30 px-1.5 py-0.5 rounded">R3F</span>
+          <span 
+            className="font-mono text-[9px] px-1.5 py-0.5 rounded border"
+            style={{ 
+              color: "var(--skin-primary, #CC0000)", 
+              borderColor: "var(--skin-primary, #CC0000)40" 
+            }}
+          >
+            R3F
+          </span>
         </div>
 
         <div className="relative py-4 flex items-center justify-center">
-          <div className="w-20 h-20 rounded-full border border-dashed border-[#CC0000]/40 flex items-center justify-center animate-spin" style={{ animationDuration: "12s" }}>
-            <div className="w-12 h-12 rounded-full border border-dashed border-[#0047FF]/50 flex items-center justify-center animate-spin" style={{ animationDuration: "6s", animationDirection: "reverse" }}>
+          <div 
+            className="w-20 h-20 rounded-full border border-dashed flex items-center justify-center animate-spin" 
+            style={{ 
+              borderColor: "var(--skin-primary, #CC0000)50",
+              animationDuration: "12s" 
+            }}
+          >
+            <div 
+              className="w-12 h-12 rounded-full border border-dashed flex items-center justify-center animate-spin" 
+              style={{ 
+                borderColor: "var(--skin-accent, #0047FF)60",
+                animationDuration: "6s", 
+                animationDirection: "reverse" 
+              }}
+            >
               <Cpu className="w-5 h-5 text-white" />
             </div>
           </div>
         </div>
 
         <div>
-          <h4 className="text-white font-semibold text-sm mb-1">WebGL & Shaders</h4>
+          <h4 className="text-white font-semibold text-sm mb-1 group-hover:text-[var(--skin-primary,#CC0000)] transition-colors">
+            WebGL &amp; Shaders
+          </h4>
           <p className="text-white/40 text-xs">Transforming flat websites into dimensional living ecosystems.</p>
         </div>
       </motion.div>
@@ -139,12 +173,12 @@ export function BentoGrid() {
       {/* ── CARD 4: Commit Matrix / Shipping Velocity (Col span 2) ── */}
       <motion.div
         whileHover={{ y: -4 }}
-        onMouseEnter={() => spiderAudio.playBlip(550, 0.04)}
-        className="md:col-span-2 p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[#CC0000]/50 transition-all duration-300 relative overflow-hidden"
+        onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(550, 0.04); }}
+        className="md:col-span-2 p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[var(--skin-primary,#CC0000)]/50 transition-all duration-300 relative overflow-hidden shadow-lg"
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <GitCommit className="w-4 h-4 text-[#CC0000]" />
+            <GitCommit className="w-4 h-4" style={{ color: "var(--skin-primary, #CC0000)" }} />
             <span className="font-mono text-[10px] uppercase tracking-wider text-white/50">
               Web Sling Velocity // Active Commits
             </span>
@@ -155,11 +189,23 @@ export function BentoGrid() {
         {/* Heatmap visualization */}
         <div className="grid grid-cols-12 gap-1.5 my-3">
           {Array.from({ length: 48 }).map((_, idx) => {
-            const intensity = idx % 5 === 0 ? "bg-[#CC0000]" : idx % 3 === 0 ? "bg-[#CC0000]/60" : idx % 2 === 0 ? "bg-[#0047FF]/40" : "bg-white/10";
+            const isHigh = idx % 5 === 0;
+            const isMed  = idx % 3 === 0;
+            const isLow  = idx % 2 === 0;
             return (
               <div
                 key={idx}
-                className={`h-4 rounded-xs ${intensity} hover:scale-125 transition-transform`}
+                className="h-4 rounded-xs transition-transform hover:scale-125 cursor-default"
+                style={{
+                  background: isHigh
+                    ? "var(--skin-primary, #CC0000)"
+                    : isMed
+                    ? "var(--skin-primary, #CC0000)88"
+                    : isLow
+                    ? "var(--skin-accent, #0047FF)66"
+                    : "rgba(255, 255, 255, 0.08)",
+                  boxShadow: isHigh ? "0 0 8px var(--skin-primary, #CC0000)66" : "none",
+                }}
               />
             );
           })}
@@ -174,36 +220,53 @@ export function BentoGrid() {
       {/* ── CARD 5: Spider-Sense Fullstack Stack (Col span 2) ── */}
       <motion.div
         whileHover={{ y: -4 }}
-        onMouseEnter={() => spiderAudio.playBlip(700, 0.04)}
-        className="md:col-span-2 card-shimmer p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[#0047FF]/50 transition-all duration-300 relative flex flex-col justify-between"
+        onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(700, 0.04); }}
+        className="md:col-span-2 card-shimmer p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[var(--skin-accent,#0047FF)]/50 transition-all duration-300 relative flex flex-col justify-between shadow-lg"
       >
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <Activity className="w-4 h-4 text-[#0047FF]" />
+            <Activity className="w-4 h-4" style={{ color: "var(--skin-accent, #0047FF)" }} />
             <span className="font-mono text-[10px] uppercase tracking-wider text-white/50">
               Stack Resilience
             </span>
           </div>
-          <span className="font-mono text-[10px] text-[#0047FF]">STARK TIER ARCHITECTURE</span>
+          <span 
+            className="font-mono text-[10px] font-bold"
+            style={{ color: "var(--skin-accent, #0047FF)" }}
+          >
+            STARK TIER ARCHITECTURE
+          </span>
         </div>
 
         <div className="space-y-2.5 my-2">
           <div>
             <div className="flex justify-between text-xs font-mono mb-1">
               <span className="text-white/70">App Router &amp; Server Actions</span>
-              <span className="text-[#CC0000]">Next.js 16</span>
+              <span style={{ color: "var(--skin-primary, #CC0000)" }}>Next.js 16</span>
             </div>
             <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-              <div className="w-[96%] h-full bg-[#CC0000]" />
+              <div 
+                className="w-[96%] h-full rounded-full" 
+                style={{ 
+                  background: "var(--skin-primary, #CC0000)",
+                  boxShadow: "0 0 8px var(--skin-primary, #CC0000)" 
+                }} 
+              />
             </div>
           </div>
           <div>
             <div className="flex justify-between text-xs font-mono mb-1">
               <span className="text-white/70">Reactive Concurrency &amp; Hooks</span>
-              <span className="text-[#0047FF]">React 19</span>
+              <span style={{ color: "var(--skin-accent, #0047FF)" }}>React 19</span>
             </div>
             <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-              <div className="w-[92%] h-full bg-[#0047FF]" />
+              <div 
+                className="w-[92%] h-full rounded-full" 
+                style={{ 
+                  background: "var(--skin-accent, #0047FF)",
+                  boxShadow: "0 0 8px var(--skin-accent, #0047FF)" 
+                }} 
+              />
             </div>
           </div>
         </div>
@@ -217,8 +280,8 @@ export function BentoGrid() {
       {/* ── CARD 6: Open to Work + Location ── */}
       <motion.div
         whileHover={{ y: -4 }}
-        onMouseEnter={() => spiderAudio.playBlip(900, 0.04)}
-        className="md:col-span-2 card-shimmer p-6 rounded-sm bg-gradient-to-br from-emerald-950/40 via-[#0c0c18] to-[#0c0c18] border border-emerald-500/20 hover:border-emerald-400/50 transition-all duration-300 relative overflow-hidden group"
+        onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(900, 0.04); }}
+        className="md:col-span-2 card-shimmer p-6 rounded-sm bg-gradient-to-br from-emerald-950/40 via-[#0c0c18] to-[#0c0c18] border border-emerald-500/20 hover:border-emerald-400/50 transition-all duration-300 relative overflow-hidden group shadow-lg"
       >
         {/* Background glow */}
         <div className="absolute top-0 left-0 w-40 h-40 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -257,4 +320,3 @@ export function BentoGrid() {
     </div>
   );
 }
-

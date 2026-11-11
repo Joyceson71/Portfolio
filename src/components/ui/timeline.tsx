@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
+import { useStore } from "@/lib/store";
 
 interface ExperienceItem {
   year: string;
@@ -17,7 +18,21 @@ interface ExperienceItem {
 
 const experiences: ExperienceItem[] = [
   {
-    year: "2024 — Present",
+    year: "2025 — 2026",
+    role: "AI & Full-Stack Systems Engineer",
+    company: "NeuralDesk & Autonomous Lab",
+    location: "Remote",
+    description: "Architecting streaming LLM applications, WebGL spatial interfaces, and reactive real-time architectures with Next.js 16 and Supabase.",
+    achievements: [
+      "Built NeuralDesk AI streaming multi-model platform with SSE pipelines and Supabase Realtime synchronization",
+      "Engineered mathematical 3D Spider-Verse physics simulations with custom vertex/fragment GLSL shaders",
+      "Integrated zero-downtime PostgreSQL schema deployments with strict TypeScript validation"
+    ],
+    tech: ["Next.js 16", "React 19", "OpenAI / Claude SDK", "Supabase", "Three.js / GLSL"],
+    type: "crimson",
+  },
+  {
+    year: "2024 — 2025",
     role: "Lead Frontend & Creative Engineer",
     company: "Freelance / High-Impact Ventures",
     location: "Remote",
@@ -28,7 +43,7 @@ const experiences: ExperienceItem[] = [
       "Boosted client Core Web Vitals to 95+ performance scores with zero layout shift"
     ],
     tech: ["Next.js 16", "React 19", "Three.js", "TypeScript", "Tailwind CSS v4"],
-    type: "crimson",
+    type: "blue",
   },
   {
     year: "2023 — 2024",
@@ -42,7 +57,7 @@ const experiences: ExperienceItem[] = [
       "Designed dark-mode UI systems with responsive touch controls"
     ],
     tech: ["React", "Node.js", "PostgreSQL", "Prisma", "MongoDB", "WebSockets"],
-    type: "blue",
+    type: "crimson",
   },
   {
     year: "2022 — 2023",
@@ -55,22 +70,24 @@ const experiences: ExperienceItem[] = [
       "Reduced bundle footprint by 35% through tree-shaking and modern dynamic imports"
     ],
     tech: ["JavaScript (ES6+)", "React", "CSS Modules", "Figma", "REST APIs"],
-    type: "crimson",
+    type: "blue",
   },
 ];
 
 export function CareerTimeline() {
+  const sfxEnabled = useStore((s) => s.sfxEnabled);
+
   return (
     <div className="relative pl-6 md:pl-10">
       {/* Central web filament line */}
       <div 
-        className="absolute left-2 md:left-4 top-4 bottom-4 w-px bg-gradient-to-b from-[#CC0000] via-[#0047FF] to-transparent shadow-[0_0_8px_rgba(204,0,0,0.5)]" 
+        className="absolute left-2 md:left-4 top-4 bottom-4 w-px bg-gradient-to-b from-[var(--skin-primary,#CC0000)] via-[var(--skin-accent,#0047FF)] to-transparent shadow-[0_0_8px_var(--skin-primary,#CC0000)]" 
       />
 
       <div className="space-y-12">
         {experiences.map((exp, idx) => {
           const isCrimson = exp.type === "crimson";
-          const accentColor = isCrimson ? "#CC0000" : "#0047FF";
+          const accentColor = isCrimson ? "var(--skin-primary, #CC0000)" : "var(--skin-accent, #0047FF)";
 
           return (
             <motion.div
@@ -78,8 +95,8 @@ export function CareerTimeline() {
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.6, delay: idx * 0.15 }}
-              onMouseEnter={() => spiderAudio.playBlip(720 + idx * 40, 0.04)}
+              transition={{ duration: 0.6, delay: idx * 0.12 }}
+              onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(720 + idx * 40, 0.04); }}
               className="relative group"
             >
               {/* Web node connector */}
@@ -94,18 +111,18 @@ export function CareerTimeline() {
               </div>
 
               {/* Card content */}
-              <div className="web-panel p-6 md:p-8 rounded-sm hover:border-[#CC0000]/40 transition-all duration-300">
+              <div className="web-panel p-6 md:p-8 rounded-sm hover:border-[var(--skin-primary,#CC0000)]/40 transition-all duration-300">
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                   <span 
                     className="font-mono text-xs font-bold px-2.5 py-1 rounded"
-                    style={{ background: `${accentColor}15`, color: accentColor, border: `1px solid ${accentColor}30` }}
+                    style={{ background: `${accentColor}18`, color: accentColor, border: `1px solid ${accentColor}33` }}
                   >
                     {exp.year}
                   </span>
                   <span className="font-mono text-xs text-white/40">{exp.location}</span>
                 </div>
 
-                <h3 className="text-xl font-bold text-white mb-1 group-hover:text-[#CC0000] transition-colors">
+                <h3 className="text-xl font-bold text-white mb-1 group-hover:text-[var(--skin-primary,#CC0000)] transition-colors">
                   {exp.role}
                 </h3>
                 <h4 className="text-sm font-semibold text-white/70 mb-4">{exp.company}</h4>

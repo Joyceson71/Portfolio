@@ -3,56 +3,33 @@
 import { motion } from "framer-motion";
 import { Star, Newspaper, CheckCircle2 } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
-
-interface Review {
-  headline: string;
-  quote: string;
-  author: string;
-  role: string;
-  company: string;
-  rating: number;
-}
-
-const reviews: Review[] = [
-  {
-    headline: "“HE DELIVERED 60 FPS 3D WEBSITES OVERNIGHT!”",
-    quote: "Joyceson took our sluggish dashboard and transformed it into a buttery-smooth, visually spectacular experience. The attention to micro-animations and zero-latency state rendering is unmatched.",
-    author: "Alex Rivera",
-    role: "VP of Engineering",
-    company: "SaaS Scaleout",
-    rating: 5,
-  },
-  {
-    headline: "“A REAL-LIFE WEB SLINGER IN FRONTEND CODE.”",
-    quote: "Working with Joyceson felt like watching Spider-Man swing between rooftops. Complex React 19 concurrent features and Three.js scenes were integrated cleanly ahead of schedule.",
-    author: "Elena Rostova",
-    role: "Product Design Director",
-    company: "Hyperion Labs",
-    rating: 5,
-  },
-  {
-    headline: "“LIGHTHOUSE SCORE WENT FROM 42 TO 99.”",
-    quote: "His mastery over Next.js App Router, bundle splitting, and SEO best practices doubled our conversion rates within weeks. A true craftsperson of the modern web.",
-    author: "Marcus Chen",
-    role: "Founder & CTO",
-    company: "Venture Pulse",
-    rating: 5,
-  },
-];
+import { useStore } from "@/lib/store";
+import { REVIEWS } from "@/lib/constants";
 
 export function DailyBugleReviews() {
+  const sfxEnabled = useStore((s) => s.sfxEnabled);
+
   return (
     <div className="space-y-6">
       {/* Daily Bugle Hologram Header banner */}
-      <div className="p-4 md:p-6 bg-[#100808] border border-[#CC0000]/40 rounded-sm relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div 
+        className="p-4 md:p-6 bg-[#100808]/90 border rounded-sm relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl"
+        style={{ borderColor: "var(--skin-primary, #CC0000)55" }}
+      >
         <div className="flex items-center gap-3">
-          <Newspaper className="w-8 h-8 text-[#CC0000] shrink-0" />
+          <Newspaper className="w-8 h-8 shrink-0" style={{ color: "var(--skin-primary, #CC0000)" }} />
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-xs font-bold text-[#CC0000] tracking-widest uppercase">
+              <span 
+                className="font-mono text-xs font-bold tracking-widest uppercase"
+                style={{ color: "var(--skin-primary, #CC0000)" }}
+              >
                 THE DAILY BUGLE EXCLUSIVE
               </span>
-              <span className="bg-[#CC0000] text-black text-[9px] font-black uppercase px-1.5 py-0.2 rounded-xs">
+              <span 
+                className="text-black text-[9px] font-black uppercase px-1.5 py-0.2 rounded-xs"
+                style={{ background: "var(--skin-primary, #CC0000)" }}
+              >
                 VERIFIED
               </span>
             </div>
@@ -63,29 +40,39 @@ export function DailyBugleReviews() {
         </div>
 
         <div className="font-mono text-xs text-white/50 border-l-0 md:border-l border-white/10 md:pl-4">
-          <p className="text-white/80 font-bold">100% SATISFACTION RATE</p>
+          <p className="text-white/80 font-bold flex items-center gap-1.5">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            <span>100% SATISFACTION RATE</span>
+          </p>
           <p className="text-[10px]">ALL REVIEWS CROSS-EXAMINED BY J. JONAH JAMESON</p>
         </div>
       </div>
 
-      {/* 3 Review Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {reviews.map((rev, i) => (
+      {/* Review Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {REVIEWS.map((rev, i) => (
           <motion.div
-            key={i}
+            key={rev.id}
             whileHover={{ y: -6 }}
-            onMouseEnter={() => spiderAudio.playBlip(600 + i * 60, 0.04)}
-            className="web-panel p-6 rounded-sm flex flex-col justify-between hover:border-[#CC0000]/60 transition-all duration-300 relative group"
+            onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(600 + i * 50, 0.04); }}
+            className="web-panel p-6 rounded-sm flex flex-col justify-between hover:border-[var(--skin-primary,#CC0000)]/60 transition-all duration-300 relative group shadow-lg"
           >
             <div>
-              {/* Star rating */}
-              <div className="flex items-center gap-1 mb-4">
-                {Array.from({ length: rev.rating }).map((_, s) => (
-                  <Star key={s} className="w-3.5 h-3.5 fill-[#CC0000] text-[#CC0000]" />
-                ))}
+              {/* Star rating & date */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: rev.rating }).map((_, s) => (
+                    <Star 
+                      key={s} 
+                      className="w-3.5 h-3.5" 
+                      style={{ fill: "var(--skin-primary, #CC0000)", color: "var(--skin-primary, #CC0000)" }} 
+                    />
+                  ))}
+                </div>
+                <span className="font-mono text-[10px] text-white/40">{rev.date}</span>
               </div>
 
-              <h4 className="font-bold text-sm text-white mb-3 group-hover:text-[#CC0000] transition-colors">
+              <h4 className="font-bold text-sm text-white mb-3 group-hover:text-[var(--skin-primary,#CC0000)] transition-colors leading-snug">
                 {rev.headline}
               </h4>
 
@@ -96,10 +83,9 @@ export function DailyBugleReviews() {
 
             <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between">
               <div>
-                <p className="text-xs font-bold text-white">{rev.author}</p>
+                <p className="text-xs font-bold text-white">{rev.name}</p>
                 <p className="font-mono text-[10px] text-white/40">{rev.role} · {rev.company}</p>
               </div>
-              <CheckCircle2 className="w-4 h-4 text-[#0047FF]" />
             </div>
           </motion.div>
         ))}
