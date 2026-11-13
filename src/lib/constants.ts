@@ -163,7 +163,7 @@ export const PROJECTS: ProjectDetail[] = [
     tech: ["Next.js 16", "React 19", "TypeScript", "Chart.js", "Tailwind CSS", "Docker"],
     demo: "https://smart-biz-inky.vercel.app/",
     github: "https://github.com/Joyceson71/smart_biz",
-    year: "2024",
+    year: "2026",
     metrics: "100 Lighthouse Score · Zero Layout Shift",
     architecture: [
       "Strict client-side memoization preventing unneeded re-renders on financial charts",
