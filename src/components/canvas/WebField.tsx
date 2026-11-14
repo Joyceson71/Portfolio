@@ -43,17 +43,17 @@ export function WebField({
     if (!groupRef.current) return;
     const t = state.clock.elapsedTime;
 
-    // Slow group rotation
-    groupRef.current.rotation.z += delta * 0.025;
+    // Slow group rotation with smooth dynamic tilt
+    groupRef.current.rotation.z += delta * (0.025 + Math.abs(mouseX) * 0.015);
     groupRef.current.rotation.x = THREE.MathUtils.lerp(
-      groupRef.current.rotation.x, -mouseY * 0.22, 0.04
+      groupRef.current.rotation.x, -mouseY * 0.24, 0.045
     );
     groupRef.current.rotation.y = THREE.MathUtils.lerp(
-      groupRef.current.rotation.y, mouseX * 0.22, 0.04
+      groupRef.current.rotation.y, mouseX * 0.24, 0.045
     );
 
     // Breathing scale
-    const pulse = 1 + Math.sin(t * 1.5) * 0.02;
+    const pulse = 1 + Math.sin(t * 1.6) * 0.022;
     groupRef.current.scale.set(pulse, pulse, pulse);
 
     // Per-ring cursor ripple — displace Z of each vertex
@@ -69,10 +69,11 @@ export function WebField({
         const dx = vx - mouseX * MAX_R * 0.5;
         const dy = vy + mouseY * MAX_R * 0.5;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        // Ripple wave radiating outward from mouse
-        const wave = Math.sin(dist * 0.9 - t * WAVE_SPD) * RIPPLE;
+        // Harmonic ripple waves radiating outward from mouse
+        const wavePrimary = Math.sin(dist * 0.9 - t * WAVE_SPD) * RIPPLE;
+        const waveHarmonic = Math.sin(dist * 1.8 - t * (WAVE_SPD * 1.35)) * (RIPPLE * 0.28);
         const zBase = Math.sin(angle * 4 + ri * 0.8) * 0.5;
-        pos.setZ(s, zBase + wave * Math.exp(-dist * 0.08));
+        pos.setZ(s, zBase + (wavePrimary + waveHarmonic) * Math.exp(-dist * 0.08));
       }
       pos.needsUpdate = true;
       const mat = line.material as THREE.LineBasicMaterial;

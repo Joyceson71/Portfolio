@@ -107,6 +107,21 @@ export function ParticleTrail() {
         }
       }
 
+      // Continuous bio-sparks while clicking / dragging
+      if (mouseRef.current.clicking && Math.random() > 0.45) {
+        if (particlesRef.current.length < MAX_PARTICLES + 10) {
+          particlesRef.current.push({
+            x: mx + (Math.random() - 0.5) * 8,
+            y: my + (Math.random() - 0.5) * 8,
+            life: 0.9,
+            vx: (Math.random() - 0.5) * 1.8,
+            vy: (Math.random() - 0.5) * 1.8,
+            size: 1.8 + Math.random() * 2.2,
+            color: Math.random() > 0.4 ? primary : accent,
+          });
+        }
+      }
+
       // Update & draw
       particlesRef.current = particlesRef.current.filter((p) => p.life > 0.01);
       const particles = particlesRef.current;

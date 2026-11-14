@@ -117,7 +117,7 @@ export const PROJECTS: ProjectDetail[] = [
     tech: ["Next.js 16", "React 19", "TypeScript", "PostgreSQL", "Prisma", "Tailwind CSS", "Resend"],
     demo: "https://kings-lms.vercel.app/",
     github: "https://github.com/Joyceson71/kings-lms",
-    year: "2025",
+    year: "2026",
     metrics: "2.4k+ Active Students · 99.8% Uptime",
     architecture: [
       "Next.js 16 App Router with React 19 Server Actions for zero-latency form mutations",
@@ -186,7 +186,7 @@ export const PROJECTS: ProjectDetail[] = [
     tech: ["Three.js", "React Three Fiber", "GLSL Shaders", "PostProcessing", "WebGL"],
     demo: "#home",
     github: "https://github.com/Joyceson71/Portfolio",
-    year: "2025",
+    year: "2026",
     metrics: "60 FPS Stable · GPU Accelerated",
     architecture: [
       "BufferGeometry allocation with dynamic Float32Array coordinates for zero GC overhead",
@@ -209,7 +209,7 @@ export const PROJECTS: ProjectDetail[] = [
     tech: ["GLSL", "WebGL", "Three.js", "R3F", "ShaderMaterial"],
     demo: "#home",
     github: "https://github.com/Joyceson71/Portfolio",
-    year: "2025",
+    year: "2026",
     metrics: "Custom Shaders · Realtime Uniforms",
     architecture: [
       "Dual-pass render target capturing scene luminance for bloom thresholding",
@@ -232,7 +232,7 @@ export const PROJECTS: ProjectDetail[] = [
     tech: ["Canvas2D", "Verlet Physics", "TypeScript", "MathUtils"],
     demo: "#home",
     github: "https://github.com/Joyceson71/Portfolio",
-    year: "2025",
+    year: "2026",
     metrics: "20 Nodes · 60 FPS Verlet Solver",
     architecture: [
       "Verlet particle integration: pos = pos + (pos - oldPos) + accel * dt^2",
@@ -255,7 +255,7 @@ export const PROJECTS: ProjectDetail[] = [
     tech: ["Three.js", "R3F", "PBR Materials", "Draco"],
     demo: "#home",
     github: "https://github.com/Joyceson71/Portfolio",
-    year: "2025",
+    year: "2026",
     metrics: "PBR Metallic · 360° Orbit",
     architecture: [
       "Standard PBR metallic/roughness workflow with custom environment map",
@@ -278,7 +278,7 @@ export const PROJECTS: ProjectDetail[] = [
     tech: ["Three.js", "InstancedMesh", "R3F", "Volumetric Lighting"],
     demo: "#contact",
     github: "https://github.com/Joyceson71/Portfolio",
-    year: "2025",
+    year: "2026",
     metrics: "80 Instanced Beams · Volumetric Cone",
     architecture: [
       "Octagonal cone geometry with double-sided additive blending material",
