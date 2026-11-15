@@ -199,6 +199,7 @@ export const PROJECTS: ProjectDetail[] = [
       "Swarming nanite field simulating orbital particle physics",
     ],
   },
+  
   {
     id: 5,
     title: "GLSL Hologram Playground",
