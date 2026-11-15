@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useStore } from "@/lib/store";
 import { spiderAudio } from "@/lib/spider-audio";
 
@@ -47,10 +47,30 @@ export function SpiderSenseHUD() {
   // Nanite integrity: maps to scroll (flavor text)
   const naniteIntegrity = Math.round(100 - scrollProgress * 30);
 
-  const toggleCollapse = () => {
+  const toggleCollapse = useCallback(() => {
     if (sfxEnabled) spiderAudio.playBlip(isCollapsed ? 880 : 640, 0.03);
-    setIsCollapsed(!isCollapsed);
-  };
+    setIsCollapsed((v) => !v);
+  }, [isCollapsed, sfxEnabled]);
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+      if (e.key.toLowerCase() === "h") {
+        toggleCollapse();
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [toggleCollapse]);
 
   return (
     <>
@@ -74,6 +94,7 @@ export function SpiderSenseHUD() {
         {isCollapsed ? (
           <button
             onClick={toggleCollapse}
+            title="Expand Spider-Sense telemetry HUD — Press [H]"
             aria-label="Expand Spider-Sense telemetry HUD"
             className="flex items-center gap-2 px-3 py-1.5 rounded-sm bg-[#080810]/90 backdrop-blur-md border border-white/[0.1] hover:border-[var(--skin-primary,#CC0000)]/60 font-mono text-[9px] uppercase tracking-wider shadow-lg text-white/80 transition-all cursor-pointer pointer-events-auto"
           >
@@ -95,6 +116,7 @@ export function SpiderSenseHUD() {
               <span className="text-[8px] text-[var(--skin-primary,#CC0000)] font-bold tracking-tight">● SPIDER-SENSE</span>
               <button
                 onClick={toggleCollapse}
+                title="Collapse HUD — Press [H]"
                 aria-label="Collapse HUD"
                 className="text-[8px] text-white/40 hover:text-white transition-colors cursor-pointer px-1"
               >

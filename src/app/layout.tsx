@@ -8,6 +8,7 @@ import { WebRope } from "@/components/cursor/WebRope";
 import { ClickSplatLayer } from "@/components/cursor/ClickSplat";
 import { ParticleTrail } from "@/components/cursor/ParticleTrail";
 import { SpiderSenseHUD } from "@/components/hud/SpiderSenseHUD";
+import { KeyboardShortcuts } from "@/components/hud/KeyboardShortcuts";
 import { Loader } from "@/components/hud/Loader";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -62,8 +63,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ParticleTrail />
         </CursorProvider>
 
-        {/* Persistent Spider-Sense HUD overlay */}
+        {/* Persistent Spider-Sense HUD overlay & Global Keyboard Shortcuts */}
         <SpiderSenseHUD />
+        <KeyboardShortcuts />
 
         {/* Loading screen — shows until drei useProgress hits 100 */}
         <Loader />

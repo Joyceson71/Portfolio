@@ -10,9 +10,10 @@ export function SfxToggle() {
   return (
     <button
       id="sfx-toggle"
+      title={`Toggle audio effects — Press [M]`}
       aria-label={sfxEnabled ? "Mute sound effects" : "Enable sound effects"}
       onClick={toggleSfx}
-      className="flex items-center gap-1 px-2 py-1 rounded bg-[#0c0c18]/90 border border-white/10 hover:border-white/30 transition-all font-mono text-[9px] uppercase tracking-wider text-white/50 hover:text-white backdrop-blur-sm"
+      className="flex items-center gap-1.5 px-2 py-1 rounded bg-[#0c0c18]/90 border border-white/10 hover:border-white/30 transition-all font-mono text-[9px] uppercase tracking-wider text-white/50 hover:text-white backdrop-blur-sm"
       data-interactive
     >
       {sfxEnabled
@@ -20,6 +21,7 @@ export function SfxToggle() {
         : <VolumeX className="w-3 h-3" />
       }
       <span className="hidden sm:inline">{sfxEnabled ? "SFX ON" : "SFX OFF"}</span>
+      <span className="hidden md:inline-block text-[8px] opacity-40 font-mono">[M]</span>
     </button>
   );
 }

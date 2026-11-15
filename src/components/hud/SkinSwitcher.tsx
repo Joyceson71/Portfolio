@@ -29,13 +29,13 @@ export function SkinSwitcher() {
         <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "var(--skin-primary, #CC0000)" }} />
         Suit:
       </span>
-      {skins.map(([id, config]) => {
+      {skins.map(([id, config], idx) => {
         const isActive = skin === id;
         return (
           <button
             key={id}
             id={`skin-${id}`}
-            title={`${config.label} (${config.tag})`}
+            title={`${config.label} (${config.tag}) — Press [${idx + 1}]`}
             aria-label={`Switch to ${config.label} skin`}
             aria-pressed={isActive}
             onClick={() => {
@@ -63,6 +63,9 @@ export function SkinSwitcher() {
               }}
             />
             <span className="hidden sm:inline">{config.label.split(" ")[0]}</span>
+            <span className="hidden md:inline-block text-[8px] opacity-40 font-mono">
+              [{idx + 1}]
+            </span>
           </button>
         );
       })}
