@@ -1,12 +1,13 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Sphere } from "@react-three/drei";
 import * as THREE from "three";
 
 // ── Central Nanotech Core (Spider Nanocore from original scene) ─
-// Upgraded: the core fades out as the user scrolls past the hero.
+// Upgraded: dynamic click shock impulse, 4 orbiting Stark micro-satellites,
+// smooth exponential damping and scroll-based hero fade.
 
 interface CoreNanotechProps {
   mouseX: number;
@@ -27,27 +28,56 @@ export function CoreNanotech({
   const icosaRef = useRef<THREE.Mesh>(null!);
   const ring1 = useRef<THREE.Mesh>(null!);
   const ring2 = useRef<THREE.Mesh>(null!);
+  const dronesRef = useRef<(THREE.Mesh | null)[]>([]);
+  const clickImpulse = useRef(0);
 
-  // Fade out as user scrolls
+  // Fade out as user scrolls past the hero
   const opacity = Math.max(0, 1 - scrollProgress * 6);
-  const scale = 0.3 + opacity * 0.7;
+  const baseScale = 0.3 + opacity * 0.7;
+
+  useEffect(() => {
+    const onDown = () => {
+      clickImpulse.current = 1.0;
+    };
+    window.addEventListener("mousedown", onDown);
+    return () => window.removeEventListener("mousedown", onDown);
+  }, []);
 
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
+    clickImpulse.current = THREE.MathUtils.damp(clickImpulse.current, 0, 4.5, delta);
+    const impulse = clickImpulse.current;
+
     if (ring1.current) {
-      ring1.current.rotation.x += delta * 0.8;
-      ring1.current.rotation.y += delta * 0.5;
+      ring1.current.rotation.x += delta * (0.8 + impulse * 2.5);
+      ring1.current.rotation.y += delta * (0.5 + impulse * 2.0);
     }
     if (ring2.current) {
-      ring2.current.rotation.y -= delta * 0.7;
-      ring2.current.rotation.z += delta * 0.6;
+      ring2.current.rotation.y -= delta * (0.7 + impulse * 2.2);
+      ring2.current.rotation.z += delta * (0.6 + impulse * 1.8);
     }
     if (icosaRef.current) {
       icosaRef.current.rotation.x = t * 0.3;
       icosaRef.current.rotation.y = t * 0.4;
-      const s = 1.15 + Math.sin(t * 2) * 0.05;
+      const s = 1.15 + Math.sin(t * 2) * 0.05 + impulse * 0.12;
       icosaRef.current.scale.set(s, s, s);
     }
+
+    // Orbiting Stark Nanite Drones
+    dronesRef.current.forEach((drone, idx) => {
+      if (!drone) return;
+      const orbitSpeed = 1.2 + idx * 0.2;
+      const angle = t * orbitSpeed + (idx * Math.PI) / 2;
+      const r = 1.85 + Math.sin(t * 2 + idx) * 0.15;
+      const tilt = (idx % 2 === 0 ? 1 : -1) * 0.4;
+
+      drone.position.x = Math.cos(angle) * r;
+      drone.position.y = Math.sin(angle) * r * Math.cos(tilt) + Math.sin(t * 3 + idx) * 0.25;
+      drone.position.z = Math.sin(angle) * r * Math.sin(tilt) + Math.cos(t * 2 + idx) * 0.2;
+      drone.rotation.x += delta * 2;
+      drone.rotation.y += delta * 2;
+    });
+
     if (groupRef.current) {
       groupRef.current.position.x = THREE.MathUtils.lerp(
         groupRef.current.position.x, mouseX * 0.8, 0.06
@@ -55,12 +85,14 @@ export function CoreNanotech({
       groupRef.current.position.y = THREE.MathUtils.lerp(
         groupRef.current.position.y, -mouseY * 0.8, 0.06
       );
-      groupRef.current.scale.setScalar(scale);
+      const currentScale = baseScale * (1 + impulse * 0.08);
+      groupRef.current.scale.setScalar(currentScale);
     }
   });
 
   return (
     <group ref={groupRef}>
+      {/* Outer Torus Ring */}
       <mesh ref={ring1}>
         <torusGeometry args={[1.5, 0.035, 16, 100]} />
         <meshStandardMaterial
@@ -74,6 +106,7 @@ export function CoreNanotech({
         />
       </mesh>
 
+      {/* Inner Torus Ring */}
       <mesh ref={ring2}>
         <torusGeometry args={[1.1, 0.025, 16, 100]} />
         <meshStandardMaterial
@@ -87,6 +120,7 @@ export function CoreNanotech({
         />
       </mesh>
 
+      {/* Wireframe Icosahedron */}
       <mesh ref={icosaRef}>
         <icosahedronGeometry args={[0.9, 1]} />
         <meshBasicMaterial
@@ -97,6 +131,7 @@ export function CoreNanotech({
         />
       </mesh>
 
+      {/* Core Nanotech Sphere */}
       <Sphere args={[0.42, 32, 32]}>
         <meshStandardMaterial
           color={skinColor}
@@ -109,6 +144,7 @@ export function CoreNanotech({
         />
       </Sphere>
 
+      {/* Inner White Singularity */}
       <Sphere args={[0.18, 16, 16]}>
         <meshStandardMaterial
           color="#ffffff"
@@ -118,6 +154,25 @@ export function CoreNanotech({
           opacity={opacity}
         />
       </Sphere>
+
+      {/* 4 Orbiting Stark Nanite Drones */}
+      {Array.from({ length: 4 }).map((_, i) => (
+        <mesh
+          key={i}
+          ref={(el) => {
+            dronesRef.current[i] = el;
+          }}
+        >
+          <octahedronGeometry args={[0.075, 0]} />
+          <meshStandardMaterial
+            color={i % 2 === 0 ? skinAccent : skinColor}
+            emissive={i % 2 === 0 ? skinAccent : skinColor}
+            emissiveIntensity={4}
+            transparent
+            opacity={0.9 * opacity}
+          />
+        </mesh>
+      ))}
     </group>
   );
 }

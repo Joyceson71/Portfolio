@@ -68,10 +68,17 @@ function SceneContent({ mouseX, mouseY }: SceneContentProps) {
       <StackGraph scrollProgress={scrollProgress} />
 
       {/* Timeline region */}
-      <TimelineStrand scrollProgress={scrollProgress} />
+      <TimelineStrand
+        scrollProgress={scrollProgress}
+        skinColor={skinConfig.primary}
+      />
 
       {/* Contact region */}
-      <BeaconScene scrollProgress={scrollProgress} />
+      <BeaconScene
+        scrollProgress={scrollProgress}
+        skinColor={skinConfig.primary}
+        skinAccent={skinConfig.accent}
+      />
 
       {/* Always-present city */}
       <CityScape />

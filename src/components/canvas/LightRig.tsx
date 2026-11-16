@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -13,8 +13,17 @@ interface LightRigProps {
 
 export function LightRig({ mouseX, mouseY, skinColor, skinAccent = "#0047FF" }: LightRigProps) {
   const cursorLightRef = useRef<THREE.PointLight>(null!);
+  const clickIntensity = useRef(35);
 
-  useFrame(() => {
+  useEffect(() => {
+    const onDown = () => {
+      clickIntensity.current = 80;
+    };
+    window.addEventListener("mousedown", onDown);
+    return () => window.removeEventListener("mousedown", onDown);
+  }, []);
+
+  useFrame((state, delta) => {
     if (cursorLightRef.current) {
       cursorLightRef.current.position.x = THREE.MathUtils.lerp(
         cursorLightRef.current.position.x, mouseX * 8, 0.06
@@ -22,6 +31,10 @@ export function LightRig({ mouseX, mouseY, skinColor, skinAccent = "#0047FF" }: 
       cursorLightRef.current.position.y = THREE.MathUtils.lerp(
         cursorLightRef.current.position.y, -mouseY * 6, 0.06
       );
+
+      // Damp intensity smoothly back to baseline 35
+      clickIntensity.current = THREE.MathUtils.damp(clickIntensity.current, 35, 6, delta);
+      cursorLightRef.current.intensity = clickIntensity.current;
     }
   });
 
@@ -36,7 +49,7 @@ export function LightRig({ mouseX, mouseY, skinColor, skinAccent = "#0047FF" }: 
         position={[0, 0, 4]}
         color={skinColor}
         intensity={35}
-        distance={15}
+        distance={18}
         decay={2}
       />
     </>

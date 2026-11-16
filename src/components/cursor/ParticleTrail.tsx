@@ -25,16 +25,16 @@ export function ParticleTrail() {
   const canvasRef = useRef<HTMLCanvasElement>(null!);
   const particlesRef = useRef<Particle[]>([]);
   const rafRef = useRef<number>(0);
-  const { x, y, isClicking } = useCursor();
-  const mouseRef = useRef({ x: 0, y: 0, clicking: false });
+  const { x, y, isClicking, velocity } = useCursor();
+  const mouseRef = useRef({ x: 0, y: 0, clicking: false, velocity: 0 });
   const skin = useStore((s) => s.skin);
 
   // Cached theme colors to avoid layout thrashing via per-frame getComputedStyle
   const colorsRef = useRef({ primary: "#CC0000", accent: "#0047FF" });
 
   useEffect(() => {
-    mouseRef.current = { x, y, clicking: isClicking };
-  }, [x, y, isClicking]);
+    mouseRef.current = { x, y, clicking: isClicking, velocity };
+  }, [x, y, isClicking, velocity]);
 
   // Update cached colors whenever skin changes or on mount
   useEffect(() => {
@@ -103,6 +103,21 @@ export function ParticleTrail() {
             vy: (Math.random() - 0.5) * 0.6,
             size: 1.5 + Math.random() * 2.2,
             color: sparkColor,
+          });
+        }
+      }
+
+      // High-speed whip trail: spawn extra nanite node when moving quickly
+      if (mouseRef.current.velocity > 12 && Math.random() > 0.4) {
+        if (particlesRef.current.length < MAX_PARTICLES + 8) {
+          particlesRef.current.push({
+            x: mx + (Math.random() - 0.5) * 4,
+            y: my + (Math.random() - 0.5) * 4,
+            life: 0.85,
+            vx: (Math.random() - 0.5) * 0.8,
+            vy: (Math.random() - 0.5) * 0.8,
+            size: 1.2 + Math.random() * 1.8,
+            color: accent,
           });
         }
       }

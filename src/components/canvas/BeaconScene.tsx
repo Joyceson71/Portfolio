@@ -6,13 +6,15 @@ import * as THREE from "three";
 
 // ── Spider-Signal Beacon Scene ─────────────────────────────────
 // A pulsing light beacon (octagonal cone pointing upward) with
-// a particle burst system and ambient glow light.
+// a particle burst system and ambient glow light, fully suit-synced.
 
 interface BeaconSceneProps {
   scrollProgress: number;
+  skinColor?: string;
+  skinAccent?: string;
 }
 
-function BeaconParticles({ active }: { active: boolean }) {
+function BeaconParticles({ active, color }: { active: boolean; color: string }) {
   const instancedRef = useRef<THREE.InstancedMesh>(null!);
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const COUNT = 80;
@@ -57,8 +59,8 @@ function BeaconParticles({ active }: { active: boolean }) {
     <instancedMesh ref={instancedRef} args={[undefined, undefined, COUNT]}>
       <sphereGeometry args={[1, 4, 4]} />
       <meshStandardMaterial
-        color="#CC0000"
-        emissive="#CC0000"
+        color={color}
+        emissive={color}
         emissiveIntensity={6}
         toneMapped={false}
       />
@@ -66,7 +68,11 @@ function BeaconParticles({ active }: { active: boolean }) {
   );
 }
 
-export function BeaconScene({ scrollProgress }: BeaconSceneProps) {
+export function BeaconScene({
+  scrollProgress,
+  skinColor = "#CC0000",
+  skinAccent = "#0047FF",
+}: BeaconSceneProps) {
   const groupRef = useRef<THREE.Group>(null!);
   const coneRef = useRef<THREE.Mesh>(null!);
   const lightRef = useRef<THREE.SpotLight>(null!);
@@ -85,7 +91,7 @@ export function BeaconScene({ scrollProgress }: BeaconSceneProps) {
       mat.emissiveIntensity = 2 + Math.sin(t * 2) * 1;
     }
     if (lightRef.current) {
-      lightRef.current.intensity = active ? 80 + Math.sin(t * 2) * 20 : 0;
+      lightRef.current.intensity = active ? 85 + Math.sin(t * 2) * 20 : 0;
     }
   });
 
@@ -95,8 +101,8 @@ export function BeaconScene({ scrollProgress }: BeaconSceneProps) {
       <mesh ref={coneRef} rotation={[0, 0, Math.PI]}>
         <coneGeometry args={[1.2, 4, 8, 1, true]} />
         <meshStandardMaterial
-          color="#CC0000"
-          emissive="#CC0000"
+          color={skinColor}
+          emissive={skinColor}
           emissiveIntensity={2}
           transparent
           opacity={0.55}
@@ -108,15 +114,15 @@ export function BeaconScene({ scrollProgress }: BeaconSceneProps) {
       {/* Wireframe overlay */}
       <mesh rotation={[0, 0, Math.PI]}>
         <coneGeometry args={[1.2, 4, 8, 1, true]} />
-        <meshBasicMaterial color="#CC0000" wireframe transparent opacity={0.3} />
+        <meshBasicMaterial color={skinAccent} wireframe transparent opacity={0.35} />
       </mesh>
 
       {/* Base ring */}
       <mesh position={[0, 0, 0]}>
         <torusGeometry args={[1.2, 0.06, 8, 32]} />
         <meshStandardMaterial
-          color="#CC0000"
-          emissive="#CC0000"
+          color={skinColor}
+          emissive={skinColor}
           emissiveIntensity={5}
         />
       </mesh>
@@ -126,14 +132,14 @@ export function BeaconScene({ scrollProgress }: BeaconSceneProps) {
         ref={lightRef}
         position={[0, 0, 0]}
         target-position={[0, 10, 0]}
-        color="#CC0000"
-        intensity={80}
-        distance={30}
+        color={skinColor}
+        intensity={85}
+        distance={32}
         angle={0.25}
         penumbra={0.5}
       />
 
-      <BeaconParticles active={active} />
+      <BeaconParticles active={active} color={skinColor} />
     </group>
   );
 }

@@ -20,9 +20,10 @@ const MILESTONE_COLORS = ["#CC0000", "#0047FF", "#6cc24a", "#9900ff", "#eab308"]
 
 interface TimelineStrandProps {
   scrollProgress: number;
+  skinColor?: string;
 }
 
-export function TimelineStrand({ scrollProgress }: TimelineStrandProps) {
+export function TimelineStrand({ scrollProgress, skinColor = "#CC0000" }: TimelineStrandProps) {
   const groupRef = useRef<THREE.Group>(null!);
   // Visible in 0.72–0.84 range
   const localT = Math.max(0, Math.min(1, (scrollProgress - 0.72) / 0.12));
@@ -55,8 +56,8 @@ export function TimelineStrand({ scrollProgress }: TimelineStrandProps) {
       {/* Main glowing strand */}
       <mesh geometry={tubeGeom}>
         <meshStandardMaterial
-          color="#CC0000"
-          emissive="#CC0000"
+          color={skinColor}
+          emissive={skinColor}
           emissiveIntensity={3}
           transparent
           opacity={opacity * 0.8}
