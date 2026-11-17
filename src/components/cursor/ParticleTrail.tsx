@@ -142,8 +142,10 @@ export function ParticleTrail() {
       const particles = particlesRef.current;
 
       // Web filaments: draw interconnecting threads between close trail nodes
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
+      // Cap scan to first 20 to keep the inner loop O(1) worst-case per frame
+      const filamentCount = Math.min(particles.length, 20);
+      for (let i = 0; i < filamentCount; i++) {
+        for (let j = i + 1; j < filamentCount; j++) {
           const p1 = particles[i];
           const p2 = particles[j];
           const dx = p1.x - p2.x;

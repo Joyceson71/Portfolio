@@ -5,6 +5,7 @@
 class SpiderAudioController {
   private ctx: AudioContext | null = null;
   public isMuted: boolean = true; // default OFF per spec
+  private lastBlipAt: number = 0; // debounce guard
 
   /** Call once from a Client Component to keep mute in sync with Zustand */
   public syncWithStore(sfxEnabled: boolean) {
@@ -27,6 +28,10 @@ class SpiderAudioController {
 
   public playBlip(freq: number = 880, duration: number = 0.06) {
     if (this.isMuted) return;
+    // Debounce: skip if called within 16 ms (one frame) to prevent AudioContext saturation
+    const now = performance.now();
+    if (now - this.lastBlipAt < 16) return;
+    this.lastBlipAt = now;
     try {
       const ctx = this.getContext();
       if (!ctx) return;

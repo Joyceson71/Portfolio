@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo, memo } from "react";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
@@ -36,7 +36,7 @@ const SceneRoot = dynamic(
 );
 
 // ── Skill Bar (replaces old skills section) ──────────────────────
-function SkillBar({ skill, index }: { skill: typeof SKILLS[0]; index: number }) {
+const SkillBar = memo(function SkillBar({ skill, index }: { skill: typeof SKILLS[0]; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
@@ -68,7 +68,7 @@ function SkillBar({ skill, index }: { skill: typeof SKILLS[0]; index: number }) 
       </div>
     </motion.div>
   );
-}
+});
 
 // ── Skill Cluster metadata ────────────────────────────────────────
 const CLUSTER_ICONS: Record<string, string> = {
@@ -85,7 +85,7 @@ const CLUSTER_LABELS: Record<string, string> = {
 };
 
 // ── Project Card ─────────────────────────────────────────────────
-function ProjectCard({
+const ProjectCard = memo(function ProjectCard({
   p, i, onOpen,
 }: {
   p: ProjectDetail;
@@ -177,7 +177,7 @@ function ProjectCard({
       </div>
     </motion.div>
   );
-}
+});
 
 // ── Contact Form ──────────────────────────────────────────────────
 function ContactForm() {
@@ -277,10 +277,22 @@ function ContactForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="spider-btn w-full justify-center py-4 flex items-center gap-2 disabled:opacity-60"
+        className="spider-btn w-full justify-center py-4 flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
       >
-        {status === "sending" ? "Transmitting..." : "Transmit Signal"}
-        <Send className="w-4 h-4" />
+        {status === "sending" ? (
+          <>
+            <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+            </svg>
+            Transmitting…
+          </>
+        ) : (
+          <>
+            Transmit Signal
+            <Send className="w-4 h-4" />
+          </>
+        )}
       </button>
     </form>
   );
@@ -323,17 +335,19 @@ export default function Home() {
     };
   }, []);
 
-  const handleCopyEmail = () => {
+  const handleCopyEmail = useCallback(() => {
     if (sfxEnabled) spiderAudio.playBlip(920, 0.08);
     navigator.clipboard.writeText("joycesondanielraj71@gmail.com");
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2500);
-  };
+  }, [sfxEnabled]);
 
-  const filteredProjects =
-    selectedFilter === "all"
+  const filteredProjects = useMemo(
+    () => selectedFilter === "all"
       ? PROJECTS
-      : PROJECTS.filter((p) => p.filter === selectedFilter);
+      : PROJECTS.filter((p) => p.filter === selectedFilter),
+    [selectedFilter],
+  );
 
   return (
     <main className="relative w-full bg-[#080810] text-[#e8e8ec] overflow-x-hidden cyber-grid">

@@ -10,6 +10,15 @@ import { SKILLS, CLUSTER_CENTERS, type SkillCluster } from "@/lib/constants";
 // connect with web strands. Hovering a node (3D raycasting) pulls
 // it forward and highlights connections.
 
+// Deterministic LCG pseudo-random to give stable positions across HMR/re-renders
+function lcg(seed: number) {
+  let s = seed;
+  return () => {
+    s = (1664525 * s + 1013904223) & 0xffffffff;
+    return (s >>> 0) / 0xffffffff;
+  };
+}
+
 const CLUSTER_COLORS: Record<SkillCluster, string> = {
   frontend: "#61dafb",
   creative: "#CC0000",
@@ -26,15 +35,16 @@ interface NodeData {
 }
 
 function buildNodes(): NodeData[] {
+  const rand = lcg(0xdeadbeef);
   return SKILLS.map((skill) => {
     const center = CLUSTER_CENTERS[skill.cluster];
-    const angle = Math.random() * Math.PI * 2;
-    const r = 0.8 + Math.random() * 1.4;
+    const angle = rand() * Math.PI * 2;
+    const r = 0.8 + rand() * 1.4;
     return {
       position: new THREE.Vector3(
         center[0] + Math.cos(angle) * r,
         center[1] + Math.sin(angle) * r,
-        center[2] + (Math.random() - 0.5) * 0.8,
+        center[2] + (rand() - 0.5) * 0.8,
       ),
       cluster: skill.cluster,
       level: skill.level,
