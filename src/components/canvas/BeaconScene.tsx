@@ -127,6 +127,27 @@ export function BeaconScene({
         />
       </mesh>
 
+      {/* Ground glow disc — landing pad atmosphere */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0]}>
+        <ringGeometry args={[0.6, 3.5, 48]} />
+        <meshBasicMaterial
+          color={skinColor}
+          transparent
+          opacity={0.12}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+      {/* Outer pulse ring */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.04, 0]}>
+        <ringGeometry args={[2.8, 3.0, 48]} />
+        <meshBasicMaterial
+          color={skinAccent}
+          transparent
+          opacity={0.2}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
       {/* Upward spot light */}
       <spotLight
         ref={lightRef}

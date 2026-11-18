@@ -62,6 +62,7 @@ html[data-skin="iron"] {
     color: #e8e8ec;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+    scroll-behavior: smooth;
   }
 
   /* Hide the native cursor sitewide */
@@ -161,6 +162,7 @@ html[data-skin="iron"] {
     overflow: hidden;
     clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
     transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.6s ease, color 0.6s ease;
+    will-change: transform;
   }
   .spider-btn::before {
     content: '';
@@ -280,6 +282,7 @@ html[data-skin="iron"] {
     border: 1px solid rgba(255, 255, 255, 0.15);
     clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
     transition: all 0.2s ease;
+    will-change: transform;
   }
   .spider-btn-outline:hover {
     border-color: color-mix(in srgb, var(--skin-primary) 70%, transparent);
@@ -469,6 +472,8 @@ html[data-skin="iron"] {
   .card-shimmer {
     position: relative;
     overflow: hidden;
+    will-change: transform;
+    contain: layout style;
   }
   .card-shimmer::after {
     content: '';

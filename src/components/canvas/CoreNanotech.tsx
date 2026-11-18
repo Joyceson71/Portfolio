@@ -28,6 +28,7 @@ export function CoreNanotech({
   const icosaRef = useRef<THREE.Mesh>(null!);
   const ring1 = useRef<THREE.Mesh>(null!);
   const ring2 = useRef<THREE.Mesh>(null!);
+  const ring3 = useRef<THREE.Mesh>(null!);
   const dronesRef = useRef<(THREE.Mesh | null)[]>([]);
   const clickImpulse = useRef(0);
 
@@ -55,6 +56,10 @@ export function CoreNanotech({
     if (ring2.current) {
       ring2.current.rotation.y -= delta * (0.7 + impulse * 2.2);
       ring2.current.rotation.z += delta * (0.6 + impulse * 1.8);
+    }
+    if (ring3.current) {
+      ring3.current.rotation.x -= delta * (0.55 + impulse * 1.6);
+      ring3.current.rotation.z += delta * (0.45 + impulse * 1.4);
     }
     if (icosaRef.current) {
       icosaRef.current.rotation.x = t * 0.3;
@@ -117,6 +122,20 @@ export function CoreNanotech({
           metalness={0.8}
           transparent
           opacity={opacity}
+        />
+      </mesh>
+
+      {/* Diagonal Torus Ring — adds a third gyroscopic layer */}
+      <mesh ref={ring3} rotation={[Math.PI / 4, Math.PI / 6, 0]}>
+        <torusGeometry args={[1.3, 0.018, 16, 80]} />
+        <meshStandardMaterial
+          color={skinAccent}
+          emissive={skinAccent}
+          emissiveIntensity={2.5}
+          roughness={0.3}
+          metalness={0.7}
+          transparent
+          opacity={0.65 * opacity}
         />
       </mesh>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Stars, PerformanceMonitor, Preload } from "@react-three/drei";
 import {
@@ -32,7 +32,8 @@ interface SceneContentProps {
 function SceneContent({ mouseX, mouseY }: SceneContentProps) {
   const scrollProgress = useStore((s) => s.scrollProgress);
   const skin = useStore((s) => s.skin);
-  const skinConfig = SKINS[skin];
+  // Memoize skinConfig so reference is stable unless skin string changes
+  const skinConfig = useMemo(() => SKINS[skin], [skin]);
 
   return (
     <>
