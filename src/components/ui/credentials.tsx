@@ -1,7 +1,8 @@
 "use client";
 
+import { useState, memo, useCallback } from "react";
 import { motion } from "framer-motion";
-import { GraduationCap, Award, Shield } from "lucide-react";
+import { GraduationCap, Award, Shield, Check } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
 import { useStore } from "@/lib/store";
 
@@ -16,10 +17,10 @@ interface Credential {
 
 const credentials: Credential[] = [
   {
-    title: "B.E. in Electronics & Communication Engineering (3rd Year)",
+    title: "B.E. in Electronics & Communication Engineering (Final Year)",
     issuer: "Anna University Affiliate",
-    year: "2023 — 2027 (Undergrad)",
-    id: "ECE-3RD-YR",
+    year: "2022 — 2026 (Undergrad)",
+    id: "ECE-FINAL-YR",
     skills: ["Signals & Systems", "Digital Signal Processing", "Microcontrollers", "Computer Architecture"],
     type: "degree",
   },
@@ -49,14 +50,23 @@ const credentials: Credential[] = [
   },
 ];
 
-export function CredentialsSection() {
+export const CredentialsSection = memo(function CredentialsSection() {
   const sfxEnabled = useStore((s) => s.sfxEnabled);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopyId = useCallback((id: string) => {
+    navigator.clipboard.writeText(id);
+    if (sfxEnabled) spiderAudio.playBlip(920, 0.05);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
+  }, [sfxEnabled]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {credentials.map((cred, idx) => {
         const isDegree = cred.type === "degree";
         const accent = isDegree ? "var(--skin-primary, #CC0000)" : "var(--skin-accent, #0047FF)";
+        const isCopied = copiedId === cred.id;
 
         return (
           <motion.div
@@ -89,10 +99,21 @@ export function CredentialsSection() {
                 {cred.title}
               </h4>
 
-              <div className="font-mono text-[10px] text-white/35 mb-4 flex items-center gap-1.5">
-                <Shield className="w-3 h-3 text-emerald-400" />
-                <span>VERIFIED CREDENTIAL ID: {cred.id}</span>
-              </div>
+              <button
+                type="button"
+                onClick={() => handleCopyId(cred.id)}
+                title="Click to copy credential ID"
+                className="font-mono text-[10px] text-white/40 hover:text-white mb-4 flex items-center gap-1.5 transition-colors cursor-pointer"
+              >
+                {isCopied ? (
+                  <Check className="w-3 h-3 text-emerald-400" />
+                ) : (
+                  <Shield className="w-3 h-3 text-emerald-400" />
+                )}
+                <span>
+                  {isCopied ? "COPIED TO CLIPBOARD" : `VERIFIED CREDENTIAL ID: ${cred.id}`}
+                </span>
+              </button>
             </div>
 
             <div className="pt-3 border-t border-white/[0.06] flex flex-wrap gap-1.5">
@@ -110,4 +131,4 @@ export function CredentialsSection() {
       })}
     </div>
   );
-}
+});

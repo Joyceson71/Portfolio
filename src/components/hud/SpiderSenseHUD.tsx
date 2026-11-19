@@ -19,6 +19,10 @@ function useFPS() {
     let rafId: number;
 
     function loop(now: number) {
+      if (document.hidden) {
+        rafId = requestAnimationFrame(loop);
+        return;
+      }
       count++;
       if (now - last >= 1000) {
         setFps(count);

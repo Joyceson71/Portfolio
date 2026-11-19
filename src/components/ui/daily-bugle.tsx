@@ -1,12 +1,13 @@
 "use client";
 
+import { memo } from "react";
 import { motion } from "framer-motion";
 import { Star, Newspaper, CheckCircle2 } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
 import { useStore } from "@/lib/store";
 import { REVIEWS } from "@/lib/constants";
 
-export function DailyBugleReviews() {
+export const DailyBugleReviews = memo(function DailyBugleReviews() {
   const sfxEnabled = useStore((s) => s.sfxEnabled);
 
   return (
@@ -92,4 +93,4 @@ export function DailyBugleReviews() {
       </div>
     </div>
   );
-}
+});

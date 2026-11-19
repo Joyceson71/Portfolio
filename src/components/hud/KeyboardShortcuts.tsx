@@ -110,12 +110,16 @@ export function KeyboardShortcuts() {
       {/* Keyboard Shortcuts Overlay Modal (triggered with '?') */}
       <AnimatePresence>
         {showCheatSheet && (
-          <div className="fixed inset-0 z-[9995] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div 
+            onClick={() => setShowCheatSheet(false)}
+            className="fixed inset-0 z-[9995] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          >
             <motion.div
               initial={{ opacity: 0, scale: 0.92, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.92, y: 15 }}
               transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
               className="web-panel w-full max-w-md p-6 rounded-sm bg-[#0c0c18] border shadow-2xl relative"
               style={{ borderColor: "var(--skin-primary, #CC0000)60" }}
             >
@@ -185,6 +189,22 @@ export function KeyboardShortcuts() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Floating subtle hotkey trigger button for quick discovery */}
+      <button
+        onClick={() => {
+          setShowCheatSheet((prev) => !prev);
+          if (sfxEnabled) spiderAudio.playBlip(750, 0.03);
+        }}
+        title="View Web-Verse Hotkeys [?]"
+        className="fixed bottom-4 left-4 z-[100] hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#080812]/80 backdrop-blur-md border border-white/10 hover:border-[var(--skin-primary,#CC0000)]/60 text-white/50 hover:text-white transition-all font-mono text-[10px] shadow-md group cursor-pointer"
+      >
+        <Keyboard className="w-3.5 h-3.5 text-[var(--skin-primary,#CC0000)] group-hover:scale-110 transition-transform" />
+        <span className="tracking-wider">HOTKEYS</span>
+        <kbd className="px-1 py-0.2 rounded bg-white/10 text-[9px] text-white/70 font-semibold border border-white/20 ml-0.5">
+          ?
+        </kbd>
+      </button>
     </>
   );
 }

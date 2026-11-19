@@ -1,7 +1,8 @@
 "use client";
 
+import { memo } from "react";
 import { motion } from "framer-motion";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Sparkles } from "lucide-react";
 import { spiderAudio } from "@/lib/spider-audio";
 import { useStore } from "@/lib/store";
 
@@ -74,7 +75,7 @@ const experiences: ExperienceItem[] = [
   },
 ];
 
-export function CareerTimeline() {
+export const CareerTimeline = memo(function CareerTimeline() {
   const sfxEnabled = useStore((s) => s.sfxEnabled);
 
   return (
@@ -88,6 +89,7 @@ export function CareerTimeline() {
         {experiences.map((exp, idx) => {
           const isCrimson = exp.type === "crimson";
           const accentColor = isCrimson ? "var(--skin-primary, #CC0000)" : "var(--skin-accent, #0047FF)";
+          const isCurrent = idx === 0;
 
           return (
             <motion.div
@@ -113,17 +115,26 @@ export function CareerTimeline() {
               {/* Card content */}
               <div className="web-panel p-6 md:p-8 rounded-sm hover:border-[var(--skin-primary,#CC0000)]/40 transition-all duration-300">
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                  <span 
-                    className="font-mono text-xs font-bold px-2.5 py-1 rounded"
-                    style={{ background: `${accentColor}18`, color: accentColor, border: `1px solid ${accentColor}33` }}
-                  >
-                    {exp.year}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span 
+                      className="font-mono text-xs font-bold px-2.5 py-1 rounded"
+                      style={{ background: `${accentColor}18`, color: accentColor, border: `1px solid ${accentColor}33` }}
+                    >
+                      {exp.year}
+                    </span>
+                    {isCurrent && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                        <span>ACTIVE CHAPTER</span>
+                      </span>
+                    )}
+                  </div>
                   <span className="font-mono text-xs text-white/40">{exp.location}</span>
                 </div>
 
-                <h3 className="text-xl font-bold text-white mb-1 group-hover:text-[var(--skin-primary,#CC0000)] transition-colors">
-                  {exp.role}
+                <h3 className="text-xl font-bold text-white mb-1 group-hover:text-[var(--skin-primary,#CC0000)] transition-colors flex items-center gap-2">
+                  <span>{exp.role}</span>
+                  {isCurrent && <Sparkles className="w-4 h-4 text-emerald-400 opacity-80" />}
                 </h3>
                 <h4 className="text-sm font-semibold text-white/70 mb-4">{exp.company}</h4>
 
@@ -146,7 +157,7 @@ export function CareerTimeline() {
                   {exp.tech.map((t) => (
                     <span 
                       key={t}
-                      className="font-mono text-[10px] text-white/50 px-2 py-0.5 rounded bg-white/[0.03] border border-white/10"
+                      className="font-mono text-[10px] text-white/50 px-2 py-0.5 rounded bg-white/[0.03] border border-white/10 hover:border-white/30 hover:text-white transition-colors cursor-default"
                     >
                       {t}
                     </span>
@@ -159,4 +170,4 @@ export function CareerTimeline() {
       </div>
     </div>
   );
-}
+});
