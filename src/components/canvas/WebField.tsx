@@ -41,6 +41,14 @@ export function WebField({
 
   useFrame((state, delta) => {
     if (!groupRef.current) return;
+
+    // Performance: When scrolled past the hero, hide group and bypass all vertex calculations
+    if (opacity <= 0.001) {
+      if (groupRef.current.visible) groupRef.current.visible = false;
+      return;
+    }
+    if (!groupRef.current.visible) groupRef.current.visible = true;
+
     const t = state.clock.elapsedTime;
 
     // Slow group rotation with smooth dynamic tilt

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -78,8 +78,9 @@ function BuildingWindows({ buildings }: { buildings: BuildingData[] }) {
     return { positions, colors, count: positions.length };
   }, [buildings]);
 
-  useFrame(() => {
-    if (!instancedRef.current) return;
+  // Initialize static window matrices and colors once on mount instead of every frame
+  useEffect(() => {
+    if (!instancedRef.current || positions.length === 0) return;
     positions.forEach((pos, i) => {
       dummy.position.set(...pos);
       dummy.scale.set(0.22, 0.18, 0.01);
@@ -88,9 +89,10 @@ function BuildingWindows({ buildings }: { buildings: BuildingData[] }) {
       instancedRef.current.setColorAt(i, colors[i]);
     });
     instancedRef.current.instanceMatrix.needsUpdate = true;
-    if (instancedRef.current.instanceColor)
+    if (instancedRef.current.instanceColor) {
       instancedRef.current.instanceColor.needsUpdate = true;
-  });
+    }
+  }, [positions, colors, dummy]);
 
   if (count === 0) return null;
 

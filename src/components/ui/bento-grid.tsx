@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 import {
   Clock, 
@@ -15,9 +15,31 @@ import {
 import { spiderAudio } from "@/lib/spider-audio";
 import { useStore } from "@/lib/store";
 
+interface CommitCell {
+  week: number;
+  commits: number;
+  level: number;
+}
+
 export function BentoGrid() {
   const [time, setTime] = useState("");
+  const [hoveredWeek, setHoveredWeek] = useState<CommitCell | null>(null);
   const sfxEnabled = useStore((s) => s.sfxEnabled);
+
+  // 52-week deterministic activity matrix
+  const commitCells = useMemo<CommitCell[]>(() => {
+    return Array.from({ length: 52 }, (_, idx) => {
+      const seed = Math.sin((idx + 1) * 31.17) * 10000;
+      const rand = seed - Math.floor(seed);
+      const commits = rand > 0.82 ? Math.floor(12 + rand * 12) : rand > 0.45 ? Math.floor(6 + rand * 6) : Math.floor(1 + rand * 5);
+      const level = commits >= 14 ? 3 : commits >= 7 ? 2 : 1;
+      return {
+        week: idx + 1,
+        commits,
+        level,
+      };
+    });
+  }, []);
 
   useEffect(() => {
     const updateTime = () => {
@@ -174,46 +196,73 @@ export function BentoGrid() {
       <motion.div
         whileHover={{ y: -4 }}
         onMouseEnter={() => { if (sfxEnabled) spiderAudio.playBlip(550, 0.04); }}
-        className="md:col-span-2 p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[var(--skin-primary,#CC0000)]/50 transition-all duration-300 relative overflow-hidden shadow-lg"
+        className="md:col-span-2 p-6 rounded-sm bg-[#0c0c18] border border-white/[0.08] hover:border-[var(--skin-primary,#CC0000)]/50 transition-all duration-300 relative overflow-hidden shadow-lg flex flex-col justify-between"
       >
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <GitCommit className="w-4 h-4" style={{ color: "var(--skin-primary, #CC0000)" }} />
-            <span className="font-mono text-[10px] uppercase tracking-wider text-white/50">
-              Web Sling Velocity // Active Commits
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <GitCommit className="w-4 h-4" style={{ color: "var(--skin-primary, #CC0000)" }} />
+              <span className="font-mono text-[10px] uppercase tracking-wider text-white/50">
+                Web Sling Velocity // Active Commits
+              </span>
+            </div>
+            <span className="font-mono text-[10px] text-white/40">
+              {hoveredWeek
+                ? `Wk ${hoveredWeek.week} · ${hoveredWeek.commits} commits`
+                : "52 Weeks · 100+ pushes"}
             </span>
           </div>
-          <span className="font-mono text-[10px] text-white/40">100+ pushes this year</span>
+
+          {/* Interactive 52-week heatmap grid */}
+          <div
+            className="my-3"
+            style={{ display: "grid", gridTemplateColumns: "repeat(13, minmax(0, 1fr))", gap: "0.375rem" }}
+          >
+            {commitCells.map((cell) => {
+              const isHigh = cell.level === 3;
+              const isMed  = cell.level === 2;
+              const isHovered = hoveredWeek?.week === cell.week;
+
+              return (
+                <div
+                  key={cell.week}
+                  onMouseEnter={() => {
+                    setHoveredWeek(cell);
+                    if (sfxEnabled) spiderAudio.playBlip(600 + cell.commits * 18, 0.02);
+                  }}
+                  onMouseLeave={() => setHoveredWeek(null)}
+                  className="h-4 rounded-xs transition-all hover:scale-130 cursor-pointer relative"
+                  style={{
+                    background: isHigh
+                      ? "var(--skin-primary, #CC0000)"
+                      : isMed
+                      ? "var(--skin-primary, #CC0000)88"
+                      : "var(--skin-accent, #0047FF)66",
+                    boxShadow: isHovered
+                      ? "0 0 12px var(--skin-primary, #CC0000)"
+                      : isHigh
+                      ? "0 0 8px var(--skin-primary, #CC0000)66"
+                      : "none",
+                    transform: isHovered ? "scale(1.25)" : "scale(1)",
+                    zIndex: isHovered ? 10 : 1,
+                  }}
+                />
+              );
+            })}
+          </div>
         </div>
 
-        {/* Heatmap visualization */}
-        <div className="grid grid-cols-12 gap-1.5 my-3">
-          {Array.from({ length: 48 }).map((_, idx) => {
-            const isHigh = idx % 5 === 0;
-            const isMed  = idx % 3 === 0;
-            const isLow  = idx % 2 === 0;
-            return (
-              <div
-                key={idx}
-                className="h-4 rounded-xs transition-transform hover:scale-125 cursor-default"
-                style={{
-                  background: isHigh
-                    ? "var(--skin-primary, #CC0000)"
-                    : isMed
-                    ? "var(--skin-primary, #CC0000)88"
-                    : isLow
-                    ? "var(--skin-accent, #0047FF)66"
-                    : "rgba(255, 255, 255, 0.08)",
-                  boxShadow: isHigh ? "0 0 8px var(--skin-primary, #CC0000)66" : "none",
-                }}
-              />
-            );
-          })}
-        </div>
-
-        <div className="flex items-center justify-between text-xs text-white/40 font-mono mt-3">
-          <span>Frontend Architecture</span>
-          <span className="text-white/80 font-semibold">Continuous Delivery</span>
+        <div className="flex items-center justify-between text-xs text-white/40 font-mono mt-3 pt-3 border-t border-white/[0.06]">
+          <span>
+            {hoveredWeek
+              ? `Production Deploy: Zero Regressions`
+              : "Frontend Architecture"}
+          </span>
+          <span className="text-white/80 font-semibold">
+            {hoveredWeek
+              ? `Level ${hoveredWeek.level} Activity`
+              : "Continuous Delivery"}
+          </span>
         </div>
       </motion.div>
 

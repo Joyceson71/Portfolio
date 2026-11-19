@@ -130,6 +130,7 @@ html[data-skin="iron"] {
       inset 0 0 40px color-mix(in srgb, var(--skin-primary) 4%, transparent),
       0 20px 60px rgba(0, 0, 0, 0.8);
     transition: border-color 0.6s ease, box-shadow 0.6s ease;
+    contain: layout;
   }
 
   .web-panel-blue {
@@ -142,6 +143,7 @@ html[data-skin="iron"] {
       0 0 0 1px color-mix(in srgb, var(--skin-accent) 6%, transparent),
       inset 0 0 40px color-mix(in srgb, var(--skin-accent) 5%, transparent),
       0 20px 60px rgba(0, 0, 0, 0.8);
+    contain: layout;
   }
 
   /* ── Primary button ── */
